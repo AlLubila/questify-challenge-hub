@@ -17,6 +17,7 @@ import challenge1 from "@/assets/challenge-1.jpg";
 import { ImageEditorAdvanced } from "@/components/ImageEditorAdvanced";
 import { useCamera } from "@/hooks/useCamera";
 import { compressImage } from "@/lib/imageCompression";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ChallengeDetail = () => {
   const { id } = useParams();
@@ -278,8 +279,24 @@ const ChallengeDetail = () => {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <div className="container py-20 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="container py-8 space-y-6">
+          <Skeleton className="h-10 w-32" />
+          <Card className="overflow-hidden">
+            <Skeleton className="w-full h-80" />
+            <div className="p-6 space-y-6">
+              <div>
+                <Skeleton className="h-8 w-3/4 mb-3" />
+                <Skeleton className="h-5 w-full" />
+                <Skeleton className="h-5 w-2/3 mt-2" />
+              </div>
+              <div className="flex gap-4">
+                <Skeleton className="h-6 w-24" />
+                <Skeleton className="h-6 w-24" />
+                <Skeleton className="h-6 w-24" />
+              </div>
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </Card>
         </div>
       </div>
     );

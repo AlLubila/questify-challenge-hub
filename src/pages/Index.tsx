@@ -11,6 +11,7 @@ import challenge3 from "@/assets/challenge-3.jpg";
 import { useChallenges, calculateTimeLeft } from "@/hooks/useChallenges";
 import { useGenerateChallenge } from "@/hooks/useGenerateChallenge";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ChallengeCardSkeleton } from "@/components/skeletons/ChallengeCardSkeleton";
 
 const Index = () => {
   const { data: challenges, isLoading } = useChallenges();
@@ -127,7 +128,7 @@ const Index = () => {
           {isLoading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-96 bg-muted/30 rounded-lg animate-pulse" />
+                <ChallengeCardSkeleton key={i} />
               ))}
             </div>
           ) : (

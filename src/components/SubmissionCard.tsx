@@ -88,11 +88,31 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
         if (error) throw error;
       }
     },
+    onMutate: async () => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["user-vote", submission.id] });
+      
+      // Snapshot previous value
+      const previousVote = queryClient.getQueryData(["user-vote", submission.id, user?.id]);
+      
+      // Optimistically update vote status
+      queryClient.setQueryData(
+        ["user-vote", submission.id, user?.id],
+        userVote ? null : { id: 'optimistic-vote' }
+      );
+      
+      return { previousVote };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-vote"] });
       queryClient.invalidateQueries({ queryKey: ["feed-submissions"] });
     },
-    onError: (error: any) => {
+    onError: (error: any, _variables, context) => {
+      // Rollback on error
+      if (context?.previousVote !== undefined) {
+        queryClient.setQueryData(["user-vote", submission.id, user?.id], context.previousVote);
+      }
+      
       if (error.message.includes("logged in")) {
         toast.error("Sign in to vote on submissions");
         navigate("/auth");
