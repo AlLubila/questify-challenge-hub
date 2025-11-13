@@ -1,13 +1,13 @@
 project_id = "fgvxgbkzdzngyzaesddh"
 
 [functions.generate-challenge]
-verify_jwt = false
+verify_jwt = true
 
 [functions.award-badges]
-verify_jwt = false
+verify_jwt = true
 
 [functions.process-payment-success]
-verify_jwt = false
+verify_jwt = true
 
 [functions.moderate-submission]
 verify_jwt = true

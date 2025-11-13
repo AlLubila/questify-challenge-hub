@@ -17,18 +17,43 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-    { auth: { persistSession: false } }
-  );
-
   try {
     logStep("Function started");
 
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+    if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceKey) {
+      throw new Error("Supabase configuration missing");
+    }
+
+    // Authenticate user
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      throw new Error("No authorization header");
+    }
+
+    const authClient = createClient(supabaseUrl, supabaseAnonKey);
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await authClient.auth.getUser(token);
+    
+    if (authError || !user) {
+      throw new Error("Unauthorized");
+    }
+    logStep("User authenticated", { userId: user.id });
+
+    const supabaseClient = createClient(
+      supabaseUrl,
+      supabaseServiceKey,
+      { auth: { persistSession: false } }
+    );
+
+    logStep("Parsing request body");
     const { sessionId } = await req.json();
-    if (!sessionId) {
-      throw new Error("Session ID is required");
+
+    if (!sessionId || typeof sessionId !== 'string') {
+      throw new Error("Valid session ID is required");
     }
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -49,6 +74,12 @@ serve(async (req) => {
     if (!userId) {
       throw new Error("User ID not found in session metadata");
     }
+    
+    // Verify the session belongs to the authenticated user
+    if (userId !== user.id) {
+      throw new Error("Unauthorized: Session does not belong to user");
+    }
+    logStep("Verified session belongs to user", { userId });
 
     // Check if this is a boost purchase or subscription
     const isSubscription = session.mode === "subscription";
