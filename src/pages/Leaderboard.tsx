@@ -3,11 +3,18 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Trophy, Medal, Award } from "lucide-react";
+import { Trophy, Medal, Award, Loader2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LeaderboardItemSkeleton } from "@/components/skeletons/LeaderboardItemSkeleton";
+import { SearchBar } from "@/components/SearchBar";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useState } from "react";
+import PullToRefresh from "react-simple-pull-to-refresh";
+
+const ITEMS_PER_PAGE = 20;
 
 const Leaderboard = () => {
   const { t } = useLanguage();

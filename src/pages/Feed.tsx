@@ -1,8 +1,8 @@
 import { Header } from "@/components/Header";
 import { SubmissionCard } from "@/components/SubmissionCard";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -10,11 +10,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { SubmissionCardSkeleton } from "@/components/skeletons/SubmissionCardSkeleton";
+import { SearchBar } from "@/components/SearchBar";
+import { useDebounce } from "@/hooks/useDebounce";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import PullToRefresh from "react-simple-pull-to-refresh";
+
+const ITEMS_PER_PAGE = 10;
 
 const Feed = () => {
   const { t } = useLanguage();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery, 300);
+  
   const boostSuccess = searchParams.get("boost_success");
   const sessionId = searchParams.get("session_id");
 
