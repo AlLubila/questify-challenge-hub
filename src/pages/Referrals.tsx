@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useReferrals } from "@/hooks/useReferrals";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { Copy, Users, DollarSign, Gift, Share2 } from "lucide-react";
+import { Copy, Users, DollarSign, Gift, Share2, Facebook, Twitter, Instagram } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -44,6 +44,47 @@ export default function Referrals() {
       } else {
         copyReferralLink();
       }
+    }
+  };
+
+  const shareOnTwitter = () => {
+    if (data?.referralCode) {
+      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
+      const text = `🎮 Join me on Questify! Complete fun challenges, earn rewards, and level up! 🚀\n\nUse my code to get 25 bonus points when you sign up! 🎁`;
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(link)}`;
+      window.open(twitterUrl, '_blank', 'width=550,height=420');
+    }
+  };
+
+  const shareOnFacebook = () => {
+    if (data?.referralCode) {
+      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
+      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`;
+      window.open(facebookUrl, '_blank', 'width=550,height=420');
+    }
+  };
+
+  const shareOnInstagram = () => {
+    if (data?.referralCode) {
+      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
+      const text = `🎮 Join me on Questify! Complete fun challenges, earn rewards, and level up! 🚀\n\nUse my code to get 25 bonus points: ${data.referralCode}\n\nSign up here: ${link}`;
+      
+      navigator.clipboard.writeText(text);
+      toast.success("Message copied! Paste it in your Instagram post or story", {
+        duration: 4000,
+      });
+    }
+  };
+
+  const shareOnTikTok = () => {
+    if (data?.referralCode) {
+      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
+      const text = `🎮 Join me on Questify! Complete fun challenges, earn rewards, and level up! 🚀\n\nUse my code to get 25 bonus points: ${data.referralCode}\n\nSign up here: ${link}`;
+      
+      navigator.clipboard.writeText(text);
+      toast.success("Message copied! Paste it in your TikTok video description", {
+        duration: 4000,
+      });
     }
   };
 
@@ -137,6 +178,47 @@ export default function Referrals() {
               <Share2 className="h-4 w-4 mr-2" />
               Share
             </Button>
+          </div>
+
+          {/* Social Media Share Buttons */}
+          <div className="w-full pt-4 border-t border-border/50">
+            <p className="text-sm text-muted-foreground mb-3 text-center">Share on social media</p>
+            <div className="grid grid-cols-4 gap-2">
+              <Button
+                onClick={shareOnTwitter}
+                variant="outline"
+                className="flex flex-col items-center gap-1 h-auto py-3 hover:bg-[#1DA1F2]/10 hover:border-[#1DA1F2]"
+              >
+                <Twitter className="h-5 w-5" />
+                <span className="text-xs">Twitter</span>
+              </Button>
+              <Button
+                onClick={shareOnFacebook}
+                variant="outline"
+                className="flex flex-col items-center gap-1 h-auto py-3 hover:bg-[#1877F2]/10 hover:border-[#1877F2]"
+              >
+                <Facebook className="h-5 w-5" />
+                <span className="text-xs">Facebook</span>
+              </Button>
+              <Button
+                onClick={shareOnInstagram}
+                variant="outline"
+                className="flex flex-col items-center gap-1 h-auto py-3 hover:bg-[#E4405F]/10 hover:border-[#E4405F]"
+              >
+                <Instagram className="h-5 w-5" />
+                <span className="text-xs">Instagram</span>
+              </Button>
+              <Button
+                onClick={shareOnTikTok}
+                variant="outline"
+                className="flex flex-col items-center gap-1 h-auto py-3 hover:bg-foreground/10 hover:border-foreground"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                </svg>
+                <span className="text-xs">TikTok</span>
+              </Button>
+            </div>
           </div>
         </div>
 
