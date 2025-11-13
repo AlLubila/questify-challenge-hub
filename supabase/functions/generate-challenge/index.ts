@@ -36,7 +36,14 @@ serve(async (req) => {
 - Suitable for photo/video submissions
 - Fun and achievable within the timeframe
 
-Each challenge should feel fresh and exciting!`;
+IMPORTANT: Only use NON-MONETARY rewards that feel exciting and valuable:
+🏅 Exclusive badges or titles (e.g., "Trend Setter", "Legend", "Viral Star", "Challenge Master")
+⚡ XP multipliers or point boosts (e.g., "2x XP Boost", "500 Bonus Points")
+🚀 Ranking boosts or leaderboard highlights (e.g., "Featured on Leaderboard", "Top Creator Spotlight")
+🌈 Profile effects or customizations (e.g., "Gold Profile Frame", "Animated Avatar", "Rainbow Username Effect")
+🎯 Exclusive challenge access (e.g., "Early Access to Premium Challenges", "VIP Challenge Pass")
+
+Each challenge should feel fresh, exciting, and valuable without monetary prizes!`;
 
     const userPrompt = `Generate ${count} ${type} creative challenge(s) for our community. Make them trendy, fun, and potentially viral. Include a mix of difficulties.`;
 
@@ -76,7 +83,7 @@ Each challenge should feel fresh and exciting!`;
                         },
                         prize: { 
                           type: "string",
-                          description: "Prize amount (e.g., '$250 Cash', '$500 Cash', '$1000 Cash')"
+                          description: "Non-monetary reward that feels exciting (e.g., 'Viral Star Badge + 2x XP', 'Gold Profile Frame', 'Featured on Leaderboard + 500 Bonus Points', 'VIP Challenge Pass', 'Legend Title + Rainbow Effect')"
                         },
                         difficulty: { 
                           type: "string",
