@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { PageErrorBoundary } from "@/components/PageErrorBoundary";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
@@ -35,15 +37,15 @@ const AppContent = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/auth" element={<Auth />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/challenge/:id" element={<ChallengeDetail />} />
-      <Route path="/leaderboard" element={<Leaderboard />} />
-      <Route path="/feed" element={<Feed />} />
-      <Route path="/wallet" element={<Wallet />} />
-      <Route path="/referrals" element={<Referrals />} />
-      <Route path="/admin" element={<AdminLayout />}>
+      <Route path="/" element={<PageErrorBoundary pageName="Home"><Index /></PageErrorBoundary>} />
+      <Route path="/auth" element={<PageErrorBoundary pageName="Authentication"><Auth /></PageErrorBoundary>} />
+      <Route path="/profile" element={<PageErrorBoundary pageName="Profile"><Profile /></PageErrorBoundary>} />
+      <Route path="/challenge/:id" element={<PageErrorBoundary pageName="Challenge"><ChallengeDetail /></PageErrorBoundary>} />
+      <Route path="/leaderboard" element={<PageErrorBoundary pageName="Leaderboard"><Leaderboard /></PageErrorBoundary>} />
+      <Route path="/feed" element={<PageErrorBoundary pageName="Feed"><Feed /></PageErrorBoundary>} />
+      <Route path="/wallet" element={<PageErrorBoundary pageName="Wallet"><Wallet /></PageErrorBoundary>} />
+      <Route path="/referrals" element={<PageErrorBoundary pageName="Referrals"><Referrals /></PageErrorBoundary>} />
+      <Route path="/admin" element={<PageErrorBoundary pageName="Admin"><AdminLayout /></PageErrorBoundary>}>
         <Route index element={<AdminDashboard />} />
         <Route path="users" element={<UserManagement />} />
         <Route path="submissions" element={<SubmissionModeration />} />
@@ -61,19 +63,21 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <LanguageProvider>
-            <AppContent />
-          </LanguageProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AuthProvider>
+            <LanguageProvider>
+              <AppContent />
+            </LanguageProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;
