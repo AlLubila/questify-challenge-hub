@@ -16,6 +16,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import PullToRefresh from "react-simple-pull-to-refresh";
 import { UserRecommendations } from "@/components/UserRecommendations";
 import { WeeklyTopPerformers } from "@/components/WeeklyTopPerformers";
+import { AchievementsShowcase } from "@/components/AchievementsShowcase";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -306,6 +307,7 @@ const Feed = () => {
 
             <div className="hidden lg:block space-y-6 sticky top-6 h-fit">
           <WeeklyTopPerformers />
+          <AchievementsShowcase />
           <UserRecommendations />
         </div>
       </div>
