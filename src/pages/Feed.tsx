@@ -14,6 +14,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import PullToRefresh from "react-simple-pull-to-refresh";
+import { UserRecommendations } from "@/components/UserRecommendations";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -212,13 +213,15 @@ const Feed = () => {
             className="max-w-2xl mx-auto"
           />
 
-          <Tabs defaultValue="discover" className="w-full">
-            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
-              <TabsTrigger value="discover">Discover</TabsTrigger>
-              <TabsTrigger value="following" disabled={!user}>
-                Following
-              </TabsTrigger>
-            </TabsList>
+          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+            <div>
+              <Tabs defaultValue="discover" className="w-full">
+                <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
+                  <TabsTrigger value="discover">Discover</TabsTrigger>
+                  <TabsTrigger value="following" disabled={!user}>
+                    Following
+                  </TabsTrigger>
+                </TabsList>
 
             <TabsContent value="discover" className="space-y-6 mt-8">
               {isLoading ? (
@@ -298,6 +301,12 @@ const Feed = () => {
               )}
             </TabsContent>
           </Tabs>
+        </div>
+
+        <div className="hidden lg:block space-y-6 sticky top-6 h-fit">
+          <UserRecommendations />
+        </div>
+      </div>
         </div>
       </div>
     </PullToRefresh>
