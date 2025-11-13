@@ -1,24 +1,38 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
-export const useNotifications = () => {
+const playNotificationSound = () => {
+  const audio = new Audio("/notification-sound.mp3");
+  audio.volume = 0.5;
+  audio.play().catch(err => console.log("Error playing sound:", err));
+};
+
+export const useNotifications = (filterType?: string) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [soundEnabled, setSoundEnabled] = useState(true);
 
-  // Fetch notifications
+  // Fetch notifications with optional filter
   const { data: notifications, isLoading } = useQuery({
-    queryKey: ["notifications", user?.id],
+    queryKey: ["notifications", user?.id, filterType],
     queryFn: async () => {
       if (!user) return [];
-      const { data, error } = await supabase
+      let query = supabase
         .from("notifications")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", user.id);
+      
+      if (filterType && filterType !== "all") {
+        query = query.eq("type", filterType);
+      }
+      
+      const { data, error } = await query
         .order("created_at", { ascending: false })
         .limit(20);
+      
       if (error) throw error;
       return data;
     },
@@ -72,6 +86,11 @@ export const useNotifications = () => {
         (payload) => {
           console.log("New notification received:", payload);
           
+          // Play notification sound if enabled
+          if (soundEnabled) {
+            playNotificationSound();
+          }
+          
           // Show toast for new notification
           const notification = payload.new as any;
           toast.success(notification.title, {
@@ -87,7 +106,7 @@ export const useNotifications = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, queryClient]);
+  }, [user, queryClient, soundEnabled]);
 
   const unreadCount = notifications?.filter((n) => !n.is_read).length || 0;
 
@@ -99,5 +118,7 @@ export const useNotifications = () => {
     markAllAsRead: markAllAsRead.mutate,
     isMarkingRead: markAsRead.isPending,
     isMarkingAllRead: markAllAsRead.isPending,
+    soundEnabled,
+    setSoundEnabled,
   };
 };

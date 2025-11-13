@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,10 +9,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Check, CheckCheck, Zap, Crown, Trophy, Gift } from "lucide-react";
+import { Bell, CheckCheck, Zap, Crown, Trophy, Gift, Volume2, VolumeX, Filter } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
 import { formatDistanceToNow } from "date-fns";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const getNotificationIcon = (type: string) => {
   switch (type) {
@@ -31,8 +33,16 @@ const getNotificationIcon = (type: string) => {
 };
 
 export const NotificationsDropdown = () => {
-  const { notifications, unreadCount, markAsRead, markAllAsRead, isMarkingAllRead } =
-    useNotifications();
+  const [filterType, setFilterType] = useState<string>("all");
+  const { 
+    notifications, 
+    unreadCount, 
+    markAsRead, 
+    markAllAsRead, 
+    isMarkingAllRead,
+    soundEnabled,
+    setSoundEnabled
+  } = useNotifications(filterType);
 
   return (
     <DropdownMenu>
@@ -49,22 +59,47 @@ export const NotificationsDropdown = () => {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
+      <DropdownMenuContent align="end" className="w-96">
         <DropdownMenuLabel className="flex items-center justify-between">
           <span>Notifications</span>
-          {unreadCount > 0 && (
+          <div className="flex gap-1">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => markAllAsRead()}
-              disabled={isMarkingAllRead}
-              className="h-auto p-1 text-xs"
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              className="h-auto p-1"
             >
-              <CheckCheck className="h-3 w-3 mr-1" />
-              Mark all read
+              {soundEnabled ? (
+                <Volume2 className="h-4 w-4" />
+              ) : (
+                <VolumeX className="h-4 w-4" />
+              )}
             </Button>
-          )}
+            {unreadCount > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => markAllAsRead()}
+                disabled={isMarkingAllRead}
+                className="h-auto p-1 text-xs"
+              >
+                <CheckCheck className="h-3 w-3 mr-1" />
+                Mark all read
+              </Button>
+            )}
+          </div>
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <div className="px-2 py-2">
+          <Tabs value={filterType} onValueChange={setFilterType} className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="all" className="text-xs">All</TabsTrigger>
+              <TabsTrigger value="boost_applied" className="text-xs">Boosts</TabsTrigger>
+              <TabsTrigger value="subscription_activated" className="text-xs">Subs</TabsTrigger>
+              <TabsTrigger value="reward_earned" className="text-xs">Rewards</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
         <DropdownMenuSeparator />
         <ScrollArea className="h-[400px]">
           {notifications.length === 0 ? (
