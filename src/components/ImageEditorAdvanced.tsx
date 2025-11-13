@@ -6,7 +6,9 @@ import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RotateCw, Check, X, Scissors, Type, Smile, Sparkles, Brush } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { RotateCw, Check, X, Scissors, Type, Smile, Sparkles, Brush, Undo2, Redo2, Save, Layers, Palette, Eye, EyeOff, MoveUp, MoveDown, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface ImageEditorAdvancedProps {
   imageFile: File;
@@ -24,14 +26,35 @@ interface Filters {
   hueRotate: number;
   vignette: number;
   sharpen: number;
+  exposure: number;
+  highlights: number;
+  shadows: number;
+  temperature: number;
 }
 
 interface TextOverlay {
+  id: string;
   text: string;
   x: number;
   y: number;
   size: number;
   color: string;
+  visible: boolean;
+}
+
+interface Sticker {
+  id: string;
+  emoji: string;
+  x: number;
+  y: number;
+  size: number;
+  visible: boolean;
+}
+
+interface DrawPath {
+  id: string;
+  points: DrawPoint[];
+  visible: boolean;
 }
 
 interface DrawPoint {
@@ -41,13 +64,13 @@ interface DrawPoint {
   size: number;
 }
 
-const FILTER_PRESETS = {
-  none: { brightness: 100, contrast: 100, saturation: 100, blur: 0, grayscale: 0, sepia: 0, hueRotate: 0, vignette: 0, sharpen: 0 },
-  vintage: { brightness: 110, contrast: 90, saturation: 80, blur: 0, grayscale: 0, sepia: 40, hueRotate: 0, vignette: 20, sharpen: 0 },
-  cool: { brightness: 105, contrast: 110, saturation: 120, blur: 0, grayscale: 0, sepia: 0, hueRotate: 200, vignette: 0, sharpen: 5 },
-  warm: { brightness: 110, contrast: 105, saturation: 110, blur: 0, grayscale: 0, sepia: 20, hueRotate: 20, vignette: 10, sharpen: 0 },
-  dramatic: { brightness: 90, contrast: 140, saturation: 110, blur: 0, grayscale: 0, sepia: 0, hueRotate: 0, vignette: 30, sharpen: 10 },
-  bw: { brightness: 100, contrast: 120, saturation: 0, blur: 0, grayscale: 100, sepia: 0, hueRotate: 0, vignette: 15, sharpen: 5 },
+const FILTER_PRESETS: Record<string, Filters> = {
+  none: { brightness: 100, contrast: 100, saturation: 100, blur: 0, grayscale: 0, sepia: 0, hueRotate: 0, vignette: 0, sharpen: 0, exposure: 0, highlights: 0, shadows: 0, temperature: 0 },
+  vintage: { brightness: 110, contrast: 90, saturation: 80, blur: 0, grayscale: 0, sepia: 40, hueRotate: 0, vignette: 20, sharpen: 0, exposure: 5, highlights: -10, shadows: 5, temperature: 10 },
+  cool: { brightness: 105, contrast: 110, saturation: 120, blur: 0, grayscale: 0, sepia: 0, hueRotate: 200, vignette: 0, sharpen: 5, exposure: 0, highlights: 5, shadows: -5, temperature: -15 },
+  warm: { brightness: 110, contrast: 105, saturation: 110, blur: 0, grayscale: 0, sepia: 20, hueRotate: 20, vignette: 10, sharpen: 0, exposure: 5, highlights: 0, shadows: 0, temperature: 20 },
+  dramatic: { brightness: 90, contrast: 140, saturation: 110, blur: 0, grayscale: 0, sepia: 0, hueRotate: 0, vignette: 30, sharpen: 10, exposure: -10, highlights: 10, shadows: -10, temperature: 0 },
+  bw: { brightness: 100, contrast: 120, saturation: 0, blur: 0, grayscale: 100, sepia: 0, hueRotate: 0, vignette: 15, sharpen: 5, exposure: 0, highlights: 5, shadows: 5, temperature: 0 },
 };
 
 const STICKER_CATEGORIES = {
@@ -67,6 +90,14 @@ const ASPECT_RATIOS = [
   { label: "9:16 (Story)", value: "9:16" },
 ];
 
+interface EditorState {
+  filters: Filters;
+  rotation: number;
+  textOverlays: TextOverlay[];
+  stickers: Sticker[];
+  drawingPaths: DrawPath[];
+}
+
 export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditorAdvancedProps) => {
   const [filters, setFilters] = useState<Filters>(FILTER_PRESETS.none);
   const [rotation, setRotation] = useState(0);
@@ -76,13 +107,21 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
   const [currentText, setCurrentText] = useState("");
   const [textSize, setTextSize] = useState(32);
   const [textColor, setTextColor] = useState("#ffffff");
-  const [stickers, setStickers] = useState<Array<{ emoji: string; x: number; y: number; size: number }>>([]);
-  const [drawingPaths, setDrawingPaths] = useState<DrawPoint[][]>([]);
+  const [stickers, setStickers] = useState<Sticker[]>([]);
+  const [drawingPaths, setDrawingPaths] = useState<DrawPath[]>([]);
   const [currentPath, setCurrentPath] = useState<DrawPoint[]>([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [brushSize, setBrushSize] = useState(3);
   const [brushColor, setBrushColor] = useState("#ff0000");
   const [preview, setPreview] = useState<string>("");
+  
+  // Undo/Redo
+  const [history, setHistory] = useState<EditorState[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  
+  // Custom Presets
+  const [customPresets, setCustomPresets] = useState<Record<string, Filters>>({});
+  const [presetName, setPresetName] = useState("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawCanvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -100,8 +139,53 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
     updatePreview();
   }, [filters, rotation, textOverlays, stickers, drawingPaths, preview, cropArea]);
 
+  // Save to history when state changes
+  const saveToHistory = () => {
+    const currentState: EditorState = {
+      filters: { ...filters },
+      rotation,
+      textOverlays: [...textOverlays],
+      stickers: [...stickers],
+      drawingPaths: [...drawingPaths],
+    };
+    
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push(currentState);
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  };
+
+  const undo = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1;
+      const state = history[newIndex];
+      setFilters(state.filters);
+      setRotation(state.rotation);
+      setTextOverlays(state.textOverlays);
+      setStickers(state.stickers);
+      setDrawingPaths(state.drawingPaths);
+      setHistoryIndex(newIndex);
+      toast.success("Undo");
+    }
+  };
+
+  const redo = () => {
+    if (historyIndex < history.length - 1) {
+      const newIndex = historyIndex + 1;
+      const state = history[newIndex];
+      setFilters(state.filters);
+      setRotation(state.rotation);
+      setTextOverlays(state.textOverlays);
+      setStickers(state.stickers);
+      setDrawingPaths(state.drawingPaths);
+      setHistoryIndex(newIndex);
+      toast.success("Redo");
+    }
+  };
+
   const getFilterString = () => {
-    return `brightness(${filters.brightness}%) contrast(${filters.contrast}%) saturate(${filters.saturation}%) blur(${filters.blur}px) grayscale(${filters.grayscale}%) sepia(${filters.sepia}%) hue-rotate(${filters.hueRotate}deg)`;
+    const adjustedBrightness = filters.brightness + filters.exposure;
+    return `brightness(${adjustedBrightness}%) contrast(${filters.contrast}%) saturate(${filters.saturation}%) blur(${filters.blur}px) grayscale(${filters.grayscale}%) sepia(${filters.sepia}%) hue-rotate(${filters.hueRotate + filters.temperature}deg)`;
   };
 
   const applySharpen = (ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, amount: number) => {
@@ -183,8 +267,32 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
       applyVignette(ctx, canvas, filters.vignette);
     }
 
+    // Apply highlights and shadows
+    if (filters.highlights !== 0 || filters.shadows !== 0) {
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const pixels = imageData.data;
+      
+      for (let i = 0; i < pixels.length; i += 4) {
+        const luminance = 0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2];
+        
+        if (luminance > 127 && filters.highlights !== 0) {
+          const adjustment = filters.highlights / 100;
+          pixels[i] = Math.min(255, pixels[i] + adjustment * (255 - pixels[i]));
+          pixels[i + 1] = Math.min(255, pixels[i + 1] + adjustment * (255 - pixels[i + 1]));
+          pixels[i + 2] = Math.min(255, pixels[i + 2] + adjustment * (255 - pixels[i + 2]));
+        } else if (luminance < 127 && filters.shadows !== 0) {
+          const adjustment = filters.shadows / 100;
+          pixels[i] = Math.max(0, pixels[i] + adjustment * pixels[i]);
+          pixels[i + 1] = Math.max(0, pixels[i + 1] + adjustment * pixels[i + 1]);
+          pixels[i + 2] = Math.max(0, pixels[i + 2] + adjustment * pixels[i + 2]);
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+    }
+
     // Draw text overlays
     textOverlays.forEach((overlay) => {
+      if (!overlay.visible) return;
       ctx.font = `bold ${overlay.size}px Arial`;
       ctx.fillStyle = overlay.color;
       ctx.strokeStyle = "#000";
@@ -195,13 +303,15 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
 
     // Draw stickers
     stickers.forEach((sticker) => {
+      if (!sticker.visible) return;
       ctx.font = `${sticker.size}px Arial`;
       ctx.fillText(sticker.emoji, sticker.x, sticker.y);
     });
 
     // Draw drawing paths
-    drawingPaths.forEach((path) => {
-      if (path.length < 2) return;
+    drawingPaths.forEach((drawPath) => {
+      if (!drawPath.visible || drawPath.points.length < 2) return;
+      const path = drawPath.points;
       ctx.beginPath();
       ctx.moveTo(path[0].x, path[0].y);
       for (let i = 1; i < path.length; i++) {
@@ -244,8 +354,32 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
       applyVignette(ctx, canvas, filters.vignette);
     }
 
+    // Apply highlights and shadows
+    if (filters.highlights !== 0 || filters.shadows !== 0) {
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const pixels = imageData.data;
+      
+      for (let i = 0; i < pixels.length; i += 4) {
+        const luminance = 0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2];
+        
+        if (luminance > 127 && filters.highlights !== 0) {
+          const adjustment = filters.highlights / 100;
+          pixels[i] = Math.min(255, pixels[i] + adjustment * (255 - pixels[i]));
+          pixels[i + 1] = Math.min(255, pixels[i + 1] + adjustment * (255 - pixels[i + 1]));
+          pixels[i + 2] = Math.min(255, pixels[i + 2] + adjustment * (255 - pixels[i + 2]));
+        } else if (luminance < 127 && filters.shadows !== 0) {
+          const adjustment = filters.shadows / 100;
+          pixels[i] = Math.max(0, pixels[i] + adjustment * pixels[i]);
+          pixels[i + 1] = Math.max(0, pixels[i + 1] + adjustment * pixels[i + 1]);
+          pixels[i + 2] = Math.max(0, pixels[i + 2] + adjustment * pixels[i + 2]);
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+    }
+
     // Draw text overlays
     textOverlays.forEach((overlay) => {
+      if (!overlay.visible) return;
       ctx.font = `bold ${overlay.size}px Arial`;
       ctx.fillStyle = overlay.color;
       ctx.strokeStyle = "#000";
@@ -256,13 +390,15 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
 
     // Draw stickers
     stickers.forEach((sticker) => {
+      if (!sticker.visible) return;
       ctx.font = `${sticker.size}px Arial`;
       ctx.fillText(sticker.emoji, sticker.x, sticker.y);
     });
 
     // Draw paths
-    drawingPaths.forEach((path) => {
-      if (path.length < 2) return;
+    drawingPaths.forEach((drawPath) => {
+      if (!drawPath.visible || drawPath.points.length < 2) return;
+      const path = drawPath.points;
       ctx.beginPath();
       ctx.moveTo(path[0].x, path[0].y);
       for (let i = 1; i < path.length; i++) {
@@ -285,29 +421,111 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
     }, "image/png");
   };
 
-  const applyPreset = (preset: keyof typeof FILTER_PRESETS) => {
-    setFilters(FILTER_PRESETS[preset]);
+  const applyPreset = (preset: string) => {
+    const presetFilters = FILTER_PRESETS[preset] || customPresets[preset];
+    if (presetFilters) {
+      setFilters(presetFilters);
+      saveToHistory();
+      toast.success(`Applied ${preset} preset`);
+    }
+  };
+
+  const saveCustomPreset = () => {
+    if (!presetName.trim()) {
+      toast.error("Please enter a preset name");
+      return;
+    }
+    setCustomPresets({ ...customPresets, [presetName]: { ...filters } });
+    toast.success(`Saved preset: ${presetName}`);
+    setPresetName("");
+  };
+
+  const deleteCustomPreset = (name: string) => {
+    const newPresets = { ...customPresets };
+    delete newPresets[name];
+    setCustomPresets(newPresets);
+    toast.success(`Deleted preset: ${name}`);
   };
 
   const addText = () => {
     if (!currentText.trim()) return;
-    setTextOverlays([...textOverlays, {
+    const newOverlay: TextOverlay = {
+      id: Date.now().toString(),
       text: currentText,
       x: 50,
       y: 100 + textOverlays.length * 60,
       size: textSize,
       color: textColor,
-    }]);
+      visible: true,
+    };
+    setTextOverlays([...textOverlays, newOverlay]);
     setCurrentText("");
+    saveToHistory();
   };
 
   const addSticker = (emoji: string) => {
-    setStickers([...stickers, {
+    const newSticker: Sticker = {
+      id: Date.now().toString(),
       emoji,
       x: 100 + stickers.length * 50,
       y: 100 + stickers.length * 50,
       size: 48,
-    }]);
+      visible: true,
+    };
+    setStickers([...stickers, newSticker]);
+    saveToHistory();
+  };
+
+  const toggleLayerVisibility = (type: 'text' | 'sticker' | 'draw', id: string) => {
+    if (type === 'text') {
+      setTextOverlays(textOverlays.map(item => 
+        item.id === id ? { ...item, visible: !item.visible } : item
+      ));
+    } else if (type === 'sticker') {
+      setStickers(stickers.map(item => 
+        item.id === id ? { ...item, visible: !item.visible } : item
+      ));
+    } else if (type === 'draw') {
+      setDrawingPaths(drawingPaths.map(item => 
+        item.id === id ? { ...item, visible: !item.visible } : item
+      ));
+    }
+    saveToHistory();
+  };
+
+  const deleteLayer = (type: 'text' | 'sticker' | 'draw', id: string) => {
+    if (type === 'text') {
+      setTextOverlays(textOverlays.filter(item => item.id !== id));
+    } else if (type === 'sticker') {
+      setStickers(stickers.filter(item => item.id !== id));
+    } else if (type === 'draw') {
+      setDrawingPaths(drawingPaths.filter(item => item.id !== id));
+    }
+    saveToHistory();
+    toast.success("Layer deleted");
+  };
+
+  const moveLayer = (type: 'text' | 'sticker' | 'draw', id: string, direction: 'up' | 'down') => {
+    const moveInArray = <T extends { id: string }>(arr: T[]): T[] => {
+      const index = arr.findIndex(item => item.id === id);
+      if (index === -1) return arr;
+      
+      const newIndex = direction === 'up' ? index - 1 : index + 1;
+      if (newIndex < 0 || newIndex >= arr.length) return arr;
+      
+      const newArr = [...arr];
+      [newArr[index], newArr[newIndex]] = [newArr[newIndex], newArr[index]];
+      return newArr;
+    };
+
+    if (type === 'text') {
+      setTextOverlays(moveInArray(textOverlays));
+    } else if (type === 'sticker') {
+      setStickers(moveInArray(stickers));
+    } else if (type === 'draw') {
+      setDrawingPaths(moveInArray(drawingPaths));
+    }
+    saveToHistory();
   };
 
   const handleDrawStart = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -341,8 +559,14 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
 
   const handleDrawEnd = () => {
     if (currentPath.length > 0) {
-      setDrawingPaths([...drawingPaths, currentPath]);
+      const newPath: DrawPath = {
+        id: Date.now().toString(),
+        points: currentPath,
+        visible: true,
+      };
+      setDrawingPaths([...drawingPaths, newPath]);
       setCurrentPath([]);
+      saveToHistory();
     }
     setIsDrawing(false);
   };
@@ -358,6 +582,22 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
       <div className="flex items-center justify-between">
         <h3 className="text-xl font-bold">Edit Image</h3>
         <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={undo}
+            disabled={historyIndex <= 0}
+          >
+            <Undo2 className="w-4 h-4" />
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={redo}
+            disabled={historyIndex >= history.length - 1}
+          >
+            <Redo2 className="w-4 h-4" />
+          </Button>
           <Button variant="outline" size="sm" onClick={onCancel}>
             <X className="w-4 h-4 mr-2" />
             Cancel
@@ -393,7 +633,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
       </div>
 
       <Tabs defaultValue="filters" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="filters">
             <Sparkles className="w-4 h-4 mr-1" />
             Filters
@@ -401,6 +641,10 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           <TabsTrigger value="adjust">
             <Scissors className="w-4 h-4 mr-1" />
             Adjust
+          </TabsTrigger>
+          <TabsTrigger value="grading">
+            <Palette className="w-4 h-4 mr-1" />
+            Grade
           </TabsTrigger>
           <TabsTrigger value="text">
             <Type className="w-4 h-4 mr-1" />
@@ -414,20 +658,67 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
             <Brush className="w-4 h-4 mr-1" />
             Draw
           </TabsTrigger>
+          <TabsTrigger value="layers">
+            <Layers className="w-4 h-4 mr-1" />
+            Layers
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="filters" className="space-y-4">
-          <div className="grid grid-cols-3 gap-2">
-            {Object.keys(FILTER_PRESETS).map((preset) => (
-              <Button
-                key={preset}
-                variant="outline"
-                onClick={() => applyPreset(preset as keyof typeof FILTER_PRESETS)}
-                className="capitalize"
-              >
-                {preset}
+          <div>
+            <Label>Built-in Presets</Label>
+            <div className="grid grid-cols-3 gap-2 mt-2">
+              {Object.keys(FILTER_PRESETS).map((preset) => (
+                <Button
+                  key={preset}
+                  variant="outline"
+                  onClick={() => applyPreset(preset)}
+                  className="capitalize"
+                >
+                  {preset}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {Object.keys(customPresets).length > 0 && (
+            <div>
+              <Label>Custom Presets</Label>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                {Object.keys(customPresets).map((preset) => (
+                  <div key={preset} className="flex gap-1">
+                    <Button
+                      variant="outline"
+                      onClick={() => applyPreset(preset)}
+                      className="flex-1 capitalize"
+                    >
+                      {preset}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => deleteCustomPreset(preset)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div>
+            <Label>Save Current as Preset</Label>
+            <div className="flex gap-2 mt-2">
+              <Input
+                value={presetName}
+                onChange={(e) => setPresetName(e.target.value)}
+                placeholder="Preset name..."
+              />
+              <Button onClick={saveCustomPreset}>
+                <Save className="w-4 h-4" />
               </Button>
-            ))}
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -466,6 +757,52 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           </div>
         </TabsContent>
 
+        <TabsContent value="grading" className="space-y-4">
+          <div>
+            <Label>Exposure: {filters.exposure}</Label>
+            <Slider
+              value={[filters.exposure]}
+              onValueChange={([value]) => { setFilters({ ...filters, exposure: value }); saveToHistory(); }}
+              min={-50}
+              max={50}
+              step={1}
+            />
+          </div>
+
+          <div>
+            <Label>Highlights: {filters.highlights}</Label>
+            <Slider
+              value={[filters.highlights]}
+              onValueChange={([value]) => { setFilters({ ...filters, highlights: value }); saveToHistory(); }}
+              min={-50}
+              max={50}
+              step={1}
+            />
+          </div>
+
+          <div>
+            <Label>Shadows: {filters.shadows}</Label>
+            <Slider
+              value={[filters.shadows]}
+              onValueChange={([value]) => { setFilters({ ...filters, shadows: value }); saveToHistory(); }}
+              min={-50}
+              max={50}
+              step={1}
+            />
+          </div>
+
+          <div>
+            <Label>Temperature: {filters.temperature}°</Label>
+            <Slider
+              value={[filters.temperature]}
+              onValueChange={([value]) => { setFilters({ ...filters, temperature: value }); saveToHistory(); }}
+              min={-30}
+              max={30}
+              step={1}
+            />
+          </div>
+        </TabsContent>
+
         <TabsContent value="adjust" className="space-y-4">
           <div>
             <Label>Aspect Ratio</Label>
@@ -498,7 +835,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
             <Label>Brightness: {filters.brightness}%</Label>
             <Slider
               value={[filters.brightness]}
-              onValueChange={([value]) => setFilters({ ...filters, brightness: value })}
+              onValueChange={([value]) => { setFilters({ ...filters, brightness: value }); saveToHistory(); }}
               min={0}
               max={200}
               step={1}
@@ -509,7 +846,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
             <Label>Contrast: {filters.contrast}%</Label>
             <Slider
               value={[filters.contrast]}
-              onValueChange={([value]) => setFilters({ ...filters, contrast: value })}
+              onValueChange={([value]) => { setFilters({ ...filters, contrast: value }); saveToHistory(); }}
               min={0}
               max={200}
               step={1}
@@ -520,7 +857,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
             <Label>Saturation: {filters.saturation}%</Label>
             <Slider
               value={[filters.saturation]}
-              onValueChange={([value]) => setFilters({ ...filters, saturation: value })}
+              onValueChange={([value]) => { setFilters({ ...filters, saturation: value }); saveToHistory(); }}
               min={0}
               max={200}
               step={1}
@@ -703,6 +1040,147 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
             <p className="text-sm text-muted-foreground">
               Click and drag on the image above to draw
             </p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="layers" className="space-y-4">
+          <div className="space-y-2">
+            {textOverlays.length === 0 && stickers.length === 0 && drawingPaths.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-8">
+                No layers yet. Add text, stickers, or drawings to see them here.
+              </p>
+            ) : (
+              <>
+                {textOverlays.map((overlay, idx) => (
+                  <Card key={overlay.id} className="p-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 flex-1">
+                        <Type className="w-4 h-4" />
+                        <span className="text-sm truncate">{overlay.text}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleLayerVisibility('text', overlay.id)}
+                        >
+                          {overlay.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => moveLayer('text', overlay.id, 'up')}
+                          disabled={idx === 0}
+                        >
+                          <MoveUp className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => moveLayer('text', overlay.id, 'down')}
+                          disabled={idx === textOverlays.length - 1}
+                        >
+                          <MoveDown className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteLayer('text', overlay.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+
+                {stickers.map((sticker, idx) => (
+                  <Card key={sticker.id} className="p-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 flex-1">
+                        <Smile className="w-4 h-4" />
+                        <span className="text-sm">Sticker: {sticker.emoji}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleLayerVisibility('sticker', sticker.id)}
+                        >
+                          {sticker.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => moveLayer('sticker', sticker.id, 'up')}
+                          disabled={idx === 0}
+                        >
+                          <MoveUp className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => moveLayer('sticker', sticker.id, 'down')}
+                          disabled={idx === stickers.length - 1}
+                        >
+                          <MoveDown className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteLayer('sticker', sticker.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+
+                {drawingPaths.map((path, idx) => (
+                  <Card key={path.id} className="p-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 flex-1">
+                        <Brush className="w-4 h-4" />
+                        <span className="text-sm">Drawing {idx + 1}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleLayerVisibility('draw', path.id)}
+                        >
+                          {path.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => moveLayer('draw', path.id, 'up')}
+                          disabled={idx === 0}
+                        >
+                          <MoveUp className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => moveLayer('draw', path.id, 'down')}
+                          disabled={idx === drawingPaths.length - 1}
+                        >
+                          <MoveDown className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteLayer('draw', path.id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </>
+            )}
           </div>
         </TabsContent>
       </Tabs>
