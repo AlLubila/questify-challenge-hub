@@ -8,53 +8,61 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Home, Users, FileText, Trophy, BarChart3, ScrollText, DollarSign } from "lucide-react";
+import { Home, Users, FileText, Trophy, BarChart3, ScrollText, DollarSign, PlusCircle } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const menuItems = [
   {
-    title: "Dashboard",
+    title: "admin.dashboard",
     url: "/admin",
     icon: Home,
   },
   {
-    title: "Users",
+    title: "admin.users",
     url: "/admin/users",
     icon: Users,
   },
   {
-    title: "Submissions",
+    title: "admin.submissions",
     url: "/admin/submissions",
     icon: FileText,
   },
   {
-    title: "Challenges",
+    title: "admin.challenges",
     url: "/admin/challenges",
     icon: Trophy,
   },
   {
-    title: "Analytics",
+    title: "admin.createChallenge",
+    url: "/admin/create-challenge",
+    icon: PlusCircle,
+  },
+  {
+    title: "admin.analytics",
     url: "/admin/analytics",
     icon: BarChart3,
   },
   {
-    title: "Payments",
+    title: "admin.payments",
     url: "/admin/payments",
     icon: DollarSign,
   },
   {
-    title: "Activity Logs",
+    title: "admin.activityLogs",
     url: "/admin/logs",
     icon: ScrollText,
   },
 ];
 
 export const AdminSidebar = () => {
+  const { t } = useLanguage();
+  
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("admin.panel")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
@@ -62,7 +70,7 @@ export const AdminSidebar = () => {
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url}>
                       <item.icon />
-                      <span>{item.title}</span>
+                      <span>{t(item.title)}</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
