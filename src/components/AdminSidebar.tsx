@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Home, Users, FileText, Trophy, BarChart3, ScrollText, DollarSign, PlusCircle } from "lucide-react";
+import { Home, Users, FileText, Trophy, BarChart3, ScrollText, DollarSign, PlusCircle, Award } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -37,6 +37,11 @@ const menuItems = [
     title: "admin.createChallenge",
     url: "/admin/create-challenge",
     icon: PlusCircle,
+  },
+  {
+    title: "admin.rewards",
+    url: "/admin/rewards",
+    icon: Award,
   },
   {
     title: "admin.analytics",
