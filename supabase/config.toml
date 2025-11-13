@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.moderate-submission]
 verify_jwt = true
+
+[functions.publish-scheduled-challenges]
+verify_jwt = false
