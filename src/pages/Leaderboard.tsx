@@ -15,7 +15,7 @@ const Leaderboard = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("*")
+        .select("id, username, display_name, avatar_url, points, xp, level")
         .order("points", { ascending: false })
         .limit(100);
       if (error) throw error;

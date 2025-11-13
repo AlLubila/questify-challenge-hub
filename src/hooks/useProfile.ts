@@ -22,6 +22,8 @@ export const useProfile = () => {
     queryFn: async () => {
       if (!user) return null;
 
+      // useProfile hook is only used for the authenticated user's own profile
+      // so it's safe to select all fields including sensitive ones
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
