@@ -18,18 +18,52 @@ const ITEMS_PER_PAGE = 20;
 
 const Leaderboard = () => {
   const { t } = useLanguage();
-  const { data: allTimeLeaders, isLoading: allTimeLoading } = useQuery({
-    queryKey: ["leaderboard", "all-time"],
-    queryFn: async () => {
-      const { data, error } = await supabase
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery, 300);
+
+  const {
+    data: leaderboardData,
+    isLoading: allTimeLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["leaderboard", "all-time", debouncedSearch],
+    queryFn: async ({ pageParam = 0 }) => {
+      let query = supabase
         .from("profiles")
-        .select("id, username, display_name, avatar_url, points, xp, level")
+        .select("id, username, display_name, avatar_url, points, xp, level", { count: 'exact' })
         .order("points", { ascending: false })
-        .limit(100);
+        .range(pageParam, pageParam + ITEMS_PER_PAGE - 1);
+
+      // Apply search filter
+      if (debouncedSearch) {
+        query = query.or(`username.ilike.%${debouncedSearch}%,display_name.ilike.%${debouncedSearch}%`);
+      }
+
+      const { data, error, count } = await query;
       if (error) throw error;
-      return data;
+      return { data, count, nextPage: pageParam + ITEMS_PER_PAGE };
     },
+    getNextPageParam: (lastPage, allPages) => {
+      const totalFetched = allPages.reduce((acc, page) => acc + page.data.length, 0);
+      return totalFetched < (lastPage.count || 0) ? lastPage.nextPage : undefined;
+    },
+    initialPageParam: 0,
   });
+
+  const allTimeLeaders = leaderboardData?.pages.flatMap((page) => page.data) || [];
+
+  const loadMoreRef = useInfiniteScroll({
+    loading: isFetchingNextPage,
+    hasMore: hasNextPage || false,
+    onLoadMore: fetchNextPage,
+  });
+
+  const handleRefresh = async () => {
+    await refetch();
+  };
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
@@ -59,8 +93,12 @@ const Leaderboard = () => {
       return (
         <Card className="p-12 text-center">
           <Trophy className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-          <h3 className="text-xl font-bold mb-2">{t("leaderboard.noRankings")}</h3>
-          <p className="text-muted-foreground">{t("leaderboard.beFirstToEarn")}</p>
+          <h3 className="text-xl font-bold mb-2">
+            {debouncedSearch ? "No results found" : t("leaderboard.noRankings")}
+          </h3>
+          <p className="text-muted-foreground">
+            {debouncedSearch ? "Try adjusting your search" : t("leaderboard.beFirstToEarn")}
+          </p>
         </Card>
       );
     }
@@ -84,78 +122,93 @@ const Leaderboard = () => {
                 </div>
 
                 <Avatar className="h-12 w-12">
-                  <AvatarImage src={profile.avatar_url || undefined} alt={profile.username} />
-                  <AvatarFallback className="bg-gradient-primary text-primary-foreground">
-                    {profile.username.substring(0, 2).toUpperCase()}
-                  </AvatarFallback>
+                  <AvatarImage src={profile.avatar_url} alt={profile.username} />
+                  <AvatarFallback>{profile.username?.[0]?.toUpperCase()}</AvatarFallback>
                 </Avatar>
 
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold truncate">
-                    {profile.display_name || profile.username}
-                  </p>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">{profile.display_name || profile.username}</h3>
                   <p className="text-sm text-muted-foreground">@{profile.username}</p>
                 </div>
 
-                <div className="text-right space-y-1">
-                  <Badge variant="secondary" className="font-bold">
-                    {profile.points.toLocaleString()} {t("leaderboard.pts")}
-                  </Badge>
-                  <p className="text-xs text-muted-foreground">{t("profile.level")} {profile.level}</p>
+                <div className="text-right">
+                  <div className="flex items-center gap-1 text-lg font-bold text-primary mb-1">
+                    <Trophy className="w-5 h-5" />
+                    {profile.points.toLocaleString()}
+                  </div>
+                  <Badge variant="secondary">Level {profile.level}</Badge>
                 </div>
               </div>
             </Card>
           );
         })}
+
+        {/* Infinite scroll trigger */}
+        <div ref={loadMoreRef} className="py-4">
+          {isFetchingNextPage && (
+            <div className="flex justify-center">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          )}
+        </div>
       </div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <PullToRefresh onRefresh={handleRefresh} pullingContent="">
+      <div className="min-h-screen bg-background">
+        <Header />
 
-      <div className="container py-8 space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold">Leaderboard</h1>
-          <p className="text-muted-foreground text-lg">
-            Top creators competing for glory and prizes
-          </p>
+        <div className="container py-8 space-y-8">
+          <div className="text-center space-y-2">
+            <h1 className="text-4xl font-bold">Leaderboard</h1>
+            <p className="text-muted-foreground text-lg">
+              Top creators competing for glory and prizes
+            </p>
+          </div>
+
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search by username..."
+            className="max-w-2xl mx-auto"
+          />
+
+          <Tabs defaultValue="all-time" className="w-full max-w-4xl mx-auto">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="daily">Daily</TabsTrigger>
+              <TabsTrigger value="weekly">Weekly</TabsTrigger>
+              <TabsTrigger value="all-time">All Time</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="daily" className="space-y-4 mt-6">
+              <Card className="p-8 text-center">
+                <Trophy className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
+                <p className="text-muted-foreground">
+                  Daily rankings will be available soon!
+                </p>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="weekly" className="space-y-4 mt-6">
+              <Card className="p-8 text-center">
+                <Trophy className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
+                <p className="text-muted-foreground">
+                  Weekly rankings will be available soon!
+                </p>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="all-time" className="space-y-4 mt-6">
+              {renderLeaderboard(allTimeLeaders, allTimeLoading)}
+            </TabsContent>
+          </Tabs>
         </div>
-
-        <Tabs defaultValue="all-time" className="w-full max-w-4xl mx-auto">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="daily">Daily</TabsTrigger>
-            <TabsTrigger value="weekly">Weekly</TabsTrigger>
-            <TabsTrigger value="all-time">All Time</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="daily" className="space-y-4 mt-6">
-            <Card className="p-8 text-center">
-              <Trophy className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
-              <p className="text-muted-foreground">
-                Daily rankings will be available soon!
-              </p>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="weekly" className="space-y-4 mt-6">
-            <Card className="p-8 text-center">
-              <Trophy className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
-              <p className="text-muted-foreground">
-                Weekly rankings will be available soon!
-              </p>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="all-time" className="space-y-4 mt-6">
-            {renderLeaderboard(allTimeLeaders, allTimeLoading)}
-          </TabsContent>
-        </Tabs>
       </div>
-    </div>
+    </PullToRefresh>
   );
 };
 
