@@ -1,7 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useSubscription } from "@/hooks/useSubscription";
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Sparkles, Trophy, Zap, Upload, Save, Award, Crown } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -23,6 +23,37 @@ const Profile = () => {
   const { data: profile, isLoading: profileLoading } = useProfile();
   const { subscriptionData, createCheckout, isCreatingCheckout, openCustomerPortal, isOpeningPortal } = useSubscription();
   const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const subscriptionSuccess = searchParams.get("subscription_success");
+  const sessionId = searchParams.get("session_id");
+
+  useEffect(() => {
+    const processSubscriptionSuccess = async () => {
+      if (subscriptionSuccess === "true" && sessionId) {
+        try {
+          const { error } = await supabase.functions.invoke("process-payment-success", {
+            body: { sessionId },
+          });
+          
+          if (error) throw error;
+          
+          toast.success("Creator Pass Activated! 🎉", {
+            description: "Your subscription is now active. Enjoy exclusive perks!",
+          });
+        } catch (error) {
+          console.error("Error processing subscription:", error);
+        } finally {
+          // Clear the URL parameters
+          searchParams.delete("subscription_success");
+          searchParams.delete("session_id");
+          setSearchParams(searchParams);
+        }
+      }
+    };
+
+    processSubscriptionSuccess();
+  }, [subscriptionSuccess, sessionId, searchParams, setSearchParams]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState("");

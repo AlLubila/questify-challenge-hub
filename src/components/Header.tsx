@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { NotificationsDropdown } from "@/components/NotificationsDropdown";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,6 +52,8 @@ export const Header = () => {
                 <Sparkles className="w-4 h-4 text-accent" />
                 <span className="text-sm font-semibold">{profile.points.toLocaleString()} pts</span>
               </div>
+
+              <NotificationsDropdown />
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

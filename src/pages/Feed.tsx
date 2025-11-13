@@ -3,8 +3,41 @@ import { SubmissionCard } from "@/components/SubmissionCard";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Sparkles } from "lucide-react";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const Feed = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const boostSuccess = searchParams.get("boost_success");
+  const sessionId = searchParams.get("session_id");
+
+  useEffect(() => {
+    const processPaymentSuccess = async () => {
+      if (boostSuccess === "true" && sessionId) {
+        try {
+          const { error } = await supabase.functions.invoke("process-payment-success", {
+            body: { sessionId },
+          });
+          
+          if (error) throw error;
+          
+          toast.success("Boost Applied Successfully! ⚡", {
+            description: "Your submission visibility has been increased!",
+          });
+        } catch (error) {
+          console.error("Error processing payment:", error);
+        } finally {
+          // Clear the URL parameters
+          searchParams.delete("boost_success");
+          searchParams.delete("session_id");
+          setSearchParams(searchParams);
+        }
+      }
+    };
+
+    processPaymentSuccess();
+  }, [boostSuccess, sessionId, searchParams, setSearchParams]);
   const { data: submissions, isLoading } = useQuery({
     queryKey: ["feed-submissions"],
     queryFn: async () => {
