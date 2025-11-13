@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles, Menu, X, User, LogOut, Wallet, Shield, Gift, Globe } from "lucide-react";
+import { Sparkles, Menu, X, User, LogOut, Wallet, Shield, Gift } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
@@ -15,14 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { useLanguage, Language } from "@/contexts/LanguageContext";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,21 +23,7 @@ export const Header = () => {
   const { data: profile } = useProfile();
   const { isAdminOrModerator } = useUserRole();
   const navigate = useNavigate();
-  const { language, setLanguage, t } = useLanguage();
-
-  const languages = [
-    { code: "en", name: "English", flag: "🇺🇸" },
-    { code: "es", name: "Español", flag: "🇪🇸" },
-    { code: "fr", name: "Français", flag: "🇫🇷" },
-    { code: "de", name: "Deutsch", flag: "🇩🇪" },
-    { code: "pt", name: "Português", flag: "🇧🇷" },
-    { code: "it", name: "Italiano", flag: "🇮🇹" },
-    { code: "ja", name: "日本語", flag: "🇯🇵" },
-    { code: "ko", name: "한국어", flag: "🇰🇷" },
-    { code: "zh", name: "中文", flag: "🇨🇳" },
-    { code: "ar", name: "العربية", flag: "🇸🇦" },
-    { code: "he", name: "עברית", flag: "🇮🇱" },
-  ];
+  const { t } = useLanguage();
 
   return (
     <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
@@ -74,24 +53,6 @@ export const Header = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          {/* Language Selector */}
-          <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
-            <SelectTrigger className="w-[140px] hidden md:flex">
-              <Globe className="w-4 h-4 mr-2" />
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {languages.map((lang) => (
-                <SelectItem key={lang.code} value={lang.code}>
-                  <span className="flex items-center gap-2">
-                    <span>{lang.flag}</span>
-                    <span>{lang.name}</span>
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
           {user && profile ? (
             <div className="hidden md:flex items-center gap-3">
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-accent/10 border border-accent/20">
