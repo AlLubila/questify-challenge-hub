@@ -38,6 +38,18 @@ export const useFollow = (userId: string) => {
 
       if (error) throw error;
     },
+    onMutate: async () => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["isFollowing", userId] });
+      
+      // Snapshot previous value
+      const previousValue = queryClient.getQueryData(["isFollowing", userId, user?.id]);
+      
+      // Optimistically update
+      queryClient.setQueryData(["isFollowing", userId, user?.id], true);
+      
+      return { previousValue };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["isFollowing", userId] });
       queryClient.invalidateQueries({ queryKey: ["profile", userId] });
@@ -45,7 +57,11 @@ export const useFollow = (userId: string) => {
       queryClient.invalidateQueries({ queryKey: ["following"] });
       toast.success("Followed successfully!");
     },
-    onError: (error: Error) => {
+    onError: (error: Error, _variables, context) => {
+      // Rollback on error
+      if (context?.previousValue !== undefined) {
+        queryClient.setQueryData(["isFollowing", userId, user?.id], context.previousValue);
+      }
       toast.error(error.message || "Failed to follow");
     },
   });
@@ -62,6 +78,18 @@ export const useFollow = (userId: string) => {
 
       if (error) throw error;
     },
+    onMutate: async () => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["isFollowing", userId] });
+      
+      // Snapshot previous value
+      const previousValue = queryClient.getQueryData(["isFollowing", userId, user?.id]);
+      
+      // Optimistically update
+      queryClient.setQueryData(["isFollowing", userId, user?.id], false);
+      
+      return { previousValue };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["isFollowing", userId] });
       queryClient.invalidateQueries({ queryKey: ["profile", userId] });
@@ -69,7 +97,11 @@ export const useFollow = (userId: string) => {
       queryClient.invalidateQueries({ queryKey: ["following"] });
       toast.success("Unfollowed successfully!");
     },
-    onError: (error: Error) => {
+    onError: (error: Error, _variables, context) => {
+      // Rollback on error
+      if (context?.previousValue !== undefined) {
+        queryClient.setQueryData(["isFollowing", userId, user?.id], context.previousValue);
+      }
       toast.error(error.message || "Failed to unfollow");
     },
   });

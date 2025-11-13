@@ -20,6 +20,8 @@ import { format } from "date-fns";
 import { FollowButton } from "@/components/FollowButton";
 import { FollowersModal } from "@/pages/FollowersModal";
 import { ReEditSubmissionDialog } from "@/components/ReEditSubmissionDialog";
+import { ProfileHeaderSkeleton } from "@/components/skeletons/ProfileHeaderSkeleton";
+import { SubmissionCardSkeleton } from "@/components/skeletons/SubmissionCardSkeleton";
 
 const Profile = () => {
   const { user, isLoading: authLoading } = useAuth();
@@ -202,8 +204,13 @@ const Profile = () => {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <div className="container py-20 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="container py-8">
+          <ProfileHeaderSkeleton />
+          <div className="mt-8 space-y-6">
+            {[1, 2].map((i) => (
+              <SubmissionCardSkeleton key={i} />
+            ))}
+          </div>
         </div>
       </div>
     );

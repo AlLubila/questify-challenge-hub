@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Trophy, Medal, Award } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { LeaderboardItemSkeleton } from "@/components/skeletons/LeaderboardItemSkeleton";
 
 const Leaderboard = () => {
   const { t } = useLanguage();
@@ -39,8 +40,10 @@ const Leaderboard = () => {
   const renderLeaderboard = (leaders: any[] | undefined, loading: boolean) => {
     if (loading) {
       return (
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="space-y-4">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <LeaderboardItemSkeleton key={i} />
+          ))}
         </div>
       );
     }

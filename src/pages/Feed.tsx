@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { SubmissionCardSkeleton } from "@/components/skeletons/SubmissionCardSkeleton";
 
 const Feed = () => {
   const { t } = useLanguage();
@@ -143,8 +144,10 @@ const Feed = () => {
 
           <TabsContent value="discover" className="space-y-6 mt-8">
             {isLoading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <div className="max-w-2xl mx-auto space-y-6">
+                {[1, 2, 3].map((i) => (
+                  <SubmissionCardSkeleton key={i} />
+                ))}
               </div>
             ) : submissions && submissions.length > 0 ? (
               <div className="max-w-2xl mx-auto space-y-6">
@@ -167,8 +170,10 @@ const Feed = () => {
 
           <TabsContent value="following" className="space-y-6 mt-8">
             {followingLoading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <div className="max-w-2xl mx-auto space-y-6">
+                {[1, 2, 3].map((i) => (
+                  <SubmissionCardSkeleton key={i} />
+                ))}
               </div>
             ) : followingSubmissions && followingSubmissions.length > 0 ? (
               <div className="max-w-2xl mx-auto space-y-6">
