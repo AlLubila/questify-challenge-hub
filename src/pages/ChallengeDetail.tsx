@@ -10,17 +10,19 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Trophy, Clock, Users, Upload, Sparkles, ArrowLeft, Wand2 } from "lucide-react";
+import { Trophy, Clock, Users, Upload, Sparkles, ArrowLeft, Wand2, Camera, Image as ImageIcon } from "lucide-react";
 import { calculateTimeLeft } from "@/hooks/useChallenges";
 import { useState } from "react";
 import challenge1 from "@/assets/challenge-1.jpg";
 import { ImageEditorAdvanced } from "@/components/ImageEditorAdvanced";
+import { useCamera } from "@/hooks/useCamera";
 
 const ChallengeDetail = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { takePicture, pickFromGallery, isNativePlatform } = useCamera();
 
   const [contentFile, setContentFile] = useState<File | null>(null);
   const [caption, setCaption] = useState("");
@@ -158,6 +160,30 @@ const ChallengeDetail = () => {
     toast.success("Image edited successfully!");
   };
 
+  const handleCameraCapture = async () => {
+    const file = await takePicture();
+    if (file) {
+      setContentFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleGalleryPick = async () => {
+    const file = await pickFromGallery();
+    if (file) {
+      setContentFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
@@ -271,15 +297,45 @@ const ChallengeDetail = () => {
                   <div className="space-y-4">
                     {!isEditing ? (
                       <>
-                        <div>
-                          <Label htmlFor="content">Upload Photo/Video</Label>
-                          <Input
-                            id="content"
-                            type="file"
-                            accept="image/*,video/*"
-                            onChange={handleFileChange}
-                            className="cursor-pointer"
-                          />
+                        <div className="space-y-3">
+                          <Label>Capture or Upload Photo/Video</Label>
+                          
+                          {isNativePlatform && (
+                            <div className="grid grid-cols-2 gap-3">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleCameraCapture}
+                                className="w-full"
+                              >
+                                <Camera className="w-4 h-4 mr-2" />
+                                Take Photo
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleGalleryPick}
+                                className="w-full"
+                              >
+                                <ImageIcon className="w-4 h-4 mr-2" />
+                                Choose from Gallery
+                              </Button>
+                            </div>
+                          )}
+                          
+                          <div>
+                            <Label htmlFor="content" className="text-sm text-muted-foreground">
+                              {isNativePlatform ? 'Or select a file' : 'Select Photo/Video'}
+                            </Label>
+                            <Input
+                              id="content"
+                              type="file"
+                              accept="image/*,video/*"
+                              onChange={handleFileChange}
+                              className="cursor-pointer"
+                            />
+                          </div>
+                          
                           {preview && (
                             <div className="mt-4 space-y-2">
                               <div className="aspect-video bg-muted rounded-lg overflow-hidden">
