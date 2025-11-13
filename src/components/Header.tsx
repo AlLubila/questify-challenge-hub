@@ -35,12 +35,12 @@ export const Header = () => {
             <a href="/#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Challenges
             </a>
+            <button onClick={() => navigate('/feed')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Feed
+            </button>
             <button onClick={() => navigate('/leaderboard')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Leaderboard
             </button>
-            <a href="#rewards" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Rewards
-            </a>
           </nav>
         </div>
 
@@ -108,12 +108,12 @@ export const Header = () => {
             <a href="/#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Challenges
             </a>
+            <button onClick={() => navigate('/feed')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
+              Feed
+            </button>
             <button onClick={() => navigate('/leaderboard')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
               Leaderboard
             </button>
-            <a href="#rewards" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Rewards
-            </a>
             <div className="flex flex-col gap-3 pt-4 border-t border-border">
               {user && profile ? (
                 <>
