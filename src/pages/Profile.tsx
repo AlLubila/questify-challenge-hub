@@ -22,6 +22,7 @@ import { FollowersModal } from "@/pages/FollowersModal";
 import { ReEditSubmissionDialog } from "@/components/ReEditSubmissionDialog";
 import { ProfileHeaderSkeleton } from "@/components/skeletons/ProfileHeaderSkeleton";
 import { SubmissionCardSkeleton } from "@/components/skeletons/SubmissionCardSkeleton";
+import PullToRefresh from "react-simple-pull-to-refresh";
 
 const Profile = () => {
   const { user, isLoading: authLoading } = useAuth();
@@ -200,6 +201,12 @@ const Profile = () => {
     setIsEditing(!isEditing);
   };
 
+  const handleRefresh = async () => {
+    await queryClient.invalidateQueries({ queryKey: ["profile", viewedUserId] });
+    await queryClient.invalidateQueries({ queryKey: ["profile-submissions"] });
+    await queryClient.invalidateQueries({ queryKey: ["profile-badges"] });
+  };
+
   if (authLoading || profileLoading) {
     return (
       <div className="min-h-screen bg-background">
@@ -232,10 +239,11 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <PullToRefresh onRefresh={handleRefresh} pullingContent="">
+      <div className="min-h-screen bg-background">
+        <Header />
 
-      <div className="container py-8 space-y-8">
+        <div className="container py-8 space-y-8">
         {/* Profile Header */}
         <Card className="p-8">
           <div className="flex flex-col md:flex-row gap-8">
@@ -565,6 +573,7 @@ const Profile = () => {
         defaultTab={followersModalTab}
       />
     </div>
+    </PullToRefresh>
   );
 };
 

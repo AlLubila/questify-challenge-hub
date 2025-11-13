@@ -55,11 +55,18 @@ const Feed = () => {
     processPaymentSuccess();
   }, [boostSuccess, sessionId, searchParams, setSearchParams]);
   
-  // All submissions query
-  const { data: submissions, isLoading } = useQuery({
-    queryKey: ["feed-submissions"],
-    queryFn: async () => {
-      const { data, error } = await supabase
+  // All submissions infinite query
+  const {
+    data: submissionsData,
+    isLoading,
+    fetchNextPage: fetchNextSubmissions,
+    hasNextPage: hasMoreSubmissions,
+    isFetchingNextPage: isFetchingMoreSubmissions,
+    refetch: refetchSubmissions,
+  } = useInfiniteQuery({
+    queryKey: ["feed-submissions", debouncedSearch],
+    queryFn: async ({ pageParam = 0 }) => {
+      let query = supabase
         .from("submissions")
         .select(`
           *,
@@ -75,21 +82,40 @@ const Feed = () => {
             difficulty,
             points
           )
-        `)
+        `, { count: 'exact' })
         .eq("status", "approved")
         .order("submitted_at", { ascending: false })
-        .limit(50);
+        .range(pageParam, pageParam + ITEMS_PER_PAGE - 1);
+
+      // Apply search filter
+      if (debouncedSearch) {
+        query = query.or(`caption.ilike.%${debouncedSearch}%,profiles.username.ilike.%${debouncedSearch}%,profiles.display_name.ilike.%${debouncedSearch}%,challenges.title.ilike.%${debouncedSearch}%`);
+      }
+
+      const { data, error, count } = await query;
 
       if (error) throw error;
-      return data;
+      return { data, count, nextPage: pageParam + ITEMS_PER_PAGE };
     },
+    getNextPageParam: (lastPage, allPages) => {
+      const totalFetched = allPages.reduce((acc, page) => acc + page.data.length, 0);
+      return totalFetched < (lastPage.count || 0) ? lastPage.nextPage : undefined;
+    },
+    initialPageParam: 0,
   });
 
-  // Following submissions query
-  const { data: followingSubmissions, isLoading: followingLoading } = useQuery({
-    queryKey: ["following-submissions", user?.id],
-    queryFn: async () => {
-      if (!user) return [];
+  // Following submissions infinite query
+  const {
+    data: followingData,
+    isLoading: followingLoading,
+    fetchNextPage: fetchNextFollowing,
+    hasNextPage: hasMoreFollowing,
+    isFetchingNextPage: isFetchingMoreFollowing,
+    refetch: refetchFollowing,
+  } = useInfiniteQuery({
+    queryKey: ["following-submissions", user?.id, debouncedSearch],
+    queryFn: async ({ pageParam = 0 }) => {
+      if (!user) return { data: [], count: 0, nextPage: 0 };
       
       // First, get the list of users the current user follows
       const { data: follows, error: followsError } = await supabase
@@ -99,12 +125,12 @@ const Feed = () => {
       
       if (followsError) throw followsError;
       
-      if (!follows || follows.length === 0) return [];
+      if (!follows || follows.length === 0) return { data: [], count: 0, nextPage: 0 };
       
       const followingIds = follows.map((f) => f.following_id);
       
       // Then get submissions from those users
-      const { data, error } = await supabase
+      let query = supabase
         .from("submissions")
         .select(`
           *,
@@ -120,92 +146,161 @@ const Feed = () => {
             difficulty,
             points
           )
-        `)
+        `, { count: 'exact' })
         .eq("status", "approved")
         .in("user_id", followingIds)
         .order("submitted_at", { ascending: false })
-        .limit(50);
+        .range(pageParam, pageParam + ITEMS_PER_PAGE - 1);
+
+      // Apply search filter
+      if (debouncedSearch) {
+        query = query.or(`caption.ilike.%${debouncedSearch}%,profiles.username.ilike.%${debouncedSearch}%,profiles.display_name.ilike.%${debouncedSearch}%,challenges.title.ilike.%${debouncedSearch}%`);
+      }
+
+      const { data, error, count } = await query;
 
       if (error) throw error;
-      return data;
+      return { data, count, nextPage: pageParam + ITEMS_PER_PAGE };
     },
+    getNextPageParam: (lastPage, allPages) => {
+      const totalFetched = allPages.reduce((acc, page) => acc + page.data.length, 0);
+      return totalFetched < (lastPage.count || 0) ? lastPage.nextPage : undefined;
+    },
+    initialPageParam: 0,
     enabled: !!user,
   });
 
+  const submissions = submissionsData?.pages.flatMap((page) => page.data) || [];
+  const followingSubmissions = followingData?.pages.flatMap((page) => page.data) || [];
+
+  const loadMoreRefDiscover = useInfiniteScroll({
+    loading: isFetchingMoreSubmissions,
+    hasMore: hasMoreSubmissions || false,
+    onLoadMore: fetchNextSubmissions,
+  });
+
+  const loadMoreRefFollowing = useInfiniteScroll({
+    loading: isFetchingMoreFollowing,
+    hasMore: hasMoreFollowing || false,
+    onLoadMore: fetchNextFollowing,
+  });
+
+  const handleRefresh = async () => {
+    await Promise.all([
+      refetchSubmissions(),
+      refetchFollowing(),
+    ]);
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <PullToRefresh onRefresh={handleRefresh} pullingContent="">
+      <div className="min-h-screen bg-background">
+        <Header />
 
-      <div className="container py-8 space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold">Community Feed</h1>
-          <p className="text-muted-foreground text-lg">
-            Discover amazing creations from talented creators
-          </p>
+        <div className="container py-8 space-y-8">
+          <div className="text-center space-y-2">
+            <h1 className="text-4xl font-bold">Community Feed</h1>
+            <p className="text-muted-foreground text-lg">
+              Discover amazing creations from talented creators
+            </p>
+          </div>
+
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search by username, challenge, or caption..."
+            className="max-w-2xl mx-auto"
+          />
+
+          <Tabs defaultValue="discover" className="w-full">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
+              <TabsTrigger value="discover">Discover</TabsTrigger>
+              <TabsTrigger value="following" disabled={!user}>
+                Following
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="discover" className="space-y-6 mt-8">
+              {isLoading ? (
+                <div className="max-w-2xl mx-auto space-y-6">
+                  {[1, 2, 3].map((i) => (
+                    <SubmissionCardSkeleton key={i} />
+                  ))}
+                </div>
+              ) : submissions && submissions.length > 0 ? (
+                <div className="max-w-2xl mx-auto space-y-6">
+                  {submissions.map((submission: any) => (
+                    <SubmissionCard key={submission.id} submission={submission} />
+                  ))}
+                  
+                  {/* Infinite scroll trigger */}
+                  <div ref={loadMoreRefDiscover} className="py-4">
+                    {isFetchingMoreSubmissions && (
+                      <div className="flex justify-center">
+                        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="max-w-2xl mx-auto">
+                  <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <Sparkles className="w-16 h-16 mb-4 text-muted-foreground" />
+                    <h3 className="text-xl font-bold mb-2">
+                      {debouncedSearch ? "No results found" : "No submissions yet"}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {debouncedSearch
+                        ? "Try adjusting your search"
+                        : "Be the first to submit an entry to a challenge!"}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="following" className="space-y-6 mt-8">
+              {followingLoading ? (
+                <div className="max-w-2xl mx-auto space-y-6">
+                  {[1, 2, 3].map((i) => (
+                    <SubmissionCardSkeleton key={i} />
+                  ))}
+                </div>
+              ) : followingSubmissions && followingSubmissions.length > 0 ? (
+                <div className="max-w-2xl mx-auto space-y-6">
+                  {followingSubmissions.map((submission: any) => (
+                    <SubmissionCard key={submission.id} submission={submission} />
+                  ))}
+                  
+                  {/* Infinite scroll trigger */}
+                  <div ref={loadMoreRefFollowing} className="py-4">
+                    {isFetchingMoreFollowing && (
+                      <div className="flex justify-center">
+                        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="max-w-2xl mx-auto">
+                  <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <Sparkles className="w-16 h-16 mb-4 text-muted-foreground" />
+                    <h3 className="text-xl font-bold mb-2">
+                      {debouncedSearch ? "No results found" : "No submissions from followed users"}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {debouncedSearch
+                        ? "Try adjusting your search"
+                        : "Follow creators to see their latest submissions here!"}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
-
-        <Tabs defaultValue="discover" className="w-full">
-          <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
-            <TabsTrigger value="discover">Discover</TabsTrigger>
-            <TabsTrigger value="following" disabled={!user}>
-              Following
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="discover" className="space-y-6 mt-8">
-            {isLoading ? (
-              <div className="max-w-2xl mx-auto space-y-6">
-                {[1, 2, 3].map((i) => (
-                  <SubmissionCardSkeleton key={i} />
-                ))}
-              </div>
-            ) : submissions && submissions.length > 0 ? (
-              <div className="max-w-2xl mx-auto space-y-6">
-                {submissions.map((submission: any) => (
-                  <SubmissionCard key={submission.id} submission={submission} />
-                ))}
-              </div>
-            ) : (
-              <div className="max-w-2xl mx-auto">
-                <div className="flex flex-col items-center justify-center py-20 text-center">
-                  <Sparkles className="w-16 h-16 mb-4 text-muted-foreground" />
-                  <h3 className="text-xl font-bold mb-2">No submissions yet</h3>
-                  <p className="text-muted-foreground">
-                    Be the first to submit an entry to a challenge!
-                  </p>
-                </div>
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="following" className="space-y-6 mt-8">
-            {followingLoading ? (
-              <div className="max-w-2xl mx-auto space-y-6">
-                {[1, 2, 3].map((i) => (
-                  <SubmissionCardSkeleton key={i} />
-                ))}
-              </div>
-            ) : followingSubmissions && followingSubmissions.length > 0 ? (
-              <div className="max-w-2xl mx-auto space-y-6">
-                {followingSubmissions.map((submission: any) => (
-                  <SubmissionCard key={submission.id} submission={submission} />
-                ))}
-              </div>
-            ) : (
-              <div className="max-w-2xl mx-auto">
-                <div className="flex flex-col items-center justify-center py-20 text-center">
-                  <Sparkles className="w-16 h-16 mb-4 text-muted-foreground" />
-                  <h3 className="text-xl font-bold mb-2">No submissions from followed users</h3>
-                  <p className="text-muted-foreground">
-                    Follow creators to see their latest submissions here!
-                  </p>
-                </div>
-              </div>
-            )}
-          </TabsContent>
-        </Tabs>
       </div>
-    </div>
+    </PullToRefresh>
   );
 };
 
