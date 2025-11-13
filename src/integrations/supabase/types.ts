@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      badges: {
+        Row: {
+          created_at: string | null
+          criteria: string
+          description: string
+          icon: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          criteria: string
+          description: string
+          icon?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          criteria?: string
+          description?: string
+          icon?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       challenges: {
         Row: {
           challenge_type: string
@@ -67,6 +94,129 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          display_name: string | null
+          id: string
+          level: number | null
+          points: number | null
+          updated_at: string | null
+          username: string
+          xp: number | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id: string
+          level?: number | null
+          points?: number | null
+          updated_at?: string | null
+          username: string
+          xp?: number | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          level?: number | null
+          points?: number | null
+          updated_at?: string | null
+          username?: string
+          xp?: number | null
+        }
+        Relationships: []
+      }
+      submissions: {
+        Row: {
+          caption: string | null
+          challenge_id: string
+          content_url: string
+          id: string
+          status: string | null
+          submitted_at: string | null
+          user_id: string
+          votes: number | null
+        }
+        Insert: {
+          caption?: string | null
+          challenge_id: string
+          content_url: string
+          id?: string
+          status?: string | null
+          submitted_at?: string | null
+          user_id: string
+          votes?: number | null
+        }
+        Update: {
+          caption?: string | null
+          challenge_id?: string
+          content_url?: string
+          id?: string
+          status?: string | null
+          submitted_at?: string | null
+          user_id?: string
+          votes?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submissions_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "submissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_badges: {
+        Row: {
+          badge_id: string
+          earned_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_id: string
+          earned_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_id?: string
+          earned_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_badges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
