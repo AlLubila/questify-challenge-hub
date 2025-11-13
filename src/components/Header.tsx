@@ -35,6 +35,9 @@ export const Header = () => {
           </div>
           
           <nav className="hidden md:flex items-center gap-6">
+            <button onClick={() => navigate('/')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Home
+            </button>
             <a href="/#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Challenges
             </a>
@@ -124,6 +127,9 @@ export const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden border-t border-border">
           <nav className="container py-4 flex flex-col gap-4">
+            <button onClick={() => navigate('/')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
+              Home
+            </button>
             <a href="/#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Challenges
             </a>
