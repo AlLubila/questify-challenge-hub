@@ -6,8 +6,10 @@ import { Loader2, TrendingUp, TrendingDown } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Wallet = () => {
+  const { t } = useLanguage();
   const { balance, transactions, isLoading } = useWallet();
   const { subscriptionData, createCheckout, isCreatingCheckout } = useSubscription();
 
@@ -29,16 +31,16 @@ const Wallet = () => {
       <Header />
       <main className="container mx-auto px-4 py-8 space-y-8">
         <div>
-          <h1 className="text-4xl font-bold mb-2">Wallet</h1>
-          <p className="text-muted-foreground">Manage your balance and subscriptions</p>
+          <h1 className="text-4xl font-bold mb-2">{t("wallet.title")}</h1>
+          <p className="text-muted-foreground">{t("wallet.subtitle")}</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           {/* Balance Card */}
           <Card>
             <CardHeader>
-              <CardTitle>Balance</CardTitle>
-              <CardDescription>Your current wallet balance</CardDescription>
+              <CardTitle>{t("wallet.balance")}</CardTitle>
+              <CardDescription>{t("wallet.currentBalance")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-4xl font-bold text-primary">${(balance / 100).toFixed(2)}</div>
@@ -48,32 +50,32 @@ const Wallet = () => {
           {/* Subscription Card */}
           <Card>
             <CardHeader>
-              <CardTitle>Creator Pass</CardTitle>
-              <CardDescription>Premium subscription for extra perks</CardDescription>
+              <CardTitle>{t("wallet.creatorPass")}</CardTitle>
+              <CardDescription>{t("wallet.premiumSubscription")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {subscriptionData?.subscribed ? (
                 <>
-                  <Badge variant="default">Active</Badge>
+                  <Badge variant="default">{t("wallet.active")}</Badge>
                   {subscriptionData.subscription_end && (
                     <p className="text-sm text-muted-foreground">
-                      Renews on {format(new Date(subscriptionData.subscription_end), "PPP")}
+                      {t("profile.renewsOn")} {format(new Date(subscriptionData.subscription_end), "PPP")}
                     </p>
                   )}
                 </>
               ) : (
                 <>
                   <p className="text-sm text-muted-foreground">
-                    Subscribe for $5/month to get extra rewards, exclusive stats, and premium features
+                    {t("wallet.subscriptionDesc")}
                   </p>
                   <Button onClick={() => createCheckout()} disabled={isCreatingCheckout}>
                     {isCreatingCheckout ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Loading...
+                        {t("common.loading")}
                       </>
                     ) : (
-                      "Subscribe Now"
+                      t("wallet.subscribeNow")
                     )}
                   </Button>
                 </>
@@ -85,12 +87,12 @@ const Wallet = () => {
         {/* Transactions */}
         <Card>
           <CardHeader>
-            <CardTitle>Transaction History</CardTitle>
-            <CardDescription>Your recent wallet activity</CardDescription>
+            <CardTitle>{t("wallet.transactions")}</CardTitle>
+            <CardDescription>{t("wallet.recentActivity")}</CardDescription>
           </CardHeader>
           <CardContent>
             {transactions.length === 0 ? (
-              <p className="text-center text-muted-foreground py-8">No transactions yet</p>
+              <p className="text-center text-muted-foreground py-8">{t("wallet.noTransactions")}</p>
             ) : (
               <div className="space-y-4">
                 {transactions.map((transaction) => (
