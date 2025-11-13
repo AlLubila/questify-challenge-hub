@@ -9,8 +9,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { BoostSubmissionDialog } from "@/components/BoostSubmissionDialog";
+import { FollowButton } from "@/components/FollowButton";
 
 interface SubmissionCardProps {
   submission: any;
@@ -156,7 +157,10 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
     <Card className="overflow-hidden">
       {/* User Info Header */}
       <div className="p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <Link
+          to={`/profile?userId=${submission.profiles.id}`}
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+        >
           <Avatar className="h-10 w-10">
             <AvatarImage
               src={submission.profiles.avatar_url || undefined}
@@ -174,8 +178,11 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
               @{submission.profiles.username}
             </p>
           </div>
-        </div>
+        </Link>
         <div className="flex items-center gap-2">
+          {user && user.id !== submission.profiles.id && (
+            <FollowButton userId={submission.profiles.id} size="sm" variant="outline" />
+          )}
           {submission.boost_level && submission.boost_level !== 'none' && (
             <Badge variant="secondary" className="gap-1">
               <Zap className="h-3 w-3" />

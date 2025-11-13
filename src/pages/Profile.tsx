@@ -11,19 +11,45 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Trophy, Zap, Upload, Save, Award, Crown } from "lucide-react";
+import { Sparkles, Trophy, Zap, Upload, Save, Award, Crown, Users } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
+import { FollowButton } from "@/components/FollowButton";
+import { FollowersModal } from "@/pages/FollowersModal";
 
 const Profile = () => {
   const { user, isLoading: authLoading } = useAuth();
-  const { data: profile, isLoading: profileLoading } = useProfile();
-  const { subscriptionData, createCheckout, isCreatingCheckout, openCustomerPortal, isOpeningPortal } = useSubscription();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
+  
+  // Get userId from URL params (if viewing another user's profile)
+  const viewedUserId = searchParams.get("userId") || user?.id;
+  const isOwnProfile = user?.id === viewedUserId;
+  
+  // Fetch the profile of the user being viewed
+  const { data: profile, isLoading: profileLoading } = useQuery({
+    queryKey: ["profile", viewedUserId],
+    queryFn: async () => {
+      if (!viewedUserId) return null;
+      
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", viewedUserId)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!viewedUserId,
+  });
+  
+  const { subscriptionData, createCheckout, isCreatingCheckout, openCustomerPortal, isOpeningPortal } = useSubscription();
+  const [followersModalOpen, setFollowersModalOpen] = useState(false);
+  const [followersModalTab, setFollowersModalTab] = useState<"followers" | "following">("followers");
 
   const subscriptionSuccess = searchParams.get("subscription_success");
   const sessionId = searchParams.get("session_id");
@@ -63,34 +89,34 @@ const Profile = () => {
 
   // Fetch user badges
   const { data: userBadges } = useQuery({
-    queryKey: ["user-badges", user?.id],
+    queryKey: ["user-badges", viewedUserId],
     queryFn: async () => {
-      if (!user) return [];
+      if (!viewedUserId) return [];
       const { data, error } = await supabase
         .from("user_badges")
         .select("*, badges(*)")
-        .eq("user_id", user.id)
+        .eq("user_id", viewedUserId)
         .order("earned_at", { ascending: false });
       if (error) throw error;
       return data;
     },
-    enabled: !!user,
+    enabled: !!viewedUserId,
   });
 
   // Fetch user submissions
   const { data: submissions } = useQuery({
-    queryKey: ["user-submissions", user?.id],
+    queryKey: ["user-submissions", viewedUserId],
     queryFn: async () => {
-      if (!user) return [];
+      if (!viewedUserId) return [];
       const { data, error } = await supabase
         .from("submissions")
         .select("*, challenges(*)")
-        .eq("user_id", user.id)
+        .eq("user_id", viewedUserId)
         .order("submitted_at", { ascending: false });
       if (error) throw error;
       return data;
     },
-    enabled: !!user,
+    enabled: !!viewedUserId,
   });
 
   const updateProfileMutation = useMutation({
@@ -275,11 +301,43 @@ const Profile = () => {
                   {profile.bio && (
                     <p className="text-foreground">{profile.bio}</p>
                   )}
-                  <Button onClick={handleEditToggle}>Edit Profile</Button>
+                  <div className="flex gap-2">
+                    {isOwnProfile ? (
+                      <Button onClick={handleEditToggle}>Edit Profile</Button>
+                    ) : (
+                      <FollowButton userId={viewedUserId!} />
+                    )}
+                  </div>
                 </>
               )}
 
-              <div className="grid grid-cols-3 gap-4 pt-4">
+              <div className="grid grid-cols-5 gap-4 pt-4">
+                <Card 
+                  className="p-4 text-center cursor-pointer hover:bg-accent/50 transition-colors"
+                  onClick={() => {
+                    setFollowersModalTab("followers");
+                    setFollowersModalOpen(true);
+                  }}
+                >
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Users className="w-4 h-4 text-primary" />
+                    <p className="text-2xl font-bold">{profile.followers_count || 0}</p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Followers</p>
+                </Card>
+                <Card 
+                  className="p-4 text-center cursor-pointer hover:bg-accent/50 transition-colors"
+                  onClick={() => {
+                    setFollowersModalTab("following");
+                    setFollowersModalOpen(true);
+                  }}
+                >
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Users className="w-4 h-4 text-accent" />
+                    <p className="text-2xl font-bold">{profile.following_count || 0}</p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Following</p>
+                </Card>
                 <Card className="p-4 text-center">
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Sparkles className="w-4 h-4 text-accent" />
@@ -471,6 +529,14 @@ const Profile = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      {/* Followers Modal */}
+      <FollowersModal
+        userId={viewedUserId!}
+        isOpen={followersModalOpen}
+        onClose={() => setFollowersModalOpen(false)}
+        defaultTab={followersModalTab}
+      />
     </div>
   );
 };
