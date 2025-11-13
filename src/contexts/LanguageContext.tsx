@@ -1486,6 +1486,18 @@ const translations: Record<Language, Record<string, string>> = {
     "profile.achievements": "成就",
     "profile.editProfile": "编辑个人资料",
     "profile.settings": "设置",
+    "profile.stats": "统计",
+    "profile.badges": "徽章",
+    "profile.saveChanges": "保存更改",
+    "profile.displayName": "显示名称",
+    "profile.bio": "个人简介",
+    "profile.changeAvatar": "更换头像",
+    "profile.subscribe": "订阅",
+    "profile.manageSubscription": "管理订阅",
+    "profile.creatorPassActive": "创作者通行证激活",
+    "profile.renewsOn": "续订于",
+    "profile.noBadges": "暂无徽章",
+    "profile.noSubmissions": "暂无提交",
     
     // Leaderboard
     "leaderboard.title": "排行榜",
@@ -1504,11 +1516,19 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Wallet
     "wallet.title": "钱包",
+    "wallet.subtitle": "管理你的余额和订阅",
     "wallet.balance": "余额",
-    "wallet.transactions": "交易",
+    "wallet.currentBalance": "当前余额",
+    "wallet.creatorPass": "创作者通行证",
+    "wallet.premiumSubscription": "高级订阅额外福利",
+    "wallet.subscribeNow": "立即订阅",
+    "wallet.active": "激活",
+    "wallet.transactions": "交易历史",
+    "wallet.recentActivity": "最近的钱包活动",
     "wallet.history": "历史",
     "wallet.topUp": "充值",
     "wallet.withdraw": "提现",
+    "wallet.noTransactions": "暂无交易",
     
     // Challenge Detail
     "challenge.submit": "提交作品",
