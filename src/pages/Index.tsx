@@ -3,22 +3,28 @@ import { ChallengeCard } from "@/components/ChallengeCard";
 import { StatsCard } from "@/components/StatsCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Trophy, Users, Zap, TrendingUp, Award } from "lucide-react";
+import { Sparkles, Trophy, Users, Zap, TrendingUp, Award, RefreshCw } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 import challenge1 from "@/assets/challenge-1.jpg";
 import challenge2 from "@/assets/challenge-2.jpg";
 import challenge3 from "@/assets/challenge-3.jpg";
+import { useChallenges, calculateTimeLeft } from "@/hooks/useChallenges";
+import { useGenerateChallenge } from "@/hooks/useGenerateChallenge";
 
 const Index = () => {
-  const challenges = [
+  const { data: challenges, isLoading } = useChallenges();
+  const { mutate: generateChallenge, isPending: isGenerating } = useGenerateChallenge();
+
+  // Fallback challenges for when database is empty
+  const fallbackChallenges = [
     {
       id: "1",
       title: "Golden Hour Photography",
       description: "Capture the perfect sunset moment in your city. Show us your best golden hour shot!",
-      image: challenge1,
+      image_url: challenge1,
       prize: "$500 Cash",
-      participants: 12458,
-      timeLeft: "2d 14h left",
+      participants_count: 12458,
+      end_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
       points: 500,
       difficulty: "medium" as const,
     },
@@ -26,10 +32,10 @@ const Index = () => {
       id: "2",
       title: "Digital Art Fusion",
       description: "Create a unique digital artwork combining nature and technology themes.",
-      image: challenge2,
+      image_url: challenge2,
       prize: "$1000 Cash",
-      participants: 8932,
-      timeLeft: "5d 8h left",
+      participants_count: 8932,
+      end_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
       points: 750,
       difficulty: "hard" as const,
     },
@@ -37,14 +43,16 @@ const Index = () => {
       id: "3",
       title: "30-Second Dance Challenge",
       description: "Show off your best moves! Create an original 30-second dance routine.",
-      image: challenge3,
+      image_url: challenge3,
       prize: "$250 Cash",
-      participants: 24876,
-      timeLeft: "18h left",
+      participants_count: 24876,
+      end_date: new Date(Date.now() + 18 * 60 * 60 * 1000).toISOString(),
       points: 300,
       difficulty: "easy" as const,
     },
   ];
+
+  const displayChallenges = challenges && challenges.length > 0 ? challenges : fallbackChallenges;
 
   return (
     <div className="min-h-screen bg-background">
@@ -155,7 +163,7 @@ const Index = () => {
       {/* Featured Challenges */}
       <section className="py-20 px-4" id="challenges">
         <div className="container">
-          <div className="flex items-center justify-between mb-12">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
             <div>
               <h2 className="text-4xl font-bold text-foreground mb-3">
                 Featured Challenges
@@ -164,24 +172,45 @@ const Index = () => {
                 Join these trending challenges and start earning today
               </p>
             </div>
-            <Button variant="outline" className="hidden md:flex">
-              View All Challenges
-            </Button>
+            <div className="flex gap-3">
+              <Button 
+                variant="outline" 
+                size="lg"
+                onClick={() => generateChallenge({ type: "daily", count: 3 })}
+                disabled={isGenerating}
+                className="gap-2"
+              >
+                <RefreshCw className={`w-4 h-4 ${isGenerating ? "animate-spin" : ""}`} />
+                Generate AI Challenges
+              </Button>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {challenges.map((challenge, index) => (
-              <div key={challenge.id} style={{ animationDelay: `${index * 0.1}s` }}>
-                <ChallengeCard {...challenge} />
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-center mt-12 md:hidden">
-            <Button variant="outline" className="w-full sm:w-auto">
-              View All Challenges
-            </Button>
-          </div>
+          {isLoading ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-96 bg-muted/30 rounded-lg animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {displayChallenges.map((challenge, index) => (
+                <div key={challenge.id} style={{ animationDelay: `${index * 0.1}s` }}>
+                  <ChallengeCard 
+                    id={challenge.id}
+                    title={challenge.title}
+                    description={challenge.description}
+                    image={challenge.image_url || challenge1}
+                    prize={challenge.prize}
+                    participants={challenge.participants_count}
+                    timeLeft={calculateTimeLeft(challenge.end_date)}
+                    points={challenge.points}
+                    difficulty={challenge.difficulty}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
