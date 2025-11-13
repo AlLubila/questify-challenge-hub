@@ -95,22 +95,6 @@ const Index = () => {
                 </Button>
               </div>
 
-              <div className="flex items-center gap-8 pt-4">
-                <div>
-                  <p className="text-3xl font-bold text-foreground">$50k+</p>
-                  <p className="text-sm text-muted-foreground">{t("hero.prizesWon")}</p>
-                </div>
-                <div className="w-px h-12 bg-border" />
-                <div>
-                  <p className="text-3xl font-bold text-foreground">100k+</p>
-                  <p className="text-sm text-muted-foreground">{t("hero.activeUsers")}</p>
-                </div>
-                <div className="w-px h-12 bg-border" />
-                <div>
-                  <p className="text-3xl font-bold text-foreground">500+</p>
-                  <p className="text-sm text-muted-foreground">{t("hero.challenges")}</p>
-                </div>
-              </div>
             </div>
 
             <div className="relative animate-float">
@@ -125,41 +109,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-12 px-4 bg-muted/30">
-        <div className="container">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatsCard
-              icon={Trophy}
-              title={t("stats.totalPrizes")}
-              value="$50k+"
-              subtitle={t("stats.awardedToCreators")}
-              gradient="bg-gradient-accent"
-            />
-            <StatsCard
-              icon={Users}
-              title={t("stats.activeCreators")}
-              value="100k+"
-              subtitle={t("stats.creatingDaily")}
-              gradient="bg-gradient-primary"
-            />
-            <StatsCard
-              icon={Zap}
-              title={t("stats.dailyChallenges")}
-              value="12"
-              subtitle={t("stats.newEveryDay")}
-              gradient="bg-gradient-secondary"
-            />
-            <StatsCard
-              icon={TrendingUp}
-              title={t("stats.avgEarnings")}
-              value="$250"
-              subtitle={t("stats.perMonth")}
-              gradient="bg-gradient-primary"
-            />
-          </div>
-        </div>
-      </section>
 
       {/* Featured Challenges */}
       <section className="py-20 px-4" id="challenges">
