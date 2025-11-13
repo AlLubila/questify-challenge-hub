@@ -12,11 +12,15 @@ import { useChallenges, calculateTimeLeft } from "@/hooks/useChallenges";
 import { useGenerateChallenge } from "@/hooks/useGenerateChallenge";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ChallengeCardSkeleton } from "@/components/skeletons/ChallengeCardSkeleton";
+import { TrendingChallenges } from "@/components/TrendingChallenges";
+import { PersonalizedChallenges } from "@/components/PersonalizedChallenges";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
   const { data: challenges, isLoading } = useChallenges();
   const { mutate: generateChallenge, isPending: isGenerating } = useGenerateChallenge();
   const { t } = useLanguage();
+  const { user } = useAuth();
 
   // Fallback challenges for when database is empty
   const fallbackChallenges = [
@@ -125,31 +129,40 @@ const Index = () => {
             </div>
           </div>
 
-          {isLoading ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3].map((i) => (
-                <ChallengeCardSkeleton key={i} />
-              ))}
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayChallenges.map((challenge, index) => (
-                <div key={challenge.id} style={{ animationDelay: `${index * 0.1}s` }}>
-                  <ChallengeCard 
-                    id={challenge.id}
-                    title={challenge.title}
-                    description={challenge.description}
-                    image={challenge.image_url || challenge1}
-                    prize={challenge.prize}
-                    participants={challenge.participants_count}
-                    timeLeft={calculateTimeLeft(challenge.end_date)}
-                    points={challenge.points}
-                    difficulty={challenge.difficulty}
-                  />
+          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+            <div>
+              {isLoading ? (
+                <div className="grid md:grid-cols-2 gap-6">
+                  {[1, 2, 3, 4].map((i) => (
+                    <ChallengeCardSkeleton key={i} />
+                  ))}
                 </div>
-              ))}
+              ) : (
+                <div className="grid md:grid-cols-2 gap-6">
+                  {displayChallenges.map((challenge, index) => (
+                    <div key={challenge.id} style={{ animationDelay: `${index * 0.1}s` }}>
+                      <ChallengeCard 
+                        id={challenge.id}
+                        title={challenge.title}
+                        description={challenge.description}
+                        image={challenge.image_url || challenge1}
+                        prize={challenge.prize}
+                        participants={challenge.participants_count}
+                        timeLeft={calculateTimeLeft(challenge.end_date)}
+                        points={challenge.points}
+                        difficulty={challenge.difficulty}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+
+            <div className="hidden lg:block space-y-6 sticky top-6 h-fit">
+              <TrendingChallenges />
+              {user && <PersonalizedChallenges />}
+            </div>
+          </div>
         </div>
       </section>
 
