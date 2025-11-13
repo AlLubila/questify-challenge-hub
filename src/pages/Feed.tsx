@@ -15,6 +15,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import PullToRefresh from "react-simple-pull-to-refresh";
 import { UserRecommendations } from "@/components/UserRecommendations";
+import { WeeklyTopPerformers } from "@/components/WeeklyTopPerformers";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -303,7 +304,8 @@ const Feed = () => {
           </Tabs>
         </div>
 
-        <div className="hidden lg:block space-y-6 sticky top-6 h-fit">
+            <div className="hidden lg:block space-y-6 sticky top-6 h-fit">
+          <WeeklyTopPerformers />
           <UserRecommendations />
         </div>
       </div>
