@@ -10,10 +10,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Trophy, Clock, Users, Upload, Sparkles, ArrowLeft } from "lucide-react";
+import { Trophy, Clock, Users, Upload, Sparkles, ArrowLeft, Wand2 } from "lucide-react";
 import { calculateTimeLeft } from "@/hooks/useChallenges";
 import { useState } from "react";
 import challenge1 from "@/assets/challenge-1.jpg";
+import { ImageEditor } from "@/components/ImageEditor";
 
 const ChallengeDetail = () => {
   const { id } = useParams();
@@ -24,6 +25,7 @@ const ChallengeDetail = () => {
   const [contentFile, setContentFile] = useState<File | null>(null);
   const [caption, setCaption] = useState("");
   const [preview, setPreview] = useState<string>("");
+  const [isEditing, setIsEditing] = useState(false);
 
   const { data: challenge, isLoading } = useQuery({
     queryKey: ["challenge", id],
@@ -145,6 +147,17 @@ const ChallengeDetail = () => {
     }
   };
 
+  const handleEditedImage = (editedFile: File) => {
+    setContentFile(editedFile);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result as string);
+    };
+    reader.readAsDataURL(editedFile);
+    setIsEditing(false);
+    toast.success("Image edited successfully!");
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
@@ -256,45 +269,69 @@ const ChallengeDetail = () => {
                 <Card className="p-6">
                   <h2 className="text-2xl font-bold mb-4">Submit Your Entry</h2>
                   <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="content">Upload Photo/Video</Label>
-                      <Input
-                        id="content"
-                        type="file"
-                        accept="image/*,video/*"
-                        onChange={handleFileChange}
-                        className="cursor-pointer"
-                      />
-                      {preview && (
-                        <div className="mt-4 aspect-video bg-muted rounded-lg overflow-hidden">
-                          {contentFile?.type.startsWith("video") ? (
-                            <video src={preview} controls className="w-full h-full" />
-                          ) : (
-                            <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                    {!isEditing ? (
+                      <>
+                        <div>
+                          <Label htmlFor="content">Upload Photo/Video</Label>
+                          <Input
+                            id="content"
+                            type="file"
+                            accept="image/*,video/*"
+                            onChange={handleFileChange}
+                            className="cursor-pointer"
+                          />
+                          {preview && (
+                            <div className="mt-4 space-y-2">
+                              <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+                                {contentFile?.type.startsWith("video") ? (
+                                  <video src={preview} controls className="w-full h-full" />
+                                ) : (
+                                  <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                                )}
+                              </div>
+                              {contentFile?.type.startsWith("image") && (
+                                <Button
+                                  variant="outline"
+                                  onClick={() => setIsEditing(true)}
+                                  className="w-full"
+                                >
+                                  <Wand2 className="w-4 h-4 mr-2" />
+                                  Edit Image
+                                </Button>
+                              )}
+                            </div>
                           )}
                         </div>
-                      )}
-                    </div>
 
-                    <div>
-                      <Label htmlFor="caption">Caption (Optional)</Label>
-                      <Textarea
-                        id="caption"
-                        value={caption}
-                        onChange={(e) => setCaption(e.target.value)}
-                        placeholder="Tell us about your submission..."
-                        rows={4}
-                      />
-                    </div>
+                        <div>
+                          <Label htmlFor="caption">Caption (Optional)</Label>
+                          <Textarea
+                            id="caption"
+                            value={caption}
+                            onChange={(e) => setCaption(e.target.value)}
+                            placeholder="Tell us about your submission..."
+                            rows={4}
+                          />
+                        </div>
 
-                    <Button
-                      onClick={() => submitMutation.mutate()}
-                      disabled={!contentFile || submitMutation.isPending}
-                      className="w-full bg-gradient-primary"
-                    >
-                      <Upload className="w-4 h-4 mr-2" />
-                      {submitMutation.isPending ? "Submitting..." : "Submit Entry"}
-                    </Button>
+                        <Button
+                          onClick={() => submitMutation.mutate()}
+                          disabled={!contentFile || submitMutation.isPending}
+                          className="w-full bg-gradient-primary"
+                        >
+                          <Upload className="w-4 h-4 mr-2" />
+                          {submitMutation.isPending ? "Submitting..." : "Submit Entry"}
+                        </Button>
+                      </>
+                    ) : (
+                      contentFile && (
+                        <ImageEditor
+                          imageFile={contentFile}
+                          onSave={handleEditedImage}
+                          onCancel={() => setIsEditing(false)}
+                        />
+                      )
+                    )}
                   </div>
                 </Card>
               )
