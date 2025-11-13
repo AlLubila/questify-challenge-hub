@@ -41,6 +41,33 @@ export type Database = {
         }
         Relationships: []
       }
+      boost_purchases: {
+        Row: {
+          amount: number
+          boost_type: string
+          created_at: string
+          id: string
+          price_id: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          boost_type: string
+          created_at?: string
+          id?: string
+          price_id: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          boost_type?: string
+          created_at?: string
+          id?: string
+          price_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       challenges: {
         Row: {
           challenge_type: string
@@ -148,6 +175,7 @@ export type Database = {
           points: number | null
           updated_at: string | null
           username: string
+          wallet_balance: number
           xp: number | null
         }
         Insert: {
@@ -160,6 +188,7 @@ export type Database = {
           points?: number | null
           updated_at?: string | null
           username: string
+          wallet_balance?: number
           xp?: number | null
         }
         Update: {
@@ -172,6 +201,7 @@ export type Database = {
           points?: number | null
           updated_at?: string | null
           username?: string
+          wallet_balance?: number
           xp?: number | null
         }
         Relationships: []
@@ -214,6 +244,7 @@ export type Database = {
       }
       submissions: {
         Row: {
+          boost_level: string | null
           caption: string | null
           challenge_id: string
           content_url: string
@@ -224,6 +255,7 @@ export type Database = {
           votes: number | null
         }
         Insert: {
+          boost_level?: string | null
           caption?: string | null
           challenge_id: string
           content_url: string
@@ -234,6 +266,7 @@ export type Database = {
           votes?: number | null
         }
         Update: {
+          boost_level?: string | null
           caption?: string | null
           challenge_id?: string
           content_url?: string
@@ -259,6 +292,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      subscriptions: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          product_id: string
+          subscription_end: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          product_id: string
+          subscription_end?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          product_id?: string
+          subscription_end?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_badges: {
         Row: {
@@ -295,6 +358,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string | null
+          id: string
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {

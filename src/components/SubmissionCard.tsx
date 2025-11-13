@@ -3,13 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { Heart, MessageCircle, Send } from "lucide-react";
+import { Heart, MessageCircle, Send, Zap } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { BoostSubmissionDialog } from "@/components/BoostSubmissionDialog";
 
 interface SubmissionCardProps {
   submission: any;
@@ -174,11 +175,19 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
             </p>
           </div>
         </div>
-        <Badge
-          className={difficultyColors[submission.challenges.difficulty as keyof typeof difficultyColors]}
-        >
-          {submission.challenges.title}
-        </Badge>
+        <div className="flex items-center gap-2">
+          {submission.boost_level && submission.boost_level !== 'none' && (
+            <Badge variant="secondary" className="gap-1">
+              <Zap className="h-3 w-3" />
+              {submission.boost_level}
+            </Badge>
+          )}
+          <Badge
+            className={difficultyColors[submission.challenges.difficulty as keyof typeof difficultyColors]}
+          >
+            {submission.challenges.title}
+          </Badge>
+        </div>
       </div>
 
       {/* Submission Content */}
@@ -226,6 +235,18 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
           <MessageCircle className="w-5 h-5" />
           <span className="font-bold">{comments?.length || 0}</span>
         </Button>
+        {user && user.id === submission.user_id && (
+          <BoostSubmissionDialog submissionId={submission.id}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2 ml-auto"
+            >
+              <Zap className="w-5 h-5" />
+              <span className="font-bold">Boost</span>
+            </Button>
+          </BoostSubmissionDialog>
+        )}
       </div>
 
       {/* Comments Section */}

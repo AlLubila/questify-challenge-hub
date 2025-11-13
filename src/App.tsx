@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import ChallengeDetail from "./pages/ChallengeDetail";
 import Leaderboard from "./pages/Leaderboard";
 import Feed from "./pages/Feed";
+import Wallet from "./pages/Wallet";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/challenge/:id" element={<ChallengeDetail />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/feed" element={<Feed />} />
+            <Route path="/wallet" element={<Wallet />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

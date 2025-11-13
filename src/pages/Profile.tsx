@@ -1,5 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
+import { useSubscription } from "@/hooks/useSubscription";
 import { Navigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -10,15 +11,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Trophy, Zap, Upload, Save, Award } from "lucide-react";
+import { Sparkles, Trophy, Zap, Upload, Save, Award, Crown } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
 
 const Profile = () => {
   const { user, isLoading: authLoading } = useAuth();
   const { data: profile, isLoading: profileLoading } = useProfile();
+  const { subscriptionData, createCheckout, isCreatingCheckout, openCustomerPortal, isOpeningPortal } = useSubscription();
   const queryClient = useQueryClient();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -272,11 +275,12 @@ const Profile = () => {
           </div>
         </Card>
 
-        {/* Tabs for Badges and Submissions */}
+        {/* Tabs for Badges, Submissions, and Subscription */}
         <Tabs defaultValue="badges" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="badges">Badges ({userBadges?.length || 0})</TabsTrigger>
             <TabsTrigger value="submissions">Submissions ({submissions?.length || 0})</TabsTrigger>
+            <TabsTrigger value="subscription">Subscription</TabsTrigger>
           </TabsList>
 
           <TabsContent value="badges" className="space-y-4">
@@ -354,6 +358,85 @@ const Profile = () => {
                 </p>
               </Card>
             )}
+          </TabsContent>
+
+          <TabsContent value="subscription" className="space-y-4">
+            <Card className="p-8">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="p-3 rounded-full bg-gradient-primary">
+                  <Crown className="h-6 w-6 text-primary-foreground" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold mb-2">Creator Pass</h2>
+                  <p className="text-muted-foreground">
+                    Get exclusive perks, extra rewards, and premium features for $5/month
+                  </p>
+                </div>
+              </div>
+
+              {subscriptionData?.subscribed ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="default" className="text-lg px-4 py-1">Active</Badge>
+                    {subscriptionData.subscription_end && (
+                      <span className="text-sm text-muted-foreground">
+                        Renews on {format(new Date(subscriptionData.subscription_end), "PPP")}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className="bg-muted rounded-lg p-6 space-y-3">
+                    <h3 className="font-semibold mb-3">Your Benefits:</h3>
+                    <div className="flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-primary" />
+                      <span className="text-sm">2x Challenge Rewards</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Trophy className="h-4 w-4 text-primary" />
+                      <span className="text-sm">Exclusive Creator Badge</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      <span className="text-sm">Access to Premium Stats</span>
+                    </div>
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    onClick={() => openCustomerPortal()}
+                    disabled={isOpeningPortal}
+                  >
+                    Manage Subscription
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <div className="bg-muted rounded-lg p-6 space-y-3">
+                    <h3 className="font-semibold mb-3">What You'll Get:</h3>
+                    <div className="flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-primary" />
+                      <span className="text-sm">2x Challenge Rewards</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Trophy className="h-4 w-4 text-primary" />
+                      <span className="text-sm">Exclusive Creator Badge</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      <span className="text-sm">Access to Premium Stats</span>
+                    </div>
+                  </div>
+
+                  <Button
+                    className="bg-gradient-primary hover:shadow-glow"
+                    onClick={() => createCheckout()}
+                    disabled={isCreatingCheckout}
+                  >
+                    Subscribe for $5/month
+                  </Button>
+                </div>
+              )}
+            </Card>
           </TabsContent>
         </Tabs>
       </div>
