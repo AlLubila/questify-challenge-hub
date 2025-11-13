@@ -14,7 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      challenges: {
+        Row: {
+          challenge_type: string
+          created_at: string | null
+          created_by: string | null
+          description: string
+          difficulty: string
+          end_date: string
+          id: string
+          image_url: string | null
+          is_ai_generated: boolean | null
+          participants_count: number | null
+          points: number
+          prize: string
+          start_date: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          challenge_type: string
+          created_at?: string | null
+          created_by?: string | null
+          description: string
+          difficulty: string
+          end_date: string
+          id?: string
+          image_url?: string | null
+          is_ai_generated?: boolean | null
+          participants_count?: number | null
+          points?: number
+          prize: string
+          start_date?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          challenge_type?: string
+          created_at?: string | null
+          created_by?: string | null
+          description?: string
+          difficulty?: string
+          end_date?: string
+          id?: string
+          image_url?: string | null
+          is_ai_generated?: boolean | null
+          participants_count?: number | null
+          points?: number
+          prize?: string
+          start_date?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
