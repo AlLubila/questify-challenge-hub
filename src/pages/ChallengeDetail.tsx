@@ -66,13 +66,13 @@ const ChallengeDetail = () => {
       const filePath = `${user.id}/${id}/${Date.now()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("avatars")
+        .from("submissions")
         .upload(filePath, contentFile);
 
       if (uploadError) throw uploadError;
 
       const { data: urlData } = supabase.storage
-        .from("avatars")
+        .from("submissions")
         .getPublicUrl(filePath);
 
       // Create submission
