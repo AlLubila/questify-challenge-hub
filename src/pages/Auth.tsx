@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Sparkles, Mail, Chrome } from "lucide-react";
 import { z } from "zod";
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 
 const emailSchema = z.string().trim().email("Invalid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -17,7 +17,9 @@ const usernameSchema = z.string().trim().min(3, "Username must be at least 3 cha
 
 const Auth = () => {
   const { user, isLoading } = useAuth();
+  const [searchParams] = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [referralCode, setReferralCode] = useState<string | null>(null);
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState("");
@@ -28,6 +30,15 @@ const Auth = () => {
   const [signupPassword, setSignupPassword] = useState("");
   const [signupUsername, setSignupUsername] = useState("");
   const [signupDisplayName, setSignupDisplayName] = useState("");
+
+  // Check for referral code in URL
+  useEffect(() => {
+    const refCode = searchParams.get("ref");
+    if (refCode) {
+      setReferralCode(refCode);
+      toast.success("Referral code applied! Sign up to get your bonus.");
+    }
+  }, [searchParams]);
 
   // Redirect if already logged in
   if (user && !isLoading) {
@@ -79,6 +90,20 @@ const Auth = () => {
       passwordSchema.parse(signupPassword);
       usernameSchema.parse(signupUsername);
 
+      // Get referrer profile ID from referral code if exists
+      let referredById = null;
+      if (referralCode) {
+        const { data: referrerProfile } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("referral_code", referralCode)
+          .single();
+        
+        if (referrerProfile) {
+          referredById = referrerProfile.id;
+        }
+      }
+
       const redirectUrl = `${window.location.origin}/`;
 
       const { error } = await supabase.auth.signUp({
@@ -89,6 +114,7 @@ const Auth = () => {
           data: {
             username: signupUsername,
             display_name: signupDisplayName || signupUsername,
+            referred_by: referredById,
           },
         },
       });
@@ -220,6 +246,13 @@ const Auth = () => {
             </TabsContent>
 
             <TabsContent value="signup" className="space-y-4">
+              {referralCode && (
+                <div className="p-3 bg-primary/10 rounded-lg border border-primary/20">
+                  <p className="text-sm text-foreground">
+                    🎉 Referral code applied! You'll get <span className="font-bold">25 coins</span> when you sign up.
+                  </p>
+                </div>
+              )}
               <form onSubmit={handleSignup} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="signup-username">Username</Label>

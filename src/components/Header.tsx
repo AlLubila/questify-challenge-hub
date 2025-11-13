@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles, Menu, X, User, LogOut, Wallet, Shield } from "lucide-react";
+import { Sparkles, Menu, X, User, LogOut, Wallet, Shield, Gift } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
@@ -84,6 +84,10 @@ export const Header = () => {
                     <Wallet className="mr-2 h-4 w-4" />
                     Wallet
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/referrals')}>
+                    <Gift className="mr-2 h-4 w-4" />
+                    Referrals
+                  </DropdownMenuItem>
                   {isAdminOrModerator && (
                     <DropdownMenuItem onClick={() => navigate('/admin')}>
                       <Shield className="mr-2 h-4 w-4" />
@@ -129,6 +133,11 @@ export const Header = () => {
             <button onClick={() => navigate('/leaderboard')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
               Leaderboard
             </button>
+            {user && (
+              <button onClick={() => navigate('/referrals')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
+                Referrals
+              </button>
+            )}
             <div className="flex flex-col gap-3 pt-4 border-t border-border">
               {user && profile ? (
                 <>

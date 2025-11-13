@@ -11,6 +11,7 @@ import ChallengeDetail from "./pages/ChallengeDetail";
 import Leaderboard from "./pages/Leaderboard";
 import Feed from "./pages/Feed";
 import Wallet from "./pages/Wallet";
+import Referrals from "./pages/Referrals";
 import NotFound from "./pages/NotFound";
 import { AdminDashboard } from "@/pages/admin/AdminDashboard";
 import { UserManagement } from "@/pages/admin/UserManagement";
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/feed" element={<Feed />} />
             <Route path="/wallet" element={<Wallet />} />
+            <Route path="/referrals" element={<Referrals />} />
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="users" element={<UserManagement />} />

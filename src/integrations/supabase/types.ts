@@ -262,6 +262,10 @@ export type Database = {
           id: string
           level: number | null
           points: number | null
+          referral_code: string | null
+          referral_count: number | null
+          referral_earnings: number | null
+          referred_by: string | null
           updated_at: string | null
           username: string
           wallet_balance: number
@@ -277,6 +281,10 @@ export type Database = {
           id: string
           level?: number | null
           points?: number | null
+          referral_code?: string | null
+          referral_count?: number | null
+          referral_earnings?: number | null
+          referred_by?: string | null
           updated_at?: string | null
           username: string
           wallet_balance?: number
@@ -292,12 +300,69 @@ export type Database = {
           id?: string
           level?: number | null
           points?: number | null
+          referral_code?: string | null
+          referral_count?: number | null
+          referral_earnings?: number | null
+          referred_by?: string | null
           updated_at?: string | null
           username?: string
           wallet_balance?: number
           xp?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_referred_by_fkey"
+            columns: ["referred_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referrals: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          referred_id: string
+          referrer_id: string
+          reward_amount: number
+          status: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          referred_id: string
+          referrer_id: string
+          reward_amount?: number
+          status?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          referred_id?: string
+          referrer_id?: string
+          reward_amount?: number
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_referred_id_fkey"
+            columns: ["referred_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       submission_votes: {
         Row: {
@@ -520,6 +585,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_referral_code: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
