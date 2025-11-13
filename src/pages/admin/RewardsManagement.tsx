@@ -7,12 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Trophy, Plus, Trash2, Loader2 } from "lucide-react";
+import { Trophy, Plus, Loader2, UserPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const RewardsManagement = () => {
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [selectedBadgeId, setSelectedBadgeId] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState("");
   const [newBadge, setNewBadge] = useState({
     name: "",
     description: "",
@@ -28,6 +32,20 @@ export const RewardsManagement = () => {
         .from("badges")
         .select("*")
         .order("created_at", { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  // Fetch users for badge assignment
+  const { data: users } = useQuery({
+    queryKey: ["admin-users-for-badges"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, username, display_name")
+        .order("username");
       
       if (error) throw error;
       return data;
@@ -55,6 +73,36 @@ export const RewardsManagement = () => {
       toast.success("Badge created successfully!");
       setIsDialogOpen(false);
       setNewBadge({ name: "", description: "", criteria: "", icon: "" });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
+  });
+
+  // Assign badge mutation
+  const assignBadge = useMutation({
+    mutationFn: async () => {
+      if (!selectedBadgeId || !selectedUserId) {
+        throw new Error("Please select both a badge and a user");
+      }
+
+      const { error } = await supabase.from("user_badges").insert({
+        badge_id: selectedBadgeId,
+        user_id: selectedUserId,
+      });
+
+      if (error) {
+        if (error.code === "23505") {
+          throw new Error("User already has this badge");
+        }
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      toast.success("Badge assigned successfully!");
+      setIsAssignDialogOpen(false);
+      setSelectedBadgeId("");
+      setSelectedUserId("");
     },
     onError: (error: Error) => {
       toast.error(error.message);
@@ -96,69 +144,124 @@ export const RewardsManagement = () => {
           <h1 className="text-3xl font-bold text-foreground">Rewards Management</h1>
           <p className="text-muted-foreground mt-1">Create and manage badges, titles, and profile effects</p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-gradient-primary">
-              <Plus className="w-4 h-4 mr-2" />
-              Create Reward
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Create New Reward</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="name">Reward Name *</Label>
-                <Input
-                  id="name"
-                  value={newBadge.name}
-                  onChange={(e) => setNewBadge({ ...newBadge, name: e.target.value })}
-                  placeholder="e.g., Viral Star Badge"
-                  maxLength={50}
-                />
+        <div className="flex gap-2">
+          <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <UserPlus className="w-4 h-4 mr-2" />
+                Assign Badge
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Assign Badge to User</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="badge">Select Badge *</Label>
+                  <Select value={selectedBadgeId} onValueChange={setSelectedBadgeId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose a badge..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {badges?.map((badge) => (
+                        <SelectItem key={badge.id} value={badge.id}>
+                          {badge.icon} {badge.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="user">Select User *</Label>
+                  <Select value={selectedUserId} onValueChange={setSelectedUserId}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose a user..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {users?.map((user) => (
+                        <SelectItem key={user.id} value={user.id}>
+                          {user.display_name || user.username}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button
+                  onClick={() => assignBadge.mutate()}
+                  disabled={assignBadge.isPending}
+                  className="w-full"
+                >
+                  {assignBadge.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  Assign Badge
+                </Button>
               </div>
-              <div>
-                <Label htmlFor="icon">Icon/Emoji</Label>
-                <Input
-                  id="icon"
-                  value={newBadge.icon}
-                  onChange={(e) => setNewBadge({ ...newBadge, icon: e.target.value })}
-                  placeholder="🏆"
-                  maxLength={10}
-                />
-              </div>
-              <div>
-                <Label htmlFor="description">Description *</Label>
-                <Textarea
-                  id="description"
-                  value={newBadge.description}
-                  onChange={(e) => setNewBadge({ ...newBadge, description: e.target.value })}
-                  placeholder="Exclusive badge for trending creators"
-                  rows={3}
-                />
-              </div>
-              <div>
-                <Label htmlFor="criteria">Award Criteria *</Label>
-                <Textarea
-                  id="criteria"
-                  value={newBadge.criteria}
-                  onChange={(e) => setNewBadge({ ...newBadge, criteria: e.target.value })}
-                  placeholder="e.g., Complete 5 viral challenges"
-                  rows={2}
-                />
-              </div>
-              <Button
-                onClick={() => createBadge.mutate()}
-                disabled={createBadge.isPending}
-                className="w-full"
-              >
-                {createBadge.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+            </DialogContent>
+          </Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-gradient-primary">
+                <Plus className="w-4 h-4 mr-2" />
                 Create Reward
               </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Create New Reward</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="name">Reward Name *</Label>
+                  <Input
+                    id="name"
+                    value={newBadge.name}
+                    onChange={(e) => setNewBadge({ ...newBadge, name: e.target.value })}
+                    placeholder="e.g., Viral Star Badge"
+                    maxLength={50}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="icon">Icon/Emoji</Label>
+                  <Input
+                    id="icon"
+                    value={newBadge.icon}
+                    onChange={(e) => setNewBadge({ ...newBadge, icon: e.target.value })}
+                    placeholder="🏆"
+                    maxLength={10}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="description">Description *</Label>
+                  <Textarea
+                    id="description"
+                    value={newBadge.description}
+                    onChange={(e) => setNewBadge({ ...newBadge, description: e.target.value })}
+                    placeholder="Exclusive badge for trending creators"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="criteria">Award Criteria *</Label>
+                  <Textarea
+                    id="criteria"
+                    value={newBadge.criteria}
+                    onChange={(e) => setNewBadge({ ...newBadge, criteria: e.target.value })}
+                    placeholder="e.g., Complete 5 viral challenges"
+                    rows={2}
+                  />
+                </div>
+                <Button
+                  onClick={() => createBadge.mutate()}
+                  disabled={createBadge.isPending}
+                  className="w-full"
+                >
+                  {createBadge.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  Create Reward
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       {/* Reward Templates */}

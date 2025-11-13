@@ -28,6 +28,9 @@ export const CreateChallenge = () => {
   const [duration, setDuration] = useState("1");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
+  const [publishStatus, setPublishStatus] = useState<"published" | "scheduled">("published");
+  const [scheduledDate, setScheduledDate] = useState("");
+  const [scheduledTime, setScheduledTime] = useState("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -72,9 +75,23 @@ export const CreateChallenge = () => {
         imageUrl = urlData.publicUrl;
       }
 
-      // Calculate end date
+      // Calculate end date and dates for scheduling
       const now = new Date();
-      const endDate = new Date(now);
+      let startDate = now;
+      let scheduledPublishAt = null;
+      
+      if (publishStatus === "scheduled") {
+        if (!scheduledDate || !scheduledTime) {
+          throw new Error("Please set a schedule date and time");
+        }
+        scheduledPublishAt = new Date(`${scheduledDate}T${scheduledTime}`);
+        if (scheduledPublishAt <= now) {
+          throw new Error("Scheduled time must be in the future");
+        }
+        startDate = scheduledPublishAt;
+      }
+
+      const endDate = new Date(startDate);
       const durationDays = challengeType === "daily" ? parseInt(duration) : parseInt(duration) * 7;
       endDate.setDate(endDate.getDate() + durationDays);
 
@@ -85,12 +102,14 @@ export const CreateChallenge = () => {
         difficulty,
         points: parseInt(points),
         challenge_type: challengeType,
-        start_date: now.toISOString(),
+        start_date: startDate.toISOString(),
         end_date: endDate.toISOString(),
         image_url: imageUrl,
         created_by: user.id,
         is_ai_generated: false,
         participants_count: 0,
+        publish_status: publishStatus,
+        scheduled_publish_at: scheduledPublishAt?.toISOString(),
       });
 
       if (error) throw error;
@@ -98,7 +117,10 @@ export const CreateChallenge = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["challenges"] });
       queryClient.invalidateQueries({ queryKey: ["allChallenges"] });
-      toast.success(t("admin.challengeCreated"));
+      const message = publishStatus === "scheduled" 
+        ? "Challenge scheduled successfully!" 
+        : t("admin.challengeCreated");
+      toast.success(message);
       
       // Reset form
       setTitle("");
@@ -110,6 +132,9 @@ export const CreateChallenge = () => {
       setDuration("1");
       setImageFile(null);
       setImagePreview("");
+      setPublishStatus("published");
+      setScheduledDate("");
+      setScheduledTime("");
     },
     onError: (error: Error) => {
       toast.error(error.message || t("admin.challengeCreateFailed"));
@@ -222,6 +247,46 @@ export const CreateChallenge = () => {
                 : t("admin.durationWeeksHint")}
             </p>
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="publishStatus">Publish Status</Label>
+            <Select value={publishStatus} onValueChange={(value: any) => setPublishStatus(value)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="published">Publish Now</SelectItem>
+                <SelectItem value="scheduled">Schedule for Later</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {publishStatus === "scheduled" && (
+            <div className="grid md:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-muted/30">
+              <div className="space-y-2">
+                <Label htmlFor="scheduledDate">Schedule Date *</Label>
+                <Input
+                  id="scheduledDate"
+                  type="date"
+                  value={scheduledDate}
+                  onChange={(e) => setScheduledDate(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="scheduledTime">Schedule Time *</Label>
+                <Input
+                  id="scheduledTime"
+                  type="time"
+                  value={scheduledTime}
+                  onChange={(e) => setScheduledTime(e.target.value)}
+                />
+              </div>
+              <p className="text-sm text-muted-foreground col-span-2">
+                Challenge will be automatically published at the scheduled time
+              </p>
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="image">{t("admin.challengeImage")}</Label>
