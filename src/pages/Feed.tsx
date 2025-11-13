@@ -8,8 +8,10 @@ import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Feed = () => {
+  const { t } = useLanguage();
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const boostSuccess = searchParams.get("boost_success");

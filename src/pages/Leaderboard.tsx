@@ -6,8 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Trophy, Medal, Award } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Leaderboard = () => {
+  const { t } = useLanguage();
   const { data: allTimeLeaders, isLoading: allTimeLoading } = useQuery({
     queryKey: ["leaderboard", "all-time"],
     queryFn: async () => {
@@ -47,8 +49,8 @@ const Leaderboard = () => {
       return (
         <Card className="p-12 text-center">
           <Trophy className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-          <h3 className="text-xl font-bold mb-2">No rankings yet</h3>
-          <p className="text-muted-foreground">Be the first to earn points!</p>
+          <h3 className="text-xl font-bold mb-2">{t("leaderboard.noRankings")}</h3>
+          <p className="text-muted-foreground">{t("leaderboard.beFirstToEarn")}</p>
         </Card>
       );
     }
@@ -87,9 +89,9 @@ const Leaderboard = () => {
 
                 <div className="text-right space-y-1">
                   <Badge variant="secondary" className="font-bold">
-                    {profile.points.toLocaleString()} pts
+                    {profile.points.toLocaleString()} {t("leaderboard.pts")}
                   </Badge>
-                  <p className="text-xs text-muted-foreground">Level {profile.level}</p>
+                  <p className="text-xs text-muted-foreground">{t("profile.level")} {profile.level}</p>
                 </div>
               </div>
             </Card>
