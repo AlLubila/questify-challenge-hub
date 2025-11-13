@@ -32,7 +32,7 @@ const Profile = () => {
   
   // Fetch the profile of the user being viewed
   const { data: profile, isLoading: profileLoading } = useQuery({
-    queryKey: ["profile", viewedUserId],
+    queryKey: ["profile", viewedUserId, isOwnProfile],
     queryFn: async () => {
       if (!viewedUserId) return null;
       
@@ -40,9 +40,16 @@ const Profile = () => {
         .from("profiles")
         .select("*")
         .eq("id", viewedUserId)
-        .single();
+        .maybeSingle();
       
       if (error) throw error;
+      
+      // If not viewing own profile, remove sensitive fields from the response
+      if (data && !isOwnProfile) {
+        const { wallet_balance, referral_earnings, referral_code, ...publicData } = data;
+        return publicData as typeof data;
+      }
+      
       return data;
     },
     enabled: !!viewedUserId,
