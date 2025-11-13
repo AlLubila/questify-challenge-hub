@@ -15,6 +15,7 @@ import { ChallengeCardSkeleton } from "@/components/skeletons/ChallengeCardSkele
 import { TrendingChallenges } from "@/components/TrendingChallenges";
 import { PersonalizedChallenges } from "@/components/PersonalizedChallenges";
 import { WeeklyTopPerformers } from "@/components/WeeklyTopPerformers";
+import { AchievementsShowcase } from "@/components/AchievementsShowcase";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
@@ -161,6 +162,7 @@ const Index = () => {
 
             <div className="hidden lg:block space-y-6 sticky top-6 h-fit">
               <WeeklyTopPerformers />
+              <AchievementsShowcase />
               <TrendingChallenges />
               {user && <PersonalizedChallenges />}
             </div>
