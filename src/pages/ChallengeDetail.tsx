@@ -14,7 +14,7 @@ import { Trophy, Clock, Users, Upload, Sparkles, ArrowLeft, Wand2 } from "lucide
 import { calculateTimeLeft } from "@/hooks/useChallenges";
 import { useState } from "react";
 import challenge1 from "@/assets/challenge-1.jpg";
-import { ImageEditor } from "@/components/ImageEditor";
+import { ImageEditorAdvanced } from "@/components/ImageEditorAdvanced";
 
 const ChallengeDetail = () => {
   const { id } = useParams();
@@ -325,7 +325,7 @@ const ChallengeDetail = () => {
                       </>
                     ) : (
                       contentFile && (
-                        <ImageEditor
+                        <ImageEditorAdvanced
                           imageFile={contentFile}
                           onSave={handleEditedImage}
                           onCancel={() => setIsEditing(false)}

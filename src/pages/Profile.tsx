@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Trophy, Zap, Upload, Save, Award, Crown, Users } from "lucide-react";
+import { Sparkles, Trophy, Zap, Upload, Save, Award, Crown, Users, Pencil } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -19,6 +19,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { FollowButton } from "@/components/FollowButton";
 import { FollowersModal } from "@/pages/FollowersModal";
+import { ReEditSubmissionDialog } from "@/components/ReEditSubmissionDialog";
 
 const Profile = () => {
   const { user, isLoading: authLoading } = useAuth();
@@ -408,33 +409,45 @@ const Profile = () => {
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {submissions.map((submission: any) => (
                   <Card key={submission.id} className="overflow-hidden">
-                    <div className="aspect-video bg-muted relative">
-                      <img
-                        src={submission.content_url}
-                        alt="Submission"
-                        className="w-full h-full object-cover"
-                      />
-                      <Badge className="absolute top-2 right-2">
-                        {submission.status}
-                      </Badge>
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-bold mb-1">{submission.challenges.title}</h3>
-                      {submission.caption && (
-                        <p className="text-sm text-muted-foreground mb-2">
-                          {submission.caption}
-                        </p>
-                      )}
-                      <div className="flex items-center gap-4 text-sm">
-                        <span className="flex items-center gap-1">
-                          <Trophy className="w-4 h-4 text-accent" />
-                          {submission.votes} votes
-                        </span>
-                        <span className="text-muted-foreground">
-                          {new Date(submission.submitted_at).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
+                     <div className="aspect-video bg-muted relative">
+                       <img
+                         src={submission.content_url}
+                         alt="Submission"
+                         className="w-full h-full object-cover"
+                       />
+                       <Badge className="absolute top-2 right-2">
+                         {submission.status}
+                       </Badge>
+                       {isOwnProfile && (
+                         <ReEditSubmissionDialog submission={submission}>
+                           <Button
+                             size="sm"
+                             variant="secondary"
+                             className="absolute bottom-2 right-2 gap-1"
+                           >
+                             <Pencil className="w-3 h-3" />
+                             Edit
+                           </Button>
+                         </ReEditSubmissionDialog>
+                       )}
+                     </div>
+                     <div className="p-4">
+                       <h3 className="font-bold mb-1">{submission.challenges.title}</h3>
+                       {submission.caption && (
+                         <p className="text-sm text-muted-foreground mb-2">
+                           {submission.caption}
+                         </p>
+                       )}
+                       <div className="flex items-center gap-4 text-sm">
+                         <span className="flex items-center gap-1">
+                           <Trophy className="w-4 h-4 text-accent" />
+                           {submission.votes} votes
+                         </span>
+                         <span className="text-muted-foreground">
+                           {new Date(submission.submitted_at).toLocaleDateString()}
+                         </span>
+                       </div>
+                     </div>
                   </Card>
                 ))}
               </div>
