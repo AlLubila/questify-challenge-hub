@@ -19,6 +19,7 @@ import { ChallengeModeration } from "@/pages/admin/ChallengeModeration";
 import { Analytics } from "@/pages/admin/Analytics";
 import { ActivityLogs } from "@/pages/admin/ActivityLogs";
 import { AdminLayout } from "@/pages/admin/AdminLayout";
+import PaymentAnalytics from "@/pages/admin/PaymentAnalytics";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="submissions" element={<SubmissionModeration />} />
               <Route path="challenges" element={<ChallengeModeration />} />
               <Route path="analytics" element={<Analytics />} />
+              <Route path="payments" element={<PaymentAnalytics />} />
               <Route path="logs" element={<ActivityLogs />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

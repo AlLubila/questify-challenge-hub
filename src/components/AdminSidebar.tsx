@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Home, Users, FileText, Trophy, BarChart3, ScrollText } from "lucide-react";
+import { Home, Users, FileText, Trophy, BarChart3, ScrollText, DollarSign } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const menuItems = [
@@ -36,6 +36,11 @@ const menuItems = [
     title: "Analytics",
     url: "/admin/analytics",
     icon: BarChart3,
+  },
+  {
+    title: "Payments",
+    url: "/admin/payments",
+    icon: DollarSign,
   },
   {
     title: "Activity Logs",
