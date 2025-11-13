@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles, Menu, X, User, LogOut, Wallet, Shield, Gift } from "lucide-react";
+import { Sparkles, Menu, X, User, LogOut, Wallet, Shield, Gift, Globe } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
@@ -15,6 +15,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import { useLanguage, Language } from "@/contexts/LanguageContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,6 +30,19 @@ export const Header = () => {
   const { data: profile } = useProfile();
   const { isAdminOrModerator } = useUserRole();
   const navigate = useNavigate();
+  const { language, setLanguage, t } = useLanguage();
+
+  const languages = [
+    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: "es", name: "Español", flag: "🇪🇸" },
+    { code: "fr", name: "Français", flag: "🇫🇷" },
+    { code: "de", name: "Deutsch", flag: "🇩🇪" },
+    { code: "pt", name: "Português", flag: "🇧🇷" },
+    { code: "it", name: "Italiano", flag: "🇮🇹" },
+    { code: "ja", name: "日本語", flag: "🇯🇵" },
+    { code: "ko", name: "한국어", flag: "🇰🇷" },
+    { code: "zh", name: "中文", flag: "🇨🇳" },
+  ];
 
   return (
     <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
@@ -36,21 +57,39 @@ export const Header = () => {
           
           <nav className="hidden md:flex items-center gap-6">
             <button onClick={() => navigate('/')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Home
+              {t("nav.home")}
             </button>
             <a href="/#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Challenges
+              {t("nav.challenges")}
             </a>
             <button onClick={() => navigate('/feed')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Feed
+              {t("nav.feed")}
             </button>
             <button onClick={() => navigate('/leaderboard')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Leaderboard
+              {t("nav.leaderboard")}
             </button>
           </nav>
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Language Selector */}
+          <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
+            <SelectTrigger className="w-[140px] hidden md:flex">
+              <Globe className="w-4 h-4 mr-2" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {languages.map((lang) => (
+                <SelectItem key={lang.code} value={lang.code}>
+                  <span className="flex items-center gap-2">
+                    <span>{lang.flag}</span>
+                    <span>{lang.name}</span>
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           {user && profile ? (
             <div className="hidden md:flex items-center gap-3">
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-accent/10 border border-accent/20">
@@ -81,35 +120,35 @@ export const Header = () => {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate('/profile')}>
                     <User className="mr-2 h-4 w-4" />
-                    Profile
+                    {t("nav.profile")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/wallet')}>
                     <Wallet className="mr-2 h-4 w-4" />
-                    Wallet
+                    {t("nav.wallet")}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/referrals')}>
                     <Gift className="mr-2 h-4 w-4" />
-                    Referrals
+                    {t("nav.referrals")}
                   </DropdownMenuItem>
                   {isAdminOrModerator && (
                     <DropdownMenuItem onClick={() => navigate('/admin')}>
                       <Shield className="mr-2 h-4 w-4" />
-                      Admin Panel
+                      {t("nav.admin")}
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut}>
                     <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
+                    {t("nav.signOut")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           ) : (
             <div className="hidden md:flex items-center gap-3">
-              <Button variant="outline" onClick={() => navigate('/auth')}>Sign In</Button>
+              <Button variant="outline" onClick={() => navigate('/auth')}>{t("nav.signIn")}</Button>
               <Button className="bg-gradient-primary hover:shadow-glow" onClick={() => navigate('/auth')}>
-                Get Started
+                {t("nav.getStarted")}
               </Button>
             </div>
           )}

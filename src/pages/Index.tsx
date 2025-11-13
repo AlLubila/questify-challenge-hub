@@ -172,18 +172,6 @@ const Index = () => {
                 Join these trending challenges and start earning today
               </p>
             </div>
-            <div className="flex gap-3">
-              <Button 
-                variant="outline" 
-                size="lg"
-                onClick={() => generateChallenge({ type: "daily", count: 3 })}
-                disabled={isGenerating}
-                className="gap-2"
-              >
-                <RefreshCw className={`w-4 h-4 ${isGenerating ? "animate-spin" : ""}`} />
-                Generate AI Challenges
-              </Button>
-            </div>
           </div>
 
           {isLoading ? (
