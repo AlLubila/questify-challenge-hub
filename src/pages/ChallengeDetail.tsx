@@ -16,6 +16,7 @@ import { useState } from "react";
 import challenge1 from "@/assets/challenge-1.jpg";
 import { ImageEditorAdvanced } from "@/components/ImageEditorAdvanced";
 import { useCamera } from "@/hooks/useCamera";
+import { compressImage } from "@/lib/imageCompression";
 
 const ChallengeDetail = () => {
   const { id } = useParams();
@@ -28,6 +29,7 @@ const ChallengeDetail = () => {
   const [caption, setCaption] = useState("");
   const [preview, setPreview] = useState<string>("");
   const [isEditing, setIsEditing] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
 
   const { data: challenge, isLoading } = useQuery({
     queryKey: ["challenge", id],
@@ -133,19 +135,47 @@ const ChallengeDetail = () => {
     },
   });
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 20 * 1024 * 1024) {
         toast.error("File must be less than 20MB");
         return;
       }
-      setContentFile(file);
+
+      // Compress image if it's an image file
+      let finalFile = file;
+      if (file.type.startsWith('image/')) {
+        setIsCompressing(true);
+        toast.loading("Compressing image...", { id: "compress" });
+        
+        try {
+          finalFile = await compressImage(file, {
+            maxWidth: 1920,
+            maxHeight: 1920,
+            quality: 0.85,
+          });
+          
+          const savings = ((1 - finalFile.size / file.size) * 100).toFixed(1);
+          if (finalFile.size < file.size) {
+            toast.success(`Image compressed! ${savings}% smaller`, { id: "compress" });
+          } else {
+            toast.dismiss("compress");
+          }
+        } catch (error) {
+          console.error('Compression error:', error);
+          toast.error("Compression failed, using original", { id: "compress" });
+        } finally {
+          setIsCompressing(false);
+        }
+      }
+
+      setContentFile(finalFile);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result as string);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(finalFile);
     }
   };
 
@@ -163,24 +193,84 @@ const ChallengeDetail = () => {
   const handleCameraCapture = async () => {
     const file = await takePicture();
     if (file) {
-      setContentFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      // Compress the captured image
+      setIsCompressing(true);
+      toast.loading("Compressing image...", { id: "compress" });
+      
+      try {
+        const compressedFile = await compressImage(file, {
+          maxWidth: 1920,
+          maxHeight: 1920,
+          quality: 0.85,
+        });
+        
+        const savings = ((1 - compressedFile.size / file.size) * 100).toFixed(1);
+        if (compressedFile.size < file.size) {
+          toast.success(`Image compressed! ${savings}% smaller`, { id: "compress" });
+        } else {
+          toast.dismiss("compress");
+        }
+        
+        setContentFile(compressedFile);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error('Compression error:', error);
+        toast.error("Compression failed, using original", { id: "compress" });
+        setContentFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      } finally {
+        setIsCompressing(false);
+      }
     }
   };
 
   const handleGalleryPick = async () => {
     const file = await pickFromGallery();
     if (file) {
-      setContentFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      // Compress the selected image
+      setIsCompressing(true);
+      toast.loading("Compressing image...", { id: "compress" });
+      
+      try {
+        const compressedFile = await compressImage(file, {
+          maxWidth: 1920,
+          maxHeight: 1920,
+          quality: 0.85,
+        });
+        
+        const savings = ((1 - compressedFile.size / file.size) * 100).toFixed(1);
+        if (compressedFile.size < file.size) {
+          toast.success(`Image compressed! ${savings}% smaller`, { id: "compress" });
+        } else {
+          toast.dismiss("compress");
+        }
+        
+        setContentFile(compressedFile);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error('Compression error:', error);
+        toast.error("Compression failed, using original", { id: "compress" });
+        setContentFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      } finally {
+        setIsCompressing(false);
+      }
     }
   };
 
@@ -306,6 +396,7 @@ const ChallengeDetail = () => {
                                 type="button"
                                 variant="outline"
                                 onClick={handleCameraCapture}
+                                disabled={isCompressing}
                                 className="w-full"
                               >
                                 <Camera className="w-4 h-4 mr-2" />
@@ -315,6 +406,7 @@ const ChallengeDetail = () => {
                                 type="button"
                                 variant="outline"
                                 onClick={handleGalleryPick}
+                                disabled={isCompressing}
                                 className="w-full"
                               >
                                 <ImageIcon className="w-4 h-4 mr-2" />
@@ -332,6 +424,7 @@ const ChallengeDetail = () => {
                               type="file"
                               accept="image/*,video/*"
                               onChange={handleFileChange}
+                              disabled={isCompressing}
                               className="cursor-pointer"
                             />
                           </div>
