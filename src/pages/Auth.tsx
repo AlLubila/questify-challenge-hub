@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Sparkles, Mail, Chrome } from "lucide-react";
 import { z } from "zod";
 import { Navigate, useSearchParams } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const emailSchema = z.string().trim().email("Invalid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -20,6 +21,7 @@ const Auth = () => {
   const [searchParams] = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [referralCode, setReferralCode] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState("");
@@ -186,14 +188,14 @@ const Auth = () => {
         <Card className="p-6">
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="login">{t("auth.login")}</TabsTrigger>
+              <TabsTrigger value="signup">{t("auth.signup")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login" className="space-y-4">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
+                  <Label htmlFor="login-email">{t("auth.email")}</Label>
                   <Input
                     id="login-email"
                     type="email"
@@ -204,7 +206,7 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
+                  <Label htmlFor="login-password">{t("auth.password")}</Label>
                   <Input
                     id="login-password"
                     type="password"
@@ -220,7 +222,7 @@ const Auth = () => {
                   disabled={isSubmitting}
                 >
                   <Mail className="w-4 h-4 mr-2" />
-                  {isSubmitting ? "Signing in..." : "Sign In"}
+                  {isSubmitting ? t("auth.signingIn") : t("auth.signIn")}
                 </Button>
               </form>
 
@@ -229,7 +231,7 @@ const Auth = () => {
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                  <span className="bg-card px-2 text-muted-foreground">{t("auth.signInWith")}</span>
                 </div>
               </div>
 
@@ -255,7 +257,7 @@ const Auth = () => {
               )}
               <form onSubmit={handleSignup} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-username">Username</Label>
+                  <Label htmlFor="signup-username">{t("auth.username")}</Label>
                   <Input
                     id="signup-username"
                     type="text"
@@ -266,7 +268,7 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-display-name">Display Name (Optional)</Label>
+                  <Label htmlFor="signup-display-name">{t("auth.displayName")}</Label>
                   <Input
                     id="signup-display-name"
                     type="text"
@@ -276,7 +278,7 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email">{t("auth.email")}</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -287,7 +289,7 @@ const Auth = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
+                  <Label htmlFor="signup-password">{t("auth.password")}</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -303,7 +305,7 @@ const Auth = () => {
                   disabled={isSubmitting}
                 >
                   <Sparkles className="w-4 h-4 mr-2" />
-                  {isSubmitting ? "Creating account..." : "Create Account"}
+                  {isSubmitting ? t("auth.creatingAccount") : t("auth.createAccount")}
                 </Button>
               </form>
 

@@ -1,11 +1,14 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
-export type Language = "en" | "es" | "fr" | "de" | "pt" | "it" | "ja" | "ko" | "zh";
+export type Language = "en" | "es" | "fr" | "de" | "pt" | "it" | "ja" | "ko" | "zh" | "ar" | "he";
+
+const RTL_LANGUAGES: Language[] = ["ar", "he"];
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  isRTL: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -109,6 +112,49 @@ const translations: Record<Language, Record<string, string>> = {
     "common.search": "Search",
     "common.filter": "Filter",
     "common.sort": "Sort",
+    
+    // Profile
+    "profile.myProfile": "My Profile",
+    "profile.level": "Level",
+    "profile.followers": "Followers",
+    "profile.following": "Following",
+    "profile.submissions": "Submissions",
+    "profile.achievements": "Achievements",
+    "profile.editProfile": "Edit Profile",
+    "profile.settings": "Settings",
+    
+    // Leaderboard
+    "leaderboard.title": "Leaderboard",
+    "leaderboard.topCreators": "Top Creators",
+    "leaderboard.rank": "Rank",
+    "leaderboard.creator": "Creator",
+    "leaderboard.thisWeek": "This Week",
+    "leaderboard.allTime": "All Time",
+    
+    // Feed
+    "feed.title": "Feed",
+    "feed.recent": "Recent",
+    "feed.popular": "Popular",
+    "feed.following": "Following",
+    "feed.noSubmissions": "No submissions yet",
+    
+    // Wallet
+    "wallet.title": "Wallet",
+    "wallet.balance": "Balance",
+    "wallet.transactions": "Transactions",
+    "wallet.history": "History",
+    "wallet.topUp": "Top Up",
+    "wallet.withdraw": "Withdraw",
+    
+    // Challenge Detail
+    "challenge.submit": "Submit Entry",
+    "challenge.uploadPhoto": "Upload Photo/Video",
+    "challenge.caption": "Caption (Optional)",
+    "challenge.yourSubmission": "Your Submission",
+    "challenge.signInToParticipate": "Sign in to participate",
+    "challenge.submitting": "Submitting...",
+    "challenge.submitted": "Submitted",
+    "challenge.editImage": "Edit Image",
   },
   es: {
     // Navigation
@@ -208,6 +254,49 @@ const translations: Record<Language, Record<string, string>> = {
     "common.search": "Buscar",
     "common.filter": "Filtrar",
     "common.sort": "Ordenar",
+    
+    // Profile
+    "profile.myProfile": "Mi Perfil",
+    "profile.level": "Nivel",
+    "profile.followers": "Seguidores",
+    "profile.following": "Siguiendo",
+    "profile.submissions": "Envíos",
+    "profile.achievements": "Logros",
+    "profile.editProfile": "Editar Perfil",
+    "profile.settings": "Configuración",
+    
+    // Leaderboard
+    "leaderboard.title": "Clasificación",
+    "leaderboard.topCreators": "Mejores Creadores",
+    "leaderboard.rank": "Rango",
+    "leaderboard.creator": "Creador",
+    "leaderboard.thisWeek": "Esta Semana",
+    "leaderboard.allTime": "Todos los Tiempos",
+    
+    // Feed
+    "feed.title": "Feed",
+    "feed.recent": "Recientes",
+    "feed.popular": "Populares",
+    "feed.following": "Siguiendo",
+    "feed.noSubmissions": "No hay envíos todavía",
+    
+    // Wallet
+    "wallet.title": "Cartera",
+    "wallet.balance": "Saldo",
+    "wallet.transactions": "Transacciones",
+    "wallet.history": "Historial",
+    "wallet.topUp": "Recargar",
+    "wallet.withdraw": "Retirar",
+    
+    // Challenge Detail
+    "challenge.submit": "Enviar Participación",
+    "challenge.uploadPhoto": "Subir Foto/Video",
+    "challenge.caption": "Leyenda (Opcional)",
+    "challenge.yourSubmission": "Tu Envío",
+    "challenge.signInToParticipate": "Inicia sesión para participar",
+    "challenge.submitting": "Enviando...",
+    "challenge.submitted": "Enviado",
+    "challenge.editImage": "Editar Imagen",
   },
   fr: {
     "nav.home": "Accueil",
@@ -299,6 +388,49 @@ const translations: Record<Language, Record<string, string>> = {
     "common.search": "Rechercher",
     "common.filter": "Filtrer",
     "common.sort": "Trier",
+    
+    // Profile
+    "profile.myProfile": "Mon Profil",
+    "profile.level": "Niveau",
+    "profile.followers": "Abonnés",
+    "profile.following": "Abonnements",
+    "profile.submissions": "Soumissions",
+    "profile.achievements": "Réalisations",
+    "profile.editProfile": "Modifier le Profil",
+    "profile.settings": "Paramètres",
+    
+    // Leaderboard
+    "leaderboard.title": "Classement",
+    "leaderboard.topCreators": "Meilleurs Créateurs",
+    "leaderboard.rank": "Rang",
+    "leaderboard.creator": "Créateur",
+    "leaderboard.thisWeek": "Cette Semaine",
+    "leaderboard.allTime": "Tous les Temps",
+    
+    // Feed
+    "feed.title": "Fil",
+    "feed.recent": "Récents",
+    "feed.popular": "Populaires",
+    "feed.following": "Abonnements",
+    "feed.noSubmissions": "Pas encore de soumissions",
+    
+    // Wallet
+    "wallet.title": "Portefeuille",
+    "wallet.balance": "Solde",
+    "wallet.transactions": "Transactions",
+    "wallet.history": "Historique",
+    "wallet.topUp": "Recharger",
+    "wallet.withdraw": "Retirer",
+    
+    // Challenge Detail
+    "challenge.submit": "Soumettre la Participation",
+    "challenge.uploadPhoto": "Télécharger Photo/Vidéo",
+    "challenge.caption": "Légende (Optionnel)",
+    "challenge.yourSubmission": "Votre Soumission",
+    "challenge.signInToParticipate": "Connectez-vous pour participer",
+    "challenge.submitting": "Envoi...",
+    "challenge.submitted": "Soumis",
+    "challenge.editImage": "Modifier l'Image",
   },
   de: {
     "nav.home": "Startseite",
@@ -390,6 +522,49 @@ const translations: Record<Language, Record<string, string>> = {
     "common.search": "Suchen",
     "common.filter": "Filtern",
     "common.sort": "Sortieren",
+    
+    // Profile
+    "profile.myProfile": "Mein Profil",
+    "profile.level": "Level",
+    "profile.followers": "Follower",
+    "profile.following": "Folge ich",
+    "profile.submissions": "Einreichungen",
+    "profile.achievements": "Erfolge",
+    "profile.editProfile": "Profil Bearbeiten",
+    "profile.settings": "Einstellungen",
+    
+    // Leaderboard
+    "leaderboard.title": "Bestenliste",
+    "leaderboard.topCreators": "Top Kreative",
+    "leaderboard.rank": "Rang",
+    "leaderboard.creator": "Kreativer",
+    "leaderboard.thisWeek": "Diese Woche",
+    "leaderboard.allTime": "Alle Zeiten",
+    
+    // Feed
+    "feed.title": "Feed",
+    "feed.recent": "Neueste",
+    "feed.popular": "Beliebt",
+    "feed.following": "Folge ich",
+    "feed.noSubmissions": "Noch keine Einreichungen",
+    
+    // Wallet
+    "wallet.title": "Geldbörse",
+    "wallet.balance": "Guthaben",
+    "wallet.transactions": "Transaktionen",
+    "wallet.history": "Verlauf",
+    "wallet.topUp": "Aufladen",
+    "wallet.withdraw": "Abheben",
+    
+    // Challenge Detail
+    "challenge.submit": "Beitrag Einreichen",
+    "challenge.uploadPhoto": "Foto/Video Hochladen",
+    "challenge.caption": "Beschriftung (Optional)",
+    "challenge.yourSubmission": "Deine Einreichung",
+    "challenge.signInToParticipate": "Melde dich an, um teilzunehmen",
+    "challenge.submitting": "Wird eingereicht...",
+    "challenge.submitted": "Eingereicht",
+    "challenge.editImage": "Bild Bearbeiten",
   },
   pt: {
     "nav.home": "Início",
@@ -481,6 +656,333 @@ const translations: Record<Language, Record<string, string>> = {
     "common.search": "Pesquisar",
     "common.filter": "Filtrar",
     "common.sort": "Ordenar",
+    
+    // Profile
+    "profile.myProfile": "Meu Perfil",
+    "profile.level": "Nível",
+    "profile.followers": "Seguidores",
+    "profile.following": "Seguindo",
+    "profile.submissions": "Envios",
+    "profile.achievements": "Conquistas",
+    "profile.editProfile": "Editar Perfil",
+    "profile.settings": "Configurações",
+    
+    // Leaderboard
+    "leaderboard.title": "Classificação",
+    "leaderboard.topCreators": "Melhores Criadores",
+    "leaderboard.rank": "Posição",
+    "leaderboard.creator": "Criador",
+    "leaderboard.thisWeek": "Esta Semana",
+    "leaderboard.allTime": "Todos os Tempos",
+    
+    // Feed
+    "feed.title": "Feed",
+    "feed.recent": "Recentes",
+    "feed.popular": "Populares",
+    "feed.following": "Seguindo",
+    "feed.noSubmissions": "Nenhum envio ainda",
+    
+    // Wallet
+    "wallet.title": "Carteira",
+    "wallet.balance": "Saldo",
+    "wallet.transactions": "Transações",
+    "wallet.history": "Histórico",
+    "wallet.topUp": "Recarregar",
+    "wallet.withdraw": "Sacar",
+    
+    // Challenge Detail
+    "challenge.submit": "Enviar Participação",
+    "challenge.uploadPhoto": "Enviar Foto/Vídeo",
+    "challenge.caption": "Legenda (Opcional)",
+    "challenge.yourSubmission": "Seu Envio",
+    "challenge.signInToParticipate": "Faça login para participar",
+    "challenge.submitting": "Enviando...",
+    "challenge.submitted": "Enviado",
+    "challenge.editImage": "Editar Imagem",
+  },
+  ar: {
+    // Navigation
+    "nav.home": "الرئيسية",
+    "nav.challenges": "التحديات",
+    "nav.feed": "الخلاصة",
+    "nav.leaderboard": "لوحة المتصدرين",
+    "nav.profile": "الملف الشخصي",
+    "nav.wallet": "المحفظة",
+    "nav.referrals": "الإحالات",
+    "nav.admin": "لوحة الإدارة",
+    "nav.signOut": "تسجيل الخروج",
+    "nav.signIn": "تسجيل الدخول",
+    "nav.getStarted": "ابدأ الآن",
+    
+    // Hero
+    "hero.badge": "انضم إلى أكثر من 100 ألف مبدع حول العالم",
+    "hero.title1": "أنشئ.",
+    "hero.title2": "تنافس.",
+    "hero.title3": "اربح الكثير.",
+    "hero.description": "انضم إلى التحديات الإبداعية اليومية، واكسب النقاط والشارات، وتنافس مع المبدعين من جميع أنحاء العالم، واربح جوائز نقدية حقيقية. لم تكن إبداعاتك بهذه القيمة من قبل!",
+    "hero.cta": "ابدأ الإنشاء الآن",
+    "hero.howItWorks": "كيف يعمل",
+    "hero.prizesWon": "الجوائز المكتسبة",
+    "hero.activeUsers": "المستخدمون النشطون",
+    "hero.challenges": "التحديات",
+    
+    // Stats
+    "stats.totalPrizes": "إجمالي الجوائز",
+    "stats.awardedToCreators": "ممنوحة للمبدعين",
+    "stats.activeCreators": "المبدعون النشطون",
+    "stats.creatingDaily": "الإنشاء اليومي",
+    "stats.dailyChallenges": "التحديات اليومية",
+    "stats.newEveryDay": "جديد كل يوم",
+    "stats.avgEarnings": "متوسط الأرباح",
+    "stats.perMonth": "شهرياً",
+    
+    // Challenges
+    "challenges.featured": "التحديات المميزة",
+    "challenges.trending": "انضم إلى هذه التحديات الرائجة وابدأ الكسب اليوم",
+    "challenges.joinChallenge": "انضم للتحدي",
+    "challenges.participants": "المشاركون",
+    "challenges.timeLeft": "الوقت المتبقي",
+    "challenges.prize": "الجائزة",
+    "challenges.points": "النقاط",
+    "challenges.difficulty": "الصعوبة",
+    "challenges.easy": "سهل",
+    "challenges.medium": "متوسط",
+    "challenges.hard": "صعب",
+    
+    // CTA
+    "cta.title": "هل أنت مستعد لتحويل إبداعك إلى نقود؟",
+    "cta.description": "انضم إلى آلاف المبدعين الذين يكسبون المال من فعل ما يحبون. سجل الآن واحصل على 100 نقطة مكافأة!",
+    "cta.button": "انضم إلى Questify مجاناً",
+    
+    // Auth
+    "auth.login": "تسجيل الدخول",
+    "auth.signup": "التسجيل",
+    "auth.email": "البريد الإلكتروني",
+    "auth.password": "كلمة المرور",
+    "auth.username": "اسم المستخدم",
+    "auth.displayName": "الاسم المعروض (اختياري)",
+    "auth.signIn": "تسجيل الدخول",
+    "auth.signInWith": "أو تابع مع",
+    "auth.createAccount": "إنشاء حساب",
+    "auth.signingIn": "جارٍ تسجيل الدخول...",
+    "auth.creatingAccount": "جارٍ إنشاء الحساب...",
+    
+    // Referrals
+    "referrals.title": "برنامج الإحالة",
+    "referrals.description": "ادعُ أصدقاءك واكسب المكافآت معاً! احصل على 50 نقطة لكل صديق ينضم، ويحصلون على 25 نقطة.",
+    "referrals.totalReferrals": "إجمالي الإحالات",
+    "referrals.totalEarnings": "إجمالي الأرباح",
+    "referrals.rewardPerReferral": "المكافأة لكل إحالة",
+    "referrals.yourCode": "رمز الإحالة الخاص بك",
+    "referrals.shareCode": "شارك هذا الرمز مع الأصدقاء لكسب المكافآت",
+    "referrals.copyLink": "نسخ الرابط",
+    "referrals.share": "مشاركة",
+    "referrals.shareOnSocial": "مشاركة على وسائل التواصل",
+    "referrals.howItWorks": "كيف يعمل:",
+    "referrals.step1": "شارك رمز الإحالة أو الرابط مع الأصدقاء",
+    "referrals.step2": "يسجلون باستخدام رمزك ويحصلون على 25 نقطة مكافأة",
+    "referrals.step3": "تحصل على 50 نقطة لكل إحالة ناجحة",
+    "referrals.history": "سجل الإحالات",
+    "referrals.noReferrals": "لا توجد إحالات بعد",
+    "referrals.startSharing": "شارك رمز الإحالة الخاص بك لبدء كسب المكافآت!",
+    "referrals.joined": "انضم في",
+    
+    // Common
+    "common.loading": "جارٍ التحميل...",
+    "common.back": "رجوع",
+    "common.save": "حفظ",
+    "common.cancel": "إلغاء",
+    "common.submit": "إرسال",
+    "common.edit": "تعديل",
+    "common.delete": "حذف",
+    "common.search": "بحث",
+    "common.filter": "تصفية",
+    "common.sort": "ترتيب",
+    
+    // Profile
+    "profile.myProfile": "ملفي الشخصي",
+    "profile.level": "المستوى",
+    "profile.followers": "المتابعون",
+    "profile.following": "المتابَعون",
+    "profile.submissions": "المشاركات",
+    "profile.achievements": "الإنجازات",
+    "profile.editProfile": "تعديل الملف الشخصي",
+    "profile.settings": "الإعدادات",
+    
+    // Leaderboard
+    "leaderboard.title": "لوحة المتصدرين",
+    "leaderboard.topCreators": "أفضل المبدعين",
+    "leaderboard.rank": "الترتيب",
+    "leaderboard.creator": "المبدع",
+    "leaderboard.thisWeek": "هذا الأسبوع",
+    "leaderboard.allTime": "كل الأوقات",
+    
+    // Feed
+    "feed.title": "الخلاصة",
+    "feed.recent": "الأحدث",
+    "feed.popular": "الأكثر شعبية",
+    "feed.following": "المتابَعون",
+    "feed.noSubmissions": "لا توجد مشاركات بعد",
+    
+    // Wallet
+    "wallet.title": "المحفظة",
+    "wallet.balance": "الرصيد",
+    "wallet.transactions": "المعاملات",
+    "wallet.history": "السجل",
+    "wallet.topUp": "إعادة الشحن",
+    "wallet.withdraw": "سحب",
+    
+    // Challenge Detail
+    "challenge.submit": "إرسال المشاركة",
+    "challenge.uploadPhoto": "رفع صورة/فيديو",
+    "challenge.caption": "التعليق (اختياري)",
+    "challenge.yourSubmission": "مشاركتك",
+    "challenge.signInToParticipate": "سجّل الدخول للمشاركة",
+    "challenge.submitting": "جارٍ الإرسال...",
+    "challenge.submitted": "تم الإرسال",
+    "challenge.editImage": "تعديل الصورة",
+  },
+  he: {
+    // Navigation
+    "nav.home": "בית",
+    "nav.challenges": "אתגרים",
+    "nav.feed": "פיד",
+    "nav.leaderboard": "לוח מובילים",
+    "nav.profile": "פרופיל",
+    "nav.wallet": "ארנק",
+    "nav.referrals": "הפניות",
+    "nav.admin": "פאנל ניהול",
+    "nav.signOut": "התנתק",
+    "nav.signIn": "התחבר",
+    "nav.getStarted": "התחל",
+    
+    // Hero
+    "hero.badge": "הצטרף ליותר מ-100 אלף יוצרים ברחבי העולם",
+    "hero.title1": "צור.",
+    "hero.title2": "התחרה.",
+    "hero.title3": "זכה גדול.",
+    "hero.description": "הצטרף לאתגרים יצירתיים יומיים, צבור נקודות ותגים, התחרה עם יוצרים מרחבי העולם וזכה בפרסים כספיים אמיתיים. היצירתיות שלך מעולם לא הייתה כה משתלמת!",
+    "hero.cta": "התחל ליצור עכשיו",
+    "hero.howItWorks": "איך זה עובד",
+    "hero.prizesWon": "פרסים שזכו",
+    "hero.activeUsers": "משתמשים פעילים",
+    "hero.challenges": "אתגרים",
+    
+    // Stats
+    "stats.totalPrizes": "סה\"כ פרסים",
+    "stats.awardedToCreators": "הוענקו ליוצרים",
+    "stats.activeCreators": "יוצרים פעילים",
+    "stats.creatingDaily": "יוצרים יומיומי",
+    "stats.dailyChallenges": "אתגרים יומיים",
+    "stats.newEveryDay": "חדש בכל יום",
+    "stats.avgEarnings": "הכנסה ממוצעת",
+    "stats.perMonth": "לחודש",
+    
+    // Challenges
+    "challenges.featured": "אתגרים מומלצים",
+    "challenges.trending": "הצטרף לאתגרים הטרנדיים האלה והתחל להרוויח היום",
+    "challenges.joinChallenge": "הצטרף לאתגר",
+    "challenges.participants": "משתתפים",
+    "challenges.timeLeft": "זמן נותר",
+    "challenges.prize": "פרס",
+    "challenges.points": "נקודות",
+    "challenges.difficulty": "רמת קושי",
+    "challenges.easy": "קל",
+    "challenges.medium": "בינוני",
+    "challenges.hard": "קשה",
+    
+    // CTA
+    "cta.title": "מוכן להפוך את היצירתיות שלך לכסף?",
+    "cta.description": "הצטרף לאלפי יוצרים שמרוויחים כסף מעשייה מה שהם אוהבים. הירשם עכשיו וקבל 100 נקודות בונוס!",
+    "cta.button": "הצטרף ל-Questify בחינם",
+    
+    // Auth
+    "auth.login": "התחברות",
+    "auth.signup": "הרשמה",
+    "auth.email": "דוא\"ל",
+    "auth.password": "סיסמה",
+    "auth.username": "שם משתמש",
+    "auth.displayName": "שם תצוגה (אופציונלי)",
+    "auth.signIn": "התחבר",
+    "auth.signInWith": "או המשך עם",
+    "auth.createAccount": "צור חשבון",
+    "auth.signingIn": "מתחבר...",
+    "auth.creatingAccount": "יוצר חשבון...",
+    
+    // Referrals
+    "referrals.title": "תוכנית הפניות",
+    "referrals.description": "הזמן חברים וצבור תגמולים ביחד! קבל 50 נקודות עבור כל חבר שמצטרף, והם מקבלים 25 נקודות.",
+    "referrals.totalReferrals": "סה\"כ הפניות",
+    "referrals.totalEarnings": "סה\"כ רווחים",
+    "referrals.rewardPerReferral": "תגמול להפניה",
+    "referrals.yourCode": "קוד ההפניה שלך",
+    "referrals.shareCode": "שתף קוד זה עם חברים כדי לצבור תגמולים",
+    "referrals.copyLink": "העתק קישור",
+    "referrals.share": "שתף",
+    "referrals.shareOnSocial": "שתף ברשתות חברתיות",
+    "referrals.howItWorks": "איך זה עובד:",
+    "referrals.step1": "שתף את קוד ההפניה או הקישור שלך עם חברים",
+    "referrals.step2": "הם נרשמים באמצעות הקוד שלך ומקבלים 25 נקודות בונוס",
+    "referrals.step3": "אתה מקבל 50 נקודות עבור כל הפניה מוצלחת",
+    "referrals.history": "היסטוריית הפניות",
+    "referrals.noReferrals": "אין הפניות עדיין",
+    "referrals.startSharing": "שתף את קוד ההפניה שלך כדי להתחיל לצבור תגמולים!",
+    "referrals.joined": "הצטרף ב",
+    
+    // Common
+    "common.loading": "טוען...",
+    "common.back": "חזור",
+    "common.save": "שמור",
+    "common.cancel": "בטל",
+    "common.submit": "שלח",
+    "common.edit": "ערוך",
+    "common.delete": "מחק",
+    "common.search": "חפש",
+    "common.filter": "סנן",
+    "common.sort": "מיין",
+    
+    // Profile
+    "profile.myProfile": "הפרופיל שלי",
+    "profile.level": "רמה",
+    "profile.followers": "עוקבים",
+    "profile.following": "עוקב",
+    "profile.submissions": "שיתופים",
+    "profile.achievements": "הישגים",
+    "profile.editProfile": "ערוך פרופיל",
+    "profile.settings": "הגדרות",
+    
+    // Leaderboard
+    "leaderboard.title": "לוח מובילים",
+    "leaderboard.topCreators": "יוצרים מובילים",
+    "leaderboard.rank": "דירוג",
+    "leaderboard.creator": "יוצר",
+    "leaderboard.thisWeek": "השבוע",
+    "leaderboard.allTime": "כל הזמנים",
+    
+    // Feed
+    "feed.title": "פיד",
+    "feed.recent": "אחרונים",
+    "feed.popular": "פופולריים",
+    "feed.following": "עוקבים",
+    "feed.noSubmissions": "אין שיתופים עדיין",
+    
+    // Wallet
+    "wallet.title": "ארנק",
+    "wallet.balance": "יתרה",
+    "wallet.transactions": "עסקאות",
+    "wallet.history": "היסטוריה",
+    "wallet.topUp": "טען",
+    "wallet.withdraw": "משוך",
+    
+    // Challenge Detail
+    "challenge.submit": "שלח שיתוף",
+    "challenge.uploadPhoto": "העלה תמונה/וידאו",
+    "challenge.caption": "כותרת (אופציונלי)",
+    "challenge.yourSubmission": "השיתוף שלך",
+    "challenge.signInToParticipate": "התחבר כדי להשתתף",
+    "challenge.submitting": "שולח...",
+    "challenge.submitted": "נשלח",
+    "challenge.editImage": "ערוך תמונה",
   },
   it: {
     "nav.home": "Home",
@@ -572,6 +1074,49 @@ const translations: Record<Language, Record<string, string>> = {
     "common.search": "Cerca",
     "common.filter": "Filtra",
     "common.sort": "Ordina",
+    
+    // Profile
+    "profile.myProfile": "Il Mio Profilo",
+    "profile.level": "Livello",
+    "profile.followers": "Follower",
+    "profile.following": "Following",
+    "profile.submissions": "Invii",
+    "profile.achievements": "Obiettivi",
+    "profile.editProfile": "Modifica Profilo",
+    "profile.settings": "Impostazioni",
+    
+    // Leaderboard
+    "leaderboard.title": "Classifica",
+    "leaderboard.topCreators": "Top Creatori",
+    "leaderboard.rank": "Posizione",
+    "leaderboard.creator": "Creatore",
+    "leaderboard.thisWeek": "Questa Settimana",
+    "leaderboard.allTime": "Tutti i Tempi",
+    
+    // Feed
+    "feed.title": "Feed",
+    "feed.recent": "Recenti",
+    "feed.popular": "Popolari",
+    "feed.following": "Following",
+    "feed.noSubmissions": "Nessun invio ancora",
+    
+    // Wallet
+    "wallet.title": "Portafoglio",
+    "wallet.balance": "Saldo",
+    "wallet.transactions": "Transazioni",
+    "wallet.history": "Cronologia",
+    "wallet.topUp": "Ricarica",
+    "wallet.withdraw": "Preleva",
+    
+    // Challenge Detail
+    "challenge.submit": "Invia Partecipazione",
+    "challenge.uploadPhoto": "Carica Foto/Video",
+    "challenge.caption": "Didascalia (Opzionale)",
+    "challenge.yourSubmission": "Il Tuo Invio",
+    "challenge.signInToParticipate": "Accedi per partecipare",
+    "challenge.submitting": "Invio...",
+    "challenge.submitted": "Inviato",
+    "challenge.editImage": "Modifica Immagine",
   },
   ja: {
     "nav.home": "ホーム",
@@ -663,6 +1208,49 @@ const translations: Record<Language, Record<string, string>> = {
     "common.search": "検索",
     "common.filter": "フィルター",
     "common.sort": "並び替え",
+    
+    // Profile
+    "profile.myProfile": "マイプロフィール",
+    "profile.level": "レベル",
+    "profile.followers": "フォロワー",
+    "profile.following": "フォロー中",
+    "profile.submissions": "投稿",
+    "profile.achievements": "達成",
+    "profile.editProfile": "プロフィール編集",
+    "profile.settings": "設定",
+    
+    // Leaderboard
+    "leaderboard.title": "リーダーボード",
+    "leaderboard.topCreators": "トップクリエイター",
+    "leaderboard.rank": "ランク",
+    "leaderboard.creator": "クリエイター",
+    "leaderboard.thisWeek": "今週",
+    "leaderboard.allTime": "全期間",
+    
+    // Feed
+    "feed.title": "フィード",
+    "feed.recent": "最新",
+    "feed.popular": "人気",
+    "feed.following": "フォロー中",
+    "feed.noSubmissions": "まだ投稿はありません",
+    
+    // Wallet
+    "wallet.title": "ウォレット",
+    "wallet.balance": "残高",
+    "wallet.transactions": "取引",
+    "wallet.history": "履歴",
+    "wallet.topUp": "チャージ",
+    "wallet.withdraw": "出金",
+    
+    // Challenge Detail
+    "challenge.submit": "投稿を送信",
+    "challenge.uploadPhoto": "写真/動画をアップロード",
+    "challenge.caption": "キャプション（オプション）",
+    "challenge.yourSubmission": "あなたの投稿",
+    "challenge.signInToParticipate": "参加するにはサインイン",
+    "challenge.submitting": "送信中...",
+    "challenge.submitted": "送信済み",
+    "challenge.editImage": "画像を編集",
   },
   ko: {
     "nav.home": "홈",
@@ -754,6 +1342,49 @@ const translations: Record<Language, Record<string, string>> = {
     "common.search": "검색",
     "common.filter": "필터",
     "common.sort": "정렬",
+    
+    // Profile
+    "profile.myProfile": "내 프로필",
+    "profile.level": "레벨",
+    "profile.followers": "팔로워",
+    "profile.following": "팔로잉",
+    "profile.submissions": "제출물",
+    "profile.achievements": "업적",
+    "profile.editProfile": "프로필 편집",
+    "profile.settings": "설정",
+    
+    // Leaderboard
+    "leaderboard.title": "리더보드",
+    "leaderboard.topCreators": "상위 크리에이터",
+    "leaderboard.rank": "순위",
+    "leaderboard.creator": "크리에이터",
+    "leaderboard.thisWeek": "이번 주",
+    "leaderboard.allTime": "전체 기간",
+    
+    // Feed
+    "feed.title": "피드",
+    "feed.recent": "최신",
+    "feed.popular": "인기",
+    "feed.following": "팔로잉",
+    "feed.noSubmissions": "아직 제출물 없음",
+    
+    // Wallet
+    "wallet.title": "지갑",
+    "wallet.balance": "잔액",
+    "wallet.transactions": "거래",
+    "wallet.history": "내역",
+    "wallet.topUp": "충전",
+    "wallet.withdraw": "출금",
+    
+    // Challenge Detail
+    "challenge.submit": "제출하기",
+    "challenge.uploadPhoto": "사진/동영상 업로드",
+    "challenge.caption": "캡션 (선택사항)",
+    "challenge.yourSubmission": "내 제출물",
+    "challenge.signInToParticipate": "참여하려면 로그인",
+    "challenge.submitting": "제출 중...",
+    "challenge.submitted": "제출됨",
+    "challenge.editImage": "이미지 편집",
   },
   zh: {
     "nav.home": "首页",
@@ -845,25 +1476,84 @@ const translations: Record<Language, Record<string, string>> = {
     "common.search": "搜索",
     "common.filter": "筛选",
     "common.sort": "排序",
+    
+    // Profile
+    "profile.myProfile": "我的个人资料",
+    "profile.level": "等级",
+    "profile.followers": "粉丝",
+    "profile.following": "关注",
+    "profile.submissions": "提交",
+    "profile.achievements": "成就",
+    "profile.editProfile": "编辑个人资料",
+    "profile.settings": "设置",
+    
+    // Leaderboard
+    "leaderboard.title": "排行榜",
+    "leaderboard.topCreators": "顶级创作者",
+    "leaderboard.rank": "排名",
+    "leaderboard.creator": "创作者",
+    "leaderboard.thisWeek": "本周",
+    "leaderboard.allTime": "全部时间",
+    
+    // Feed
+    "feed.title": "动态",
+    "feed.recent": "最新",
+    "feed.popular": "热门",
+    "feed.following": "关注",
+    "feed.noSubmissions": "暂无提交",
+    
+    // Wallet
+    "wallet.title": "钱包",
+    "wallet.balance": "余额",
+    "wallet.transactions": "交易",
+    "wallet.history": "历史",
+    "wallet.topUp": "充值",
+    "wallet.withdraw": "提现",
+    
+    // Challenge Detail
+    "challenge.submit": "提交作品",
+    "challenge.uploadPhoto": "上传照片/视频",
+    "challenge.caption": "说明（可选）",
+    "challenge.yourSubmission": "你的提交",
+    "challenge.signInToParticipate": "登录以参与",
+    "challenge.submitting": "提交中...",
+    "challenge.submitted": "已提交",
+    "challenge.editImage": "编辑图片",
   },
 };
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>(() => {
     const saved = localStorage.getItem("questify-language");
-    return (saved as Language) || "en";
+    if (saved) return saved as Language;
+    
+    // Auto-detect browser language
+    const browserLang = navigator.language.split("-")[0];
+    const supportedLang = browserLang as Language;
+    
+    if (["en", "es", "fr", "de", "pt", "it", "ja", "ko", "zh", "ar", "he"].includes(supportedLang)) {
+      return supportedLang;
+    }
+    
+    return "en";
   });
 
   useEffect(() => {
     localStorage.setItem("questify-language", language);
+    
+    // Set document direction for RTL languages
+    document.documentElement.dir = RTL_LANGUAGES.includes(language) ? "rtl" : "ltr";
+    document.documentElement.lang = language;
   }, [language]);
 
   const t = (key: string): string => {
     return translations[language][key] || key;
   };
 
+  const isRTL = RTL_LANGUAGES.includes(language);
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage: setLanguageState, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage: setLanguageState, t, isRTL }}>
       {children}
     </LanguageContext.Provider>
   );

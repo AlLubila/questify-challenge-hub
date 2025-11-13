@@ -7,9 +7,11 @@ import { Copy, Users, DollarSign, Gift, Share2, Facebook, Twitter, Instagram } f
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Referrals() {
   const { data, isLoading } = useReferrals();
+  const { t } = useLanguage();
 
   const copyReferralCode = () => {
     if (data?.referralCode) {
@@ -105,9 +107,9 @@ export default function Referrals() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Referral Program</h1>
+        <h1 className="text-3xl font-bold mb-2">{t("referrals.title")}</h1>
         <p className="text-muted-foreground">
-          Invite friends and earn rewards together! Get 50 points for each friend who joins, and they get 25 points.
+          {t("referrals.description")}
         </p>
       </div>
 
@@ -119,7 +121,7 @@ export default function Referrals() {
               <Users className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Referrals</p>
+              <p className="text-sm text-muted-foreground">{t("referrals.totalReferrals")}</p>
               <p className="text-2xl font-bold">{data?.referralCount || 0}</p>
             </div>
           </div>
@@ -131,7 +133,7 @@ export default function Referrals() {
               <DollarSign className="h-6 w-6 text-green-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Total Earnings</p>
+              <p className="text-sm text-muted-foreground">{t("referrals.totalEarnings")}</p>
               <p className="text-2xl font-bold">{data?.referralEarnings || 0}</p>
             </div>
           </div>
@@ -143,7 +145,7 @@ export default function Referrals() {
               <Gift className="h-6 w-6 text-purple-500" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Reward Per Referral</p>
+              <p className="text-sm text-muted-foreground">{t("referrals.rewardPerReferral")}</p>
               <p className="text-2xl font-bold">50 pts</p>
             </div>
           </div>
@@ -153,8 +155,8 @@ export default function Referrals() {
       {/* Referral Code Card */}
       <Card className="p-8 mb-8 bg-gradient-to-br from-primary/5 to-primary/10">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold mb-2">Your Referral Code</h2>
-          <p className="text-muted-foreground">Share this code with friends to earn rewards</p>
+          <h2 className="text-2xl font-bold mb-2">{t("referrals.yourCode")}</h2>
+          <p className="text-muted-foreground">{t("referrals.shareCode")}</p>
         </div>
 
         <div className="flex flex-col items-center gap-4 max-w-md mx-auto">
@@ -172,17 +174,17 @@ export default function Referrals() {
           <div className="flex gap-2 w-full">
             <Button onClick={copyReferralLink} variant="outline" className="flex-1">
               <Copy className="h-4 w-4 mr-2" />
-              Copy Link
+              {t("referrals.copyLink")}
             </Button>
             <Button onClick={shareReferral} className="flex-1">
               <Share2 className="h-4 w-4 mr-2" />
-              Share
+              {t("referrals.share")}
             </Button>
           </div>
 
           {/* Social Media Share Buttons */}
           <div className="w-full pt-4 border-t border-border/50">
-            <p className="text-sm text-muted-foreground mb-3 text-center">Share on social media</p>
+            <p className="text-sm text-muted-foreground mb-3 text-center">{t("referrals.shareOnSocial")}</p>
             <div className="grid grid-cols-4 gap-2">
               <Button
                 onClick={shareOnTwitter}
@@ -223,19 +225,19 @@ export default function Referrals() {
         </div>
 
         <div className="mt-8 p-4 bg-background/50 rounded-lg">
-          <h3 className="font-semibold mb-2">How it works:</h3>
+          <h3 className="font-semibold mb-2">{t("referrals.howItWorks")}</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li className="flex items-start gap-2">
               <span className="text-primary">•</span>
-              <span>Share your referral code or link with friends</span>
+              <span>{t("referrals.step1")}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-primary">•</span>
-              <span>They sign up using your code and get 25 bonus points</span>
+              <span>{t("referrals.step2")}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-primary">•</span>
-              <span>You receive 50 points for each successful referral</span>
+              <span>{t("referrals.step3")}</span>
             </li>
           </ul>
         </div>
@@ -243,7 +245,7 @@ export default function Referrals() {
 
       {/* Referral History */}
       <Card className="p-6">
-        <h2 className="text-xl font-bold mb-4">Referral History</h2>
+        <h2 className="text-xl font-bold mb-4">{t("referrals.history")}</h2>
         
         {data?.referrals && data.referrals.length > 0 ? (
           <div className="space-y-4">
@@ -264,7 +266,7 @@ export default function Referrals() {
                       {referral.referred?.display_name || referral.referred?.username}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Joined {format(new Date(referral.created_at), "MMM d, yyyy")}
+                      {t("referrals.joined")} {format(new Date(referral.created_at), "MMM d, yyyy")}
                     </p>
                   </div>
                 </div>
@@ -274,7 +276,7 @@ export default function Referrals() {
                   </Badge>
                   <div className="text-right">
                     <p className="font-semibold text-green-500">+{referral.reward_amount}</p>
-                    <p className="text-xs text-muted-foreground">points</p>
+                    <p className="text-xs text-muted-foreground">{t("challenges.points").toLowerCase()}</p>
                   </div>
                 </div>
               </div>
@@ -283,9 +285,9 @@ export default function Referrals() {
         ) : (
           <div className="text-center py-12">
             <Users className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
-            <p className="text-muted-foreground mb-2">No referrals yet</p>
+            <p className="text-muted-foreground mb-2">{t("referrals.noReferrals")}</p>
             <p className="text-sm text-muted-foreground">
-              Share your referral code to start earning rewards!
+              {t("referrals.startSharing")}
             </p>
           </div>
         )}

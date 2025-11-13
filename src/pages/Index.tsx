@@ -10,10 +10,12 @@ import challenge2 from "@/assets/challenge-2.jpg";
 import challenge3 from "@/assets/challenge-3.jpg";
 import { useChallenges, calculateTimeLeft } from "@/hooks/useChallenges";
 import { useGenerateChallenge } from "@/hooks/useGenerateChallenge";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Index = () => {
   const { data: challenges, isLoading } = useChallenges();
   const { mutate: generateChallenge, isPending: isGenerating } = useGenerateChallenge();
+  const { t } = useLanguage();
 
   // Fallback challenges for when database is empty
   const fallbackChallenges = [
@@ -66,48 +68,47 @@ const Index = () => {
             <div className="space-y-8 animate-fade-in">
               <Badge className="bg-gradient-accent text-accent-foreground border-0 px-4 py-2 w-fit">
                 <Sparkles className="w-4 h-4 mr-2" />
-                Join 100k+ Creators Worldwide
+                {t("hero.badge")}
               </Badge>
               
               <h1 className="text-5xl md:text-7xl font-black leading-tight">
-                Create.
+                {t("hero.title1")}
                 <br />
                 <span className="bg-gradient-primary bg-clip-text text-transparent">
-                  Compete.
+                  {t("hero.title2")}
                 </span>
                 <br />
-                Win Big.
+                {t("hero.title3")}
               </h1>
 
               <p className="text-xl text-muted-foreground max-w-lg">
-                Join daily creative challenges, earn points and badges, compete with creators worldwide,
-                and win real cash prizes. Your creativity has never been this rewarding!
+                {t("hero.description")}
               </p>
 
               <div className="flex flex-wrap gap-4">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow text-lg px-8 h-14">
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Start Creating Now
+                  {t("hero.cta")}
                 </Button>
                 <Button size="lg" variant="outline" className="text-lg px-8 h-14">
-                  See How It Works
+                  {t("hero.howItWorks")}
                 </Button>
               </div>
 
               <div className="flex items-center gap-8 pt-4">
                 <div>
                   <p className="text-3xl font-bold text-foreground">$50k+</p>
-                  <p className="text-sm text-muted-foreground">Prizes Won</p>
+                  <p className="text-sm text-muted-foreground">{t("hero.prizesWon")}</p>
                 </div>
                 <div className="w-px h-12 bg-border" />
                 <div>
                   <p className="text-3xl font-bold text-foreground">100k+</p>
-                  <p className="text-sm text-muted-foreground">Active Users</p>
+                  <p className="text-sm text-muted-foreground">{t("hero.activeUsers")}</p>
                 </div>
                 <div className="w-px h-12 bg-border" />
                 <div>
                   <p className="text-3xl font-bold text-foreground">500+</p>
-                  <p className="text-sm text-muted-foreground">Challenges</p>
+                  <p className="text-sm text-muted-foreground">{t("hero.challenges")}</p>
                 </div>
               </div>
             </div>
@@ -130,30 +131,30 @@ const Index = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <StatsCard
               icon={Trophy}
-              title="Total Prizes"
+              title={t("stats.totalPrizes")}
               value="$50k+"
-              subtitle="Awarded to creators"
+              subtitle={t("stats.awardedToCreators")}
               gradient="bg-gradient-accent"
             />
             <StatsCard
               icon={Users}
-              title="Active Creators"
+              title={t("stats.activeCreators")}
               value="100k+"
-              subtitle="Creating daily"
+              subtitle={t("stats.creatingDaily")}
               gradient="bg-gradient-primary"
             />
             <StatsCard
               icon={Zap}
-              title="Daily Challenges"
+              title={t("stats.dailyChallenges")}
               value="12"
-              subtitle="New every day"
+              subtitle={t("stats.newEveryDay")}
               gradient="bg-gradient-secondary"
             />
             <StatsCard
               icon={TrendingUp}
-              title="Avg Earnings"
+              title={t("stats.avgEarnings")}
               value="$250"
-              subtitle="Per month"
+              subtitle={t("stats.perMonth")}
               gradient="bg-gradient-primary"
             />
           </div>
@@ -166,10 +167,10 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
             <div>
               <h2 className="text-4xl font-bold text-foreground mb-3">
-                Featured Challenges
+                {t("challenges.featured")}
               </h2>
               <p className="text-muted-foreground text-lg">
-                Join these trending challenges and start earning today
+                {t("challenges.trending")}
               </p>
             </div>
           </div>
@@ -209,18 +210,17 @@ const Index = () => {
           <div className="max-w-3xl mx-auto text-center space-y-8">
             <Award className="w-20 h-20 mx-auto text-primary animate-pulse-glow" />
             <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-              Ready to Turn Your Creativity Into Cash?
+              {t("cta.title")}
             </h2>
             <p className="text-xl text-muted-foreground">
-              Join thousands of creators earning money doing what they love.
-              Sign up now and get 100 bonus points!
+              {t("cta.description")}
             </p>
             <Button
               size="lg"
               className="bg-gradient-primary hover:shadow-glow text-xl px-12 h-16"
             >
               <Sparkles className="w-6 h-6 mr-2" />
-              Join Questify Free
+              {t("cta.button")}
             </Button>
           </div>
         </div>

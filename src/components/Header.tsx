@@ -42,6 +42,8 @@ export const Header = () => {
     { code: "ja", name: "日本語", flag: "🇯🇵" },
     { code: "ko", name: "한국어", flag: "🇰🇷" },
     { code: "zh", name: "中文", flag: "🇨🇳" },
+    { code: "ar", name: "العربية", flag: "🇸🇦" },
+    { code: "he", name: "עברית", flag: "🇮🇱" },
   ];
 
   return (

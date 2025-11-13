@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Trophy, Clock, Users, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ChallengeCardProps {
   id: string;
@@ -28,12 +29,15 @@ export const ChallengeCard = ({
   difficulty,
 }: ChallengeCardProps) => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   
   const difficultyColors = {
     easy: "bg-success text-success-foreground",
     medium: "bg-accent text-accent-foreground",
     hard: "bg-secondary text-secondary-foreground",
   };
+  
+  const difficultyLabel = t(`challenges.${difficulty}`);
 
   return (
     <Card className="group overflow-hidden bg-card border-border hover:shadow-glow transition-all duration-300 hover:scale-[1.02] animate-fade-in">
@@ -45,11 +49,11 @@ export const ChallengeCard = ({
         />
         <div className="absolute top-3 right-3 flex gap-2">
           <Badge className={difficultyColors[difficulty]} variant="secondary">
-            {difficulty}
+            {difficultyLabel}
           </Badge>
           <Badge className="bg-gradient-primary text-primary-foreground border-0">
             <Sparkles className="w-3 h-3 mr-1" />
-            {points} pts
+            {points} {t("challenges.points").toLowerCase()}
           </Badge>
         </div>
       </div>
@@ -82,7 +86,7 @@ export const ChallengeCard = ({
             className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
             onClick={() => navigate(`/challenge/${id}`)}
           >
-            Join Challenge
+            {t("challenges.joinChallenge")}
           </Button>
         </div>
       </div>
