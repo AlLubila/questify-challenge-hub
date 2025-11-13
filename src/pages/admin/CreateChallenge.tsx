@@ -9,8 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Upload, Loader2 } from "lucide-react";
+import { Upload, Loader2, Eye } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { ChallengeCard } from "@/components/ChallengeCard";
+import challenge1 from "@/assets/challenge-1.jpg";
 
 export const CreateChallenge = () => {
   const { t } = useLanguage();
@@ -118,11 +120,13 @@ export const CreateChallenge = () => {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">{t("admin.createChallenge")}</h1>
       
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("admin.challengeDetails")}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Form Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("admin.challengeDetails")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title">{t("admin.challengeTitle")} *</Label>
             <Input
@@ -256,6 +260,33 @@ export const CreateChallenge = () => {
           </Button>
         </CardContent>
       </Card>
+
+      {/* Preview Section */}
+      <Card className="lg:sticky lg:top-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Eye className="w-5 h-5" />
+            Live Preview
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ChallengeCard
+            id="preview"
+            title={title || "Challenge Title"}
+            description={description || "Challenge description will appear here..."}
+            image={imagePreview || challenge1}
+            prize={prize || "Reward"}
+            participants={0}
+            timeLeft={challengeType === "daily" ? `${duration || 1} day${duration !== "1" ? "s" : ""} left` : `${duration || 1} week${duration !== "1" ? "s" : ""} left`}
+            points={parseInt(points) || 0}
+            difficulty={difficulty}
+          />
+          <p className="text-sm text-muted-foreground text-center mt-4">
+            This is how your challenge will appear to users
+          </p>
+        </CardContent>
+      </Card>
     </div>
+  </div>
   );
 };

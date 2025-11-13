@@ -217,6 +217,7 @@ const translations: Record<string, string> = {
     "admin.submissions": "Submissions",
     "admin.challenges": "Challenges",
     "admin.createChallenge": "Create Challenge",
+    "admin.rewards": "Rewards",
     "admin.analytics": "Analytics",
     "admin.payments": "Payments",
     "admin.activityLogs": "Activity Logs",

@@ -23,6 +23,7 @@ import { ActivityLogs } from "@/pages/admin/ActivityLogs";
 import { AdminLayout } from "@/pages/admin/AdminLayout";
 import PaymentAnalytics from "@/pages/admin/PaymentAnalytics";
 import { CreateChallenge } from "@/pages/admin/CreateChallenge";
+import { RewardsManagement } from "@/pages/admin/RewardsManagement";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
                 <Route path="submissions" element={<SubmissionModeration />} />
                 <Route path="challenges" element={<ChallengeModeration />} />
                 <Route path="create-challenge" element={<CreateChallenge />} />
+                <Route path="rewards" element={<RewardsManagement />} />
                 <Route path="analytics" element={<Analytics />} />
                 <Route path="payments" element={<PaymentAnalytics />} />
                 <Route path="logs" element={<ActivityLogs />} />
