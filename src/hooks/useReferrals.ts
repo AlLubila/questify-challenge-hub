@@ -8,9 +8,27 @@ export const useReferrals = () => {
   return useQuery({
     queryKey: ["referrals", user?.id],
     queryFn: async () => {
-      if (!user) return null;
+      if (!user?.id) throw new Error("User not authenticated");
 
-      // Get user's referral stats from profile
+      // Get referrals where user is the referrer
+      const { data: referrals, error: referralsError } = await supabase
+        .from("referrals")
+        .select(`
+          *,
+          referred:referred_id (
+            id,
+            username,
+            display_name,
+            avatar_url,
+            created_at
+          )
+        `)
+        .eq("referrer_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (referralsError) throw referralsError;
+
+      // Get user's profile with referral stats
       const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("referral_code, referral_count, referral_earnings")
@@ -19,29 +37,13 @@ export const useReferrals = () => {
 
       if (profileError) throw profileError;
 
-      // Get list of referred users
-      const { data: referrals, error: referralsError } = await supabase
-        .from("referrals")
-        .select(`
-          *,
-          referred:profiles!referrals_referred_id_fkey(
-            username,
-            display_name,
-            avatar_url
-          )
-        `)
-        .eq("referrer_id", user.id)
-        .order("created_at", { ascending: false });
-
-      if (referralsError) throw referralsError;
-
       return {
-        referralCode: profile.referral_code,
-        totalReferrals: profile.referral_count || 0,
-        totalEarnings: profile.referral_earnings || 0,
         referrals: referrals || [],
+        referralCode: profile.referral_code,
+        referralCount: profile.referral_count || 0,
+        referralEarnings: profile.referral_earnings || 0,
       };
     },
-    enabled: !!user,
+    enabled: !!user?.id,
   });
 };

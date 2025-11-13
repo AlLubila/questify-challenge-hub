@@ -1,212 +1,213 @@
-import { Header } from "@/components/Header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useReferrals } from "@/hooks/useReferrals";
-import { useProfile } from "@/hooks/useProfile";
-import { Copy, Gift, Users, DollarSign, Share2 } from "lucide-react";
-import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
+import { Copy, Users, DollarSign, Gift, Share2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 
 export default function Referrals() {
-  const { data: profile } = useProfile();
-  const { data: referralData, isLoading } = useReferrals();
+  const { data, isLoading } = useReferrals();
 
-  const referralLink = referralData?.referralCode
-    ? `${window.location.origin}/auth?ref=${referralData.referralCode}`
-    : "";
-
-  const copyReferralLink = () => {
-    navigator.clipboard.writeText(referralLink);
-    toast.success("Referral link copied to clipboard!");
-  };
-
-  const shareReferral = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Join Questify!",
-          text: `Join me on Questify and earn 25 coins! Use my referral code: ${referralData?.referralCode}`,
-          url: referralLink,
-        });
-      } catch (err) {
-        console.error("Error sharing:", err);
-      }
-    } else {
-      copyReferralLink();
+  const copyReferralCode = () => {
+    if (data?.referralCode) {
+      navigator.clipboard.writeText(data.referralCode);
+      toast.success("Referral code copied to clipboard!");
     }
   };
 
+  const copyReferralLink = () => {
+    if (data?.referralCode) {
+      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
+      navigator.clipboard.writeText(link);
+      toast.success("Referral link copied to clipboard!");
+    }
+  };
+
+  const shareReferral = async () => {
+    if (data?.referralCode) {
+      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
+      const text = `Join Questify with my referral code and get 25 bonus points! ${link}`;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Join Questify",
+            text: text,
+            url: link,
+          });
+        } catch (error) {
+          copyReferralLink();
+        }
+      } else {
+        copyReferralLink();
+      }
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <Skeleton className="h-8 w-48 mb-6" />
+        <div className="grid gap-6 md:grid-cols-3 mb-8">
+          <Skeleton className="h-32" />
+          <Skeleton className="h-32" />
+          <Skeleton className="h-32" />
+        </div>
+        <Skeleton className="h-64" />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="container mx-auto px-4 py-8 pt-24">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* Header */}
-          <div className="text-center space-y-2">
-            <h1 className="text-4xl font-bold text-foreground">Invite Friends</h1>
-            <p className="text-muted-foreground">
-              Share Questify and earn rewards together!
-            </p>
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Referral Program</h1>
+        <p className="text-muted-foreground">
+          Invite friends and earn rewards together! Get 50 points for each friend who joins, and they get 25 points.
+        </p>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid gap-6 md:grid-cols-3 mb-8">
+        <Card className="p-6">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-primary/10 rounded-lg">
+              <Users className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Total Referrals</p>
+              <p className="text-2xl font-bold">{data?.referralCount || 0}</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-green-500/10 rounded-lg">
+              <DollarSign className="h-6 w-6 text-green-500" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Total Earnings</p>
+              <p className="text-2xl font-bold">{data?.referralEarnings || 0}</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-purple-500/10 rounded-lg">
+              <Gift className="h-6 w-6 text-purple-500" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Reward Per Referral</p>
+              <p className="text-2xl font-bold">50 pts</p>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* Referral Code Card */}
+      <Card className="p-8 mb-8 bg-gradient-to-br from-primary/5 to-primary/10">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold mb-2">Your Referral Code</h2>
+          <p className="text-muted-foreground">Share this code with friends to earn rewards</p>
+        </div>
+
+        <div className="flex flex-col items-center gap-4 max-w-md mx-auto">
+          <div className="flex items-center gap-2 w-full">
+            <div className="flex-1 bg-background border-2 border-primary/20 rounded-lg p-4 text-center">
+              <p className="text-3xl font-bold tracking-wider text-primary">
+                {data?.referralCode || "XXXXXXXX"}
+              </p>
+            </div>
+            <Button onClick={copyReferralCode} variant="outline" size="icon" className="h-14 w-14">
+              <Copy className="h-5 w-5" />
+            </Button>
           </div>
 
-          {/* Stats Cards */}
-          {isLoading ? (
-            <div className="grid gap-4 md:grid-cols-3">
-              {[...Array(3)].map((_, i) => (
-                <Skeleton key={i} className="h-32" />
-              ))}
-            </div>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-3">
-              <Card className="p-6 bg-card border-border">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-full bg-primary/10">
-                    <Users className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Total Referrals</p>
-                    <p className="text-2xl font-bold text-foreground">
-                      {referralData?.totalReferrals || 0}
-                    </p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-6 bg-card border-border">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-full bg-primary/10">
-                    <DollarSign className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Total Earnings</p>
-                    <p className="text-2xl font-bold text-foreground">
-                      {referralData?.totalEarnings || 0} coins
-                    </p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-6 bg-card border-border">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-full bg-primary/10">
-                    <Gift className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Reward per Friend</p>
-                    <p className="text-2xl font-bold text-foreground">50 coins</p>
-                  </div>
-                </div>
-              </Card>
-            </div>
-          )}
-
-          {/* Referral Link Card */}
-          <Card className="p-6 bg-card border-border">
-            <h2 className="text-xl font-bold mb-4 text-foreground">Your Referral Link</h2>
-            <p className="text-sm text-muted-foreground mb-4">
-              Share this link with friends. They get 25 coins when they sign up, and you
-              get 50 coins!
-            </p>
-            <div className="flex gap-2">
-              <div className="flex-1 p-3 bg-muted rounded-lg text-sm text-foreground break-all">
-                {referralLink || "Loading..."}
-              </div>
-              <Button onClick={copyReferralLink} variant="outline" size="icon">
-                <Copy className="w-4 h-4" />
-              </Button>
-              <Button onClick={shareReferral} size="icon">
-                <Share2 className="w-4 h-4" />
-              </Button>
-            </div>
-          </Card>
-
-          {/* How it Works */}
-          <Card className="p-6 bg-card border-border">
-            <h2 className="text-xl font-bold mb-4 text-foreground">How It Works</h2>
-            <div className="space-y-4">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
-                  1
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">Share Your Link</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Send your unique referral link to friends via social media, email, or
-                    messaging apps.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
-                  2
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">They Sign Up</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Your friend creates a Questify account using your referral link and
-                    gets 25 coins instantly.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold">
-                  3
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground">You Both Earn</h3>
-                  <p className="text-sm text-muted-foreground">
-                    You receive 50 coins as a thank you for spreading the word about
-                    Questify!
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Referred Users List */}
-          {referralData?.referrals && referralData.referrals.length > 0 && (
-            <Card className="p-6 bg-card border-border">
-              <h2 className="text-xl font-bold mb-4 text-foreground">
-                Your Referrals ({referralData.referrals.length})
-              </h2>
-              <div className="space-y-3">
-                {referralData.referrals.map((referral: any) => (
-                  <div
-                    key={referral.id}
-                    className="flex items-center justify-between p-3 bg-muted rounded-lg"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Avatar className="w-10 h-10">
-                        <AvatarImage src={referral.referred.avatar_url} />
-                        <AvatarFallback>
-                          {referral.referred.username?.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-semibold text-foreground">
-                          {referral.referred.display_name || referral.referred.username}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          @{referral.referred.username}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-primary">
-                        +{referral.reward_amount} coins
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(referral.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
+          <div className="flex gap-2 w-full">
+            <Button onClick={copyReferralLink} variant="outline" className="flex-1">
+              <Copy className="h-4 w-4 mr-2" />
+              Copy Link
+            </Button>
+            <Button onClick={shareReferral} className="flex-1">
+              <Share2 className="h-4 w-4 mr-2" />
+              Share
+            </Button>
+          </div>
         </div>
-      </main>
+
+        <div className="mt-8 p-4 bg-background/50 rounded-lg">
+          <h3 className="font-semibold mb-2">How it works:</h3>
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2">
+              <span className="text-primary">•</span>
+              <span>Share your referral code or link with friends</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary">•</span>
+              <span>They sign up using your code and get 25 bonus points</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary">•</span>
+              <span>You receive 50 points for each successful referral</span>
+            </li>
+          </ul>
+        </div>
+      </Card>
+
+      {/* Referral History */}
+      <Card className="p-6">
+        <h2 className="text-xl font-bold mb-4">Referral History</h2>
+        
+        {data?.referrals && data.referrals.length > 0 ? (
+          <div className="space-y-4">
+            {data.referrals.map((referral: any) => (
+              <div
+                key={referral.id}
+                className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
+              >
+                <div className="flex items-center gap-4">
+                  <Avatar>
+                    <AvatarImage src={referral.referred?.avatar_url} />
+                    <AvatarFallback>
+                      {referral.referred?.username?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="font-medium">
+                      {referral.referred?.display_name || referral.referred?.username}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Joined {format(new Date(referral.created_at), "MMM d, yyyy")}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <Badge variant={referral.status === "completed" ? "default" : "secondary"}>
+                    {referral.status}
+                  </Badge>
+                  <div className="text-right">
+                    <p className="font-semibold text-green-500">+{referral.reward_amount}</p>
+                    <p className="text-xs text-muted-foreground">points</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <Users className="h-16 w-16 mx-auto text-muted-foreground/50 mb-4" />
+            <p className="text-muted-foreground mb-2">No referrals yet</p>
+            <p className="text-sm text-muted-foreground">
+              Share your referral code to start earning rewards!
+            </p>
+          </div>
+        )}
+      </Card>
     </div>
   );
 }
