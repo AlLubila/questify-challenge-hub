@@ -32,12 +32,12 @@ export const Header = () => {
           </div>
           
           <nav className="hidden md:flex items-center gap-6">
-            <a href="#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <a href="/#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Challenges
             </a>
-            <a href="#leaderboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => navigate('/leaderboard')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Leaderboard
-            </a>
+            </button>
             <a href="#rewards" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Rewards
             </a>
@@ -71,7 +71,7 @@ export const Header = () => {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/profile')}>
                     <User className="mr-2 h-4 w-4" />
                     Profile
                   </DropdownMenuItem>
@@ -105,12 +105,12 @@ export const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden border-t border-border">
           <nav className="container py-4 flex flex-col gap-4">
-            <a href="#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <a href="/#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Challenges
             </a>
-            <a href="#leaderboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => navigate('/leaderboard')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
               Leaderboard
-            </a>
+            </button>
             <a href="#rewards" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Rewards
             </a>

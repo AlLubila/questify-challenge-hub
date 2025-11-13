@@ -88,14 +88,32 @@ const ChallengeDetail = () => {
 
       if (submitError) throw submitError;
 
-      // Award points
+      // Award points and update level
       if (challenge) {
-        const { error: pointsError } = await supabase.rpc("increment_points", {
-          user_id: user.id,
-          points_to_add: challenge.points,
-        });
+        const { data: currentProfile } = await supabase
+          .from("profiles")
+          .select("points, xp, level")
+          .eq("id", user.id)
+          .single();
 
-        if (pointsError) console.error("Points error:", pointsError);
+        if (currentProfile) {
+          const newXp = currentProfile.xp + challenge.points;
+          const newLevel = Math.floor(newXp / 1000) + 1;
+
+          await supabase
+            .from("profiles")
+            .update({
+              points: currentProfile.points + challenge.points,
+              xp: newXp,
+              level: newLevel,
+            })
+            .eq("id", user.id);
+        }
+
+        // Check for new badges
+        await supabase.functions.invoke("award-badges", {
+          body: { user_id: user.id },
+        });
       }
     },
     onSuccess: () => {

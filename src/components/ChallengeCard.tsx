@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Trophy, Clock, Users, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface ChallengeCardProps {
   id: string;
@@ -16,6 +17,7 @@ interface ChallengeCardProps {
 }
 
 export const ChallengeCard = ({
+  id,
   title,
   description,
   image,
@@ -25,6 +27,8 @@ export const ChallengeCard = ({
   points,
   difficulty,
 }: ChallengeCardProps) => {
+  const navigate = useNavigate();
+  
   const difficultyColors = {
     easy: "bg-success text-success-foreground",
     medium: "bg-accent text-accent-foreground",
@@ -74,7 +78,10 @@ export const ChallengeCard = ({
             <Clock className="w-4 h-4 text-secondary" />
             <span className="text-foreground font-medium">{timeLeft}</span>
           </div>
-          <Button className="bg-gradient-primary hover:shadow-glow transition-all duration-300">
+          <Button 
+            className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
+            onClick={() => navigate(`/challenge/${id}`)}
+          >
             Join Challenge
           </Button>
         </div>
