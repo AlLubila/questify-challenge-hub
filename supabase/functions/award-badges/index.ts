@@ -19,8 +19,37 @@ serve(async (req) => {
       throw new Error("Supabase configuration missing");
     }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Authenticate user
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      throw new Error("No authorization header");
+    }
+
+    const supabaseClient = createClient(
+      supabaseUrl,
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
+    
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
+    
+    if (authError || !user) {
+      throw new Error("Unauthorized");
+    }
+
     const { user_id } = await req.json();
+
+    // Validate input
+    if (!user_id || typeof user_id !== 'string') {
+      throw new Error("Invalid user_id");
+    }
+
+    // Only allow users to check badges for themselves
+    if (user_id !== user.id) {
+      throw new Error("Unauthorized: Can only check own badges");
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     if (!user_id) {
       throw new Error("User ID is required");

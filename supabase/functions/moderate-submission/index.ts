@@ -13,6 +13,27 @@ Deno.serve(async (req) => {
   try {
     const { submissionId, caption, contentUrl } = await req.json();
     
+    // Validate inputs
+    if (!submissionId || typeof submissionId !== 'string' || !submissionId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
+      throw new Error("Valid submission ID (UUID) is required");
+    }
+    
+    if (caption && typeof caption !== 'string') {
+      throw new Error("Caption must be a string");
+    }
+    
+    if (caption && caption.length > 1000) {
+      throw new Error("Caption exceeds maximum length of 1000 characters");
+    }
+    
+    if (contentUrl && typeof contentUrl !== 'string') {
+      throw new Error("Content URL must be a string");
+    }
+    
+    if (contentUrl && contentUrl.length > 2000) {
+      throw new Error("Content URL exceeds maximum length");
+    }
+    
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");

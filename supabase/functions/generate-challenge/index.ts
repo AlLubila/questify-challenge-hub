@@ -18,15 +18,53 @@ serve(async (req) => {
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY");
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     
-    if (!supabaseUrl || !supabaseServiceKey) {
+    if (!supabaseUrl || !supabaseAnonKey || !supabaseServiceKey) {
       throw new Error("Supabase configuration missing");
     }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Authenticate user
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      throw new Error("No authorization header");
+    }
+
+    const authClient = createClient(supabaseUrl, supabaseAnonKey);
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await authClient.auth.getUser(token);
+    
+    if (authError || !user) {
+      throw new Error("Unauthorized");
+    }
+
+    // Check if user is admin
+    const { data: userRoles, error: roleError } = await authClient
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id);
+
+    if (roleError) {
+      throw new Error("Failed to check user role");
+    }
+
+    const isAdmin = userRoles?.some(r => r.role === "admin");
+    if (!isAdmin) {
+      throw new Error("Unauthorized: Admin access required");
+    }
 
     const { type = 'daily', count = 1 } = await req.json();
+
+    // Validate input
+    if (!type || !["daily", "weekly"].includes(type)) {
+      throw new Error("Invalid challenge type. Must be 'daily' or 'weekly'");
+    }
+    if (typeof count !== "number" || count < 1 || count > 10) {
+      throw new Error("Invalid count. Must be between 1 and 10");
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     console.log(`Generating ${count} ${type} challenge(s)...`);
 
