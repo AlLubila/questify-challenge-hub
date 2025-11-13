@@ -5,3 +5,9 @@ verify_jwt = false
 
 [functions.award-badges]
 verify_jwt = false
+
+[functions.process-payment-success]
+verify_jwt = false
+
+[functions.moderate-submission]
+verify_jwt = true

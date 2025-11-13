@@ -1,28 +1,32 @@
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import { Trash2, Users } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Trash2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+
+type UserRole = "admin" | "moderator" | "user";
 
 export const ChallengeModeration = () => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const { data: challenges, isLoading } = useQuery({
-    queryKey: ["adminChallenges"],
+    queryKey: ["allChallenges"],
     queryFn: async () => {
       const { data: challengesData, error: challengesError } = await supabase
         .from("challenges")
@@ -31,7 +35,6 @@ export const ChallengeModeration = () => {
 
       if (challengesError) throw challengesError;
 
-      // Fetch creator profiles separately
       const creatorIds = challengesData
         .map((c) => c.created_by)
         .filter((id) => id !== null);
@@ -43,30 +46,58 @@ export const ChallengeModeration = () => {
 
       if (profilesError) throw profilesError;
 
-      // Merge profiles with challenges
       return challengesData.map((challenge) => ({
         ...challenge,
-        profile: profiles?.find((p) => p.id === challenge.created_by) || null,
+        profiles: profiles?.find((p) => p.id === challenge.created_by) || null,
       }));
     },
   });
 
+  const logActivity = async (targetId: string, reason?: string) => {
+    if (!user) return;
+    
+    await supabase.from("admin_activity_logs").insert({
+      admin_id: user.id,
+      action_type: "delete_challenge",
+      target_type: "challenge",
+      target_id: targetId,
+      reason,
+    });
+  };
+
   const deleteChallenge = useMutation({
-    mutationFn: async (challengeId: string) => {
-      const { error } = await supabase
-        .from("challenges")
-        .delete()
-        .eq("id", challengeId);
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase.from("challenges").delete().in("id", ids);
       if (error) throw error;
+
+      // Log activity for each challenge
+      for (const id of ids) {
+        await logActivity(id, "Bulk deletion");
+      }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminChallenges"] });
-      toast.success("Challenge deleted successfully");
+    onSuccess: (_, ids) => {
+      queryClient.invalidateQueries({ queryKey: ["allChallenges"] });
+      setSelectedIds([]);
+      toast.success(`${ids.length} challenge(s) deleted successfully`);
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to delete challenge");
     },
   });
+
+  const toggleSelection = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const toggleAll = () => {
+    if (selectedIds.length === (challenges?.length || 0)) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(challenges?.map((c) => c.id) || []);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -79,85 +110,92 @@ export const ChallengeModeration = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Challenge Moderation</h1>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {challenges?.map((challenge) => (
-          <Card key={challenge.id}>
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <CardTitle className="text-lg">{challenge.title}</CardTitle>
-                {challenge.is_ai_generated && (
-                  <Badge variant="secondary">AI Generated</Badge>
-                )}
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {challenge.image_url && (
-                <img
-                  src={challenge.image_url}
-                  alt={challenge.title}
-                  className="w-full h-48 object-cover rounded-md"
-                />
-              )}
-              <p className="text-sm text-muted-foreground line-clamp-3">
-                {challenge.description}
-              </p>
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-1">
-                  <Users className="h-4 w-4" />
-                  <span>{challenge.participants_count} participants</span>
-                </div>
-                <Badge variant="outline">{challenge.difficulty}</Badge>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="text-sm">
-                  <p className="font-medium">Prize: {challenge.prize}</p>
-                  <p className="text-muted-foreground">
-                    {challenge.points} points
-                  </p>
-                </div>
-                {challenge.profile && (
-                  <p className="text-xs text-muted-foreground">
-                    By {challenge.profile.display_name || challenge.profile.username}
-                  </p>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Challenge Moderation</h1>
+        {selectedIds.length > 0 && (
+          <Button
+            variant="destructive"
+            onClick={() => deleteChallenge.mutate(selectedIds)}
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Delete Selected ({selectedIds.length})
+          </Button>
+        )}
+      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>All Challenges</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-12">
+                  <Checkbox
+                    checked={selectedIds.length === challenges?.length && challenges.length > 0}
+                    onCheckedChange={toggleAll}
+                  />
+                </TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Creator</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Difficulty</TableHead>
+                <TableHead>Participants</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {challenges?.map((challenge) => (
+                <TableRow key={challenge.id}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedIds.includes(challenge.id)}
+                      onCheckedChange={() => toggleSelection(challenge.id)}
+                    />
+                  </TableCell>
+                  <TableCell className="font-medium">{challenge.title}</TableCell>
+                  <TableCell>
+                    {challenge.is_ai_generated ? (
+                      <Badge variant="secondary">AI Generated</Badge>
+                    ) : (
+                      challenge.profiles?.display_name ||
+                      challenge.profiles?.username ||
+                      "Unknown"
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{challenge.challenge_type}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        challenge.difficulty === "hard"
+                          ? "destructive"
+                          : challenge.difficulty === "medium"
+                          ? "default"
+                          : "secondary"
+                      }
+                    >
+                      {challenge.difficulty}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{challenge.participants_count || 0}</TableCell>
+                  <TableCell>
                     <Button
                       size="sm"
                       variant="destructive"
-                      className="w-full"
+                      onClick={() => deleteChallenge.mutate([challenge.id])}
                     >
                       <Trash2 className="h-4 w-4 mr-1" />
                       Delete
                     </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Delete Challenge?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This will permanently delete "{challenge.title}" and all
-                        associated submissions. This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => deleteChallenge.mutate(challenge.id)}
-                        className="bg-destructive text-destructive-foreground"
-                      >
-                        Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 };

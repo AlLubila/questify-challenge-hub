@@ -21,11 +21,13 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/contexts/AuthContext";
 
 type UserRole = "admin" | "moderator" | "user";
 
 export const UserManagement = () => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   const { data: users, isLoading } = useQuery({
@@ -52,12 +54,26 @@ export const UserManagement = () => {
     },
   });
 
+  const logActivity = async (actionType: string, targetId: string, role: string) => {
+    if (!user) return;
+    
+    await supabase.from("admin_activity_logs").insert({
+      admin_id: user.id,
+      action_type: actionType,
+      target_type: "user",
+      target_id: targetId,
+      reason: `Role: ${role}`,
+    });
+  };
+
   const assignRole = useMutation({
     mutationFn: async ({ userId, role }: { userId: string; role: UserRole }) => {
       const { error } = await supabase
         .from("user_roles")
         .insert({ user_id: userId, role });
       if (error) throw error;
+
+      await logActivity("assign_role", userId, role);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["adminUsers"] });
@@ -77,6 +93,8 @@ export const UserManagement = () => {
         .eq("user_id", userId)
         .eq("role", role);
       if (error) throw error;
+
+      await logActivity("remove_role", userId, role);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["adminUsers"] });

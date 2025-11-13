@@ -1,5 +1,3 @@
-import { NavLink } from "react-router-dom";
-import { Users, FileCheck, Trophy, LayoutDashboard, Shield } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -7,46 +5,59 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuItem,
   SidebarMenuButton,
-  useSidebar,
+  SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Home, Users, FileText, Trophy, BarChart3, ScrollText } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
-const adminItems = [
-  { title: "Dashboard", url: "/admin", icon: LayoutDashboard, exact: true },
-  { title: "Users", url: "/admin/users", icon: Users, exact: false },
-  { title: "Submissions", url: "/admin/submissions", icon: FileCheck, exact: false },
-  { title: "Challenges", url: "/admin/challenges", icon: Trophy, exact: false },
+const menuItems = [
+  {
+    title: "Dashboard",
+    url: "/admin",
+    icon: Home,
+  },
+  {
+    title: "Users",
+    url: "/admin/users",
+    icon: Users,
+  },
+  {
+    title: "Submissions",
+    url: "/admin/submissions",
+    icon: FileText,
+  },
+  {
+    title: "Challenges",
+    url: "/admin/challenges",
+    icon: Trophy,
+  },
+  {
+    title: "Analytics",
+    url: "/admin/analytics",
+    icon: BarChart3,
+  },
+  {
+    title: "Activity Logs",
+    url: "/admin/logs",
+    icon: ScrollText,
+  },
 ];
 
 export const AdminSidebar = () => {
-  const { state } = useSidebar();
-  const collapsed = state === "collapsed";
-
   return (
-    <Sidebar className={collapsed ? "w-14" : "w-60"}>
+    <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center gap-2">
-            <Shield className="h-4 w-4" />
-            {!collapsed && <span>Admin Panel</span>}
-          </SidebarGroupLabel>
+          <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {adminItems.map((item) => (
+              {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.url}
-                      end={item.exact}
-                      className={({ isActive }) =>
-                        `flex items-center gap-2 hover:bg-accent rounded-md ${
-                          isActive ? "bg-accent text-accent-foreground font-medium" : ""
-                        }`
-                      }
-                    >
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
+                    <NavLink to={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

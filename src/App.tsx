@@ -12,11 +12,13 @@ import Leaderboard from "./pages/Leaderboard";
 import Feed from "./pages/Feed";
 import Wallet from "./pages/Wallet";
 import NotFound from "./pages/NotFound";
-import { AdminLayout } from "./pages/admin/AdminLayout";
-import { AdminDashboard } from "./pages/admin/AdminDashboard";
-import { UserManagement } from "./pages/admin/UserManagement";
-import { SubmissionModeration } from "./pages/admin/SubmissionModeration";
-import { ChallengeModeration } from "./pages/admin/ChallengeModeration";
+import { AdminDashboard } from "@/pages/admin/AdminDashboard";
+import { UserManagement } from "@/pages/admin/UserManagement";
+import { SubmissionModeration } from "@/pages/admin/SubmissionModeration";
+import { ChallengeModeration } from "@/pages/admin/ChallengeModeration";
+import { Analytics } from "@/pages/admin/Analytics";
+import { ActivityLogs } from "@/pages/admin/ActivityLogs";
+import { AdminLayout } from "@/pages/admin/AdminLayout";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,8 @@ const App = () => (
               <Route path="users" element={<UserManagement />} />
               <Route path="submissions" element={<SubmissionModeration />} />
               <Route path="challenges" element={<ChallengeModeration />} />
+              <Route path="analytics" element={<Analytics />} />
+              <Route path="logs" element={<ActivityLogs />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

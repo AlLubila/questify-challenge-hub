@@ -1,26 +1,45 @@
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { CheckCircle, XCircle, Eye } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CheckCircle, XCircle, AlertTriangle } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const SubmissionModeration = () => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const { data: submissions, isLoading } = useQuery({
-    queryKey: ["adminSubmissions"],
+    queryKey: ["pendingSubmissions"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("submissions")
         .select(`
           *,
-          profiles:user_id(username, display_name),
-          challenges:challenge_id(title)
+          profiles:user_id (username, display_name),
+          challenges (title)
         `)
+        .in("status", ["pending"])
         .order("submitted_at", { ascending: false });
 
       if (error) throw error;
@@ -28,32 +47,168 @@ export const SubmissionModeration = () => {
     },
   });
 
+  const { data: flaggedSubmissions, isLoading: flaggedLoading } = useQuery({
+    queryKey: ["flaggedSubmissions"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("submissions")
+        .select(`
+          *,
+          profiles:user_id (username, display_name),
+          challenges (title)
+        `)
+        .eq("moderation_status", "flagged")
+        .order("submitted_at", { ascending: false });
+
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const logActivity = async (actionType: string, targetId: string, reason?: string) => {
+    if (!user) return;
+    
+    await supabase.from("admin_activity_logs").insert({
+      admin_id: user.id,
+      action_type: actionType,
+      target_type: "submission",
+      target_id: targetId,
+      reason,
+    });
+  };
+
   const updateStatus = useMutation({
-    mutationFn: async ({
-      submissionId,
-      status,
-    }: {
-      submissionId: string;
-      status: string;
-    }) => {
+    mutationFn: async ({ ids, status, reason }: { ids: string[]; status: string; reason?: string }) => {
       const { error } = await supabase
         .from("submissions")
-        .update({ status })
-        .eq("id", submissionId);
+        .update({ 
+          status,
+          moderation_status: status === "approved" ? "approved" : "rejected",
+          moderated_at: new Date().toISOString(),
+          moderated_by: user?.id,
+        })
+        .in("id", ids);
+      
       if (error) throw error;
+
+      // Log activity for each submission
+      for (const id of ids) {
+        await logActivity(
+          status === "approved" ? "approve_submission" : "reject_submission",
+          id,
+          reason
+        );
+      }
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["adminSubmissions"] });
-      toast.success(
-        `Submission ${variables.status === "approved" ? "approved" : "rejected"}`
-      );
+      queryClient.invalidateQueries({ queryKey: ["pendingSubmissions"] });
+      queryClient.invalidateQueries({ queryKey: ["flaggedSubmissions"] });
+      setSelectedIds([]);
+      toast.success(`${variables.ids.length} submission(s) updated successfully`);
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to update submission");
     },
   });
 
-  if (isLoading) {
+  const toggleSelection = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const toggleAll = (items: any[]) => {
+    if (selectedIds.length === items.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(items.map((i) => i.id));
+    }
+  };
+
+  const renderSubmissionsTable = (items: any[], showFlags = false) => (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-12">
+            <Checkbox
+              checked={selectedIds.length === items.length && items.length > 0}
+              onCheckedChange={() => toggleAll(items)}
+            />
+          </TableHead>
+          <TableHead>User</TableHead>
+          <TableHead>Challenge</TableHead>
+          <TableHead>Caption</TableHead>
+          {showFlags && <TableHead>Flags</TableHead>}
+          <TableHead>Submitted</TableHead>
+          <TableHead>Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {items?.map((submission) => (
+          <TableRow key={submission.id}>
+            <TableCell>
+              <Checkbox
+                checked={selectedIds.includes(submission.id)}
+                onCheckedChange={() => toggleSelection(submission.id)}
+              />
+            </TableCell>
+            <TableCell className="font-medium">
+              {submission.profiles?.display_name ||
+                submission.profiles?.username ||
+                "Unknown"}
+            </TableCell>
+            <TableCell>{submission.challenges?.title || "Unknown"}</TableCell>
+            <TableCell className="max-w-xs truncate">
+              {submission.caption || "—"}
+            </TableCell>
+            {showFlags && (
+              <TableCell>
+                {submission.moderation_flags && (
+                  <div className="space-y-1">
+                    <Badge variant="destructive" className="text-xs">
+                      {Math.round((submission.moderation_flags as any).confidence * 100)}% confidence
+                    </Badge>
+                    <div className="text-xs text-muted-foreground">
+                      {(submission.moderation_flags as any).categories?.join(", ")}
+                    </div>
+                  </div>
+                )}
+              </TableCell>
+            )}
+            <TableCell>
+              {new Date(submission.submitted_at).toLocaleDateString()}
+            </TableCell>
+            <TableCell>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  variant="default"
+                  onClick={() =>
+                    updateStatus.mutate({ ids: [submission.id], status: "approved" })
+                  }
+                >
+                  <CheckCircle className="h-4 w-4 mr-1" />
+                  Approve
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() =>
+                    updateStatus.mutate({ ids: [submission.id], status: "rejected" })
+                  }
+                >
+                  <XCircle className="h-4 w-4 mr-1" />
+                  Reject
+                </Button>
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+
+  if (isLoading || flaggedLoading) {
     return (
       <div className="space-y-4">
         <h1 className="text-3xl font-bold">Submission Moderation</h1>
@@ -62,137 +217,65 @@ export const SubmissionModeration = () => {
     );
   }
 
-  const pendingSubmissions = submissions?.filter((s) => s.status === "pending") || [];
-  const approvedSubmissions = submissions?.filter((s) => s.status === "approved") || [];
-  const rejectedSubmissions = submissions?.filter((s) => s.status === "rejected") || [];
-
-  const SubmissionCard = ({ submission }: { submission: any }) => (
-    <Card key={submission.id}>
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div>
-            <CardTitle className="text-lg">
-              {submission.challenges?.title || "Unknown Challenge"}
-            </CardTitle>
-            <p className="text-sm text-muted-foreground mt-1">
-              By {submission.profiles?.display_name || submission.profiles?.username}
-            </p>
-          </div>
-          <Badge
-            variant={
-              submission.status === "approved"
-                ? "default"
-                : submission.status === "rejected"
-                ? "destructive"
-                : "secondary"
-            }
-          >
-            {submission.status}
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {submission.content_url && (
-          <img
-            src={submission.content_url}
-            alt="Submission"
-            className="w-full h-48 object-cover rounded-md"
-          />
-        )}
-        {submission.caption && (
-          <p className="text-sm">{submission.caption}</p>
-        )}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Eye className="h-4 w-4" />
-          <span>{submission.votes} votes</span>
-          {submission.boost_level !== "none" && (
-            <Badge variant="outline" className="ml-2">
-              Boosted: {submission.boost_level}
-            </Badge>
-          )}
-        </div>
-        {submission.status === "pending" && (
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              variant="default"
-              onClick={() =>
-                updateStatus.mutate({
-                  submissionId: submission.id,
-                  status: "approved",
-                })
-              }
-              disabled={updateStatus.isPending}
-            >
-              <CheckCircle className="h-4 w-4 mr-1" />
-              Approve
-            </Button>
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() =>
-                updateStatus.mutate({
-                  submissionId: submission.id,
-                  status: "rejected",
-                })
-              }
-              disabled={updateStatus.isPending}
-            >
-              <XCircle className="h-4 w-4 mr-1" />
-              Reject
-            </Button>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
-
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Submission Moderation</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Submission Moderation</h1>
+        {selectedIds.length > 0 && (
+          <div className="flex gap-2">
+            <Button
+              variant="default"
+              onClick={() =>
+                updateStatus.mutate({ ids: selectedIds, status: "approved" })
+              }
+            >
+              <CheckCircle className="h-4 w-4 mr-2" />
+              Approve Selected ({selectedIds.length})
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() =>
+                updateStatus.mutate({ ids: selectedIds, status: "rejected" })
+              }
+            >
+              <XCircle className="h-4 w-4 mr-2" />
+              Reject Selected ({selectedIds.length})
+            </Button>
+          </div>
+        )}
+      </div>
+
       <Tabs defaultValue="pending">
         <TabsList>
           <TabsTrigger value="pending">
-            Pending ({pendingSubmissions.length})
+            Pending ({submissions?.length || 0})
           </TabsTrigger>
-          <TabsTrigger value="approved">
-            Approved ({approvedSubmissions.length})
-          </TabsTrigger>
-          <TabsTrigger value="rejected">
-            Rejected ({rejectedSubmissions.length})
+          <TabsTrigger value="flagged">
+            <AlertTriangle className="h-4 w-4 mr-2" />
+            Flagged ({flaggedSubmissions?.length || 0})
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="pending" className="space-y-4 mt-4">
-          {pendingSubmissions.length === 0 ? (
-            <Card>
-              <CardContent className="py-8 text-center text-muted-foreground">
-                No pending submissions
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {pendingSubmissions.map((submission) => (
-                <SubmissionCard key={submission.id} submission={submission} />
-              ))}
-            </div>
-          )}
+        <TabsContent value="pending">
+          <Card>
+            <CardHeader>
+              <CardTitle>Pending Submissions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {renderSubmissionsTable(submissions || [])}
+            </CardContent>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="approved" className="space-y-4 mt-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {approvedSubmissions.map((submission) => (
-              <SubmissionCard key={submission.id} submission={submission} />
-            ))}
-          </div>
-        </TabsContent>
-
-        <TabsContent value="rejected" className="space-y-4 mt-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {rejectedSubmissions.map((submission) => (
-              <SubmissionCard key={submission.id} submission={submission} />
-            ))}
-          </div>
+        <TabsContent value="flagged">
+          <Card>
+            <CardHeader>
+              <CardTitle>AI-Flagged Submissions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {renderSubmissionsTable(flaggedSubmissions || [], true)}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_activity_logs: {
+        Row: {
+          action_type: string
+          admin_id: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          reason: string | null
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          action_type: string
+          admin_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          reason?: string | null
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          action_type?: string
+          admin_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          reason?: string | null
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: []
+      }
       badges: {
         Row: {
           created_at: string | null
@@ -282,6 +315,10 @@ export type Database = {
           challenge_id: string
           content_url: string
           id: string
+          moderated_at: string | null
+          moderated_by: string | null
+          moderation_flags: Json | null
+          moderation_status: string | null
           status: string | null
           submitted_at: string | null
           user_id: string
@@ -293,6 +330,10 @@ export type Database = {
           challenge_id: string
           content_url: string
           id?: string
+          moderated_at?: string | null
+          moderated_by?: string | null
+          moderation_flags?: Json | null
+          moderation_status?: string | null
           status?: string | null
           submitted_at?: string | null
           user_id: string
@@ -304,6 +345,10 @@ export type Database = {
           challenge_id?: string
           content_url?: string
           id?: string
+          moderated_at?: string | null
+          moderated_by?: string | null
+          moderation_flags?: Json | null
+          moderation_status?: string | null
           status?: string | null
           submitted_at?: string | null
           user_id?: string
