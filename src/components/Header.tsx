@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles, Menu, X, User, LogOut, Wallet } from "lucide-react";
+import { Sparkles, Menu, X, User, LogOut, Wallet, Shield } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NotificationsDropdown } from "@/components/NotificationsDropdown";
 import {
@@ -19,6 +20,7 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
   const { data: profile } = useProfile();
+  const { isAdminOrModerator } = useUserRole();
   const navigate = useNavigate();
 
   return (
@@ -82,6 +84,12 @@ export const Header = () => {
                     <Wallet className="mr-2 h-4 w-4" />
                     Wallet
                   </DropdownMenuItem>
+                  {isAdminOrModerator && (
+                    <DropdownMenuItem onClick={() => navigate('/admin')}>
+                      <Shield className="mr-2 h-4 w-4" />
+                      Admin Panel
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={signOut}>
                     <LogOut className="mr-2 h-4 w-4" />
