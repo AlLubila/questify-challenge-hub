@@ -75,10 +75,8 @@ export const usePushNotifications = () => {
             } : undefined,
           });
           
-          // Play notification sound if available
-          if (notification.sound) {
-            playNotificationSound();
-          }
+          // Play notification sound
+          playNotificationSound();
         }
       );
 
@@ -107,7 +105,7 @@ export const usePushNotifications = () => {
       if (!user) return;
 
       const { error } = await supabase
-        .from('push_tokens')
+        .from('push_tokens' as any)
         .upsert({
           user_id: user.id,
           token: token,
@@ -145,7 +143,7 @@ export const usePushNotifications = () => {
       // Remove token from database
       if (user && pushToken) {
         await supabase
-          .from('push_tokens')
+          .from('push_tokens' as any)
           .delete()
           .eq('user_id', user.id)
           .eq('token', pushToken);
