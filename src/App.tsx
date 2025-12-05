@@ -40,6 +40,7 @@ const AppContent = () => {
       <Route path="/" element={<PageErrorBoundary pageName="Home"><Index /></PageErrorBoundary>} />
       <Route path="/auth" element={<PageErrorBoundary pageName="Authentication"><Auth /></PageErrorBoundary>} />
       <Route path="/profile" element={<PageErrorBoundary pageName="Profile"><Profile /></PageErrorBoundary>} />
+      <Route path="/profile/:userId" element={<PageErrorBoundary pageName="Profile"><Profile /></PageErrorBoundary>} />
       <Route path="/challenge/:id" element={<PageErrorBoundary pageName="Challenge"><ChallengeDetail /></PageErrorBoundary>} />
       <Route path="/leaderboard" element={<PageErrorBoundary pageName="Leaderboard"><Leaderboard /></PageErrorBoundary>} />
       <Route path="/feed" element={<PageErrorBoundary pageName="Feed"><Feed /></PageErrorBoundary>} />
