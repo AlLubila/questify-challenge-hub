@@ -115,6 +115,8 @@ export type Database = {
           participants_count: number | null
           points: number
           prize: string
+          publish_status: string | null
+          scheduled_publish_at: string | null
           start_date: string
           title: string
           updated_at: string | null
@@ -132,6 +134,8 @@ export type Database = {
           participants_count?: number | null
           points?: number
           prize: string
+          publish_status?: string | null
+          scheduled_publish_at?: string | null
           start_date?: string
           title: string
           updated_at?: string | null
@@ -149,6 +153,8 @@ export type Database = {
           participants_count?: number | null
           points?: number
           prize?: string
+          publish_status?: string | null
+          scheduled_publish_at?: string | null
           start_date?: string
           title?: string
           updated_at?: string | null
@@ -318,6 +324,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      push_tokens: {
+        Row: {
+          created_at: string | null
+          id: string
+          platform: string
+          token: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          platform: string
+          token: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          platform?: string
+          token?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       referrals: {
         Row: {
