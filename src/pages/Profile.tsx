@@ -1,7 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useSubscription } from "@/hooks/useSubscription";
-import { Navigate, useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams, useParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -28,9 +28,10 @@ const Profile = () => {
   const { user, isLoading: authLoading } = useAuth();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { userId: pathUserId } = useParams();
   
-  // Get userId from URL params (if viewing another user's profile)
-  const viewedUserId = searchParams.get("userId") || user?.id;
+  // Get userId from URL path params (if viewing another user's profile), fallback to query params, then to current user
+  const viewedUserId = pathUserId || searchParams.get("userId") || user?.id;
   const isOwnProfile = user?.id === viewedUserId;
   
   // Fetch the profile of the user being viewed
@@ -223,7 +224,8 @@ const Profile = () => {
     );
   }
 
-  if (!user) {
+  // Only require auth if viewing own profile (no userId in path)
+  if (!user && !pathUserId) {
     return <Navigate to="/auth" replace />;
   }
 

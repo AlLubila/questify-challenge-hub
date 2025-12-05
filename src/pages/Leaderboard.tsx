@@ -12,12 +12,14 @@ import { SearchBar } from "@/components/SearchBar";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PullToRefresh from "react-simple-pull-to-refresh";
 
 const ITEMS_PER_PAGE = 20;
 
 const Leaderboard = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearch = useDebounce(searchQuery, 300);
 
@@ -112,9 +114,10 @@ const Leaderboard = () => {
           return (
             <Card
               key={profile.id}
-              className={`p-4 transition-all hover:shadow-lg ${
+              className={`p-4 transition-all hover:shadow-lg cursor-pointer ${
                 isTopThree ? "border-2 border-primary/50 bg-gradient-to-r from-primary/5 to-transparent" : ""
               }`}
+              onClick={() => navigate(`/profile/${profile.id}`)}
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 flex items-center justify-center">
