@@ -33,8 +33,9 @@ const Leaderboard = () => {
   } = useInfiniteQuery({
     queryKey: ["leaderboard", "all-time", debouncedSearch],
     queryFn: async ({ pageParam = 0 }) => {
+      // Use public_profiles view to access only non-sensitive profile data
       let query = supabase
-        .from("profiles")
+        .from("public_profiles")
         .select("id, username, display_name, avatar_url, points, xp, level", { count: 'exact' })
         .order("points", { ascending: false })
         .range(pageParam, pageParam + ITEMS_PER_PAGE - 1);

@@ -40,21 +40,27 @@ const Profile = () => {
     queryFn: async () => {
       if (!viewedUserId) return null;
       
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", viewedUserId)
-        .maybeSingle();
-      
-      if (error) throw error;
-      
-      // If not viewing own profile, remove sensitive fields from the response
-      if (data && !isOwnProfile) {
-        const { wallet_balance, referral_earnings, referral_code, ...publicData } = data;
-        return publicData as typeof data;
+      if (isOwnProfile) {
+        // User can see their own full profile including financial data
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", viewedUserId)
+          .maybeSingle();
+        
+        if (error) throw error;
+        return data;
+      } else {
+        // Use public_profiles view for other users (excludes sensitive financial data)
+        const { data, error } = await supabase
+          .from("public_profiles")
+          .select("*")
+          .eq("id", viewedUserId)
+          .maybeSingle();
+        
+        if (error) throw error;
+        return data;
       }
-      
-      return data;
     },
     enabled: !!viewedUserId,
   });
