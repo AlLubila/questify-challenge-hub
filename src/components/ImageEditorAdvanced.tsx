@@ -115,6 +115,11 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
   const [brushColor, setBrushColor] = useState("#ff0000");
   const [preview, setPreview] = useState<string>("");
   
+  // Drag state for text and stickers
+  const [draggingItem, setDraggingItem] = useState<{ type: 'text' | 'sticker', id: string } | null>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  
   // Undo/Redo
   const [history, setHistory] = useState<EditorState[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -476,6 +481,68 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
     saveToHistory();
   };
 
+  // Get position relative to the image container
+  const getRelativePosition = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!containerRef.current || !imgRef.current) return { x: 0, y: 0 };
+    
+    const container = containerRef.current;
+    const rect = container.getBoundingClientRect();
+    
+    // Get client position (works for both mouse and touch)
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    
+    // Calculate scale between displayed size and natural size
+    const scaleX = imgRef.current.naturalWidth / rect.width;
+    const scaleY = imgRef.current.naturalHeight / rect.height;
+    
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY,
+    };
+  };
+
+  const handleDragStart = (type: 'text' | 'sticker', id: string, e: React.MouseEvent | React.TouchEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const pos = getRelativePosition(e);
+    const item = type === 'text' 
+      ? textOverlays.find(t => t.id === id) 
+      : stickers.find(s => s.id === id);
+    
+    if (item) {
+      setDraggingItem({ type, id });
+      setDragOffset({ x: pos.x - item.x, y: pos.y - item.y });
+    }
+  };
+
+  const handleDragMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!draggingItem) return;
+    e.preventDefault();
+    
+    const pos = getRelativePosition(e);
+    const newX = pos.x - dragOffset.x;
+    const newY = pos.y - dragOffset.y;
+    
+    if (draggingItem.type === 'text') {
+      setTextOverlays(textOverlays.map(item =>
+        item.id === draggingItem.id ? { ...item, x: newX, y: newY } : item
+      ));
+    } else if (draggingItem.type === 'sticker') {
+      setStickers(stickers.map(item =>
+        item.id === draggingItem.id ? { ...item, x: newX, y: newY } : item
+      ));
+    }
+  };
+
+  const handleDragEnd = () => {
+    if (draggingItem) {
+      saveToHistory();
+      setDraggingItem(null);
+    }
+  };
+
   const toggleLayerVisibility = (type: 'text' | 'sticker' | 'draw', id: string) => {
     if (type === 'text') {
       setTextOverlays(textOverlays.map(item => 
@@ -609,25 +676,79 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
         </div>
       </div>
 
-      <div className="aspect-video bg-muted rounded-lg overflow-hidden relative">
+      <div 
+        ref={containerRef}
+        className="aspect-video bg-muted rounded-lg overflow-hidden relative"
+        onMouseMove={handleDragMove}
+        onMouseUp={handleDragEnd}
+        onMouseLeave={handleDragEnd}
+        onTouchMove={handleDragMove}
+        onTouchEnd={handleDragEnd}
+      >
         {preview && (
           <>
             <img ref={imgRef} src={preview} alt="Original" className="hidden" />
             <canvas
               ref={previewCanvasRef}
-              className="w-full h-full object-contain absolute top-0 left-0"
-            />
-            <canvas
-              ref={drawCanvasRef}
-              className="w-full h-full object-contain absolute top-0 left-0 cursor-crosshair"
-              onMouseDown={handleDrawStart}
-              onMouseMove={handleDrawMove}
-              onMouseUp={handleDrawEnd}
-              onMouseLeave={handleDrawEnd}
-              width={imgRef.current?.naturalWidth || 800}
-              height={imgRef.current?.naturalHeight || 600}
+              className="w-full h-full object-contain absolute top-0 left-0 pointer-events-none"
             />
             <canvas ref={canvasRef} className="hidden" />
+            
+            {/* Draggable text overlays */}
+            {textOverlays.filter(t => t.visible).map((overlay) => {
+              const container = containerRef.current;
+              const img = imgRef.current;
+              if (!container || !img) return null;
+              
+              const scaleX = container.offsetWidth / (img.naturalWidth || 1);
+              const scaleY = container.offsetHeight / (img.naturalHeight || 1);
+              
+              return (
+                <div
+                  key={overlay.id}
+                  className="absolute cursor-move select-none"
+                  style={{
+                    left: overlay.x * scaleX,
+                    top: overlay.y * scaleY,
+                    fontSize: overlay.size * Math.min(scaleX, scaleY),
+                    color: overlay.color,
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                    fontWeight: 'bold',
+                  }}
+                  onMouseDown={(e) => handleDragStart('text', overlay.id, e)}
+                  onTouchStart={(e) => handleDragStart('text', overlay.id, e)}
+                >
+                  {overlay.text}
+                  <Move className="w-3 h-3 absolute -top-3 -right-3 text-white bg-primary rounded p-0.5" />
+                </div>
+              );
+            })}
+            
+            {/* Draggable stickers */}
+            {stickers.filter(s => s.visible).map((sticker) => {
+              const container = containerRef.current;
+              const img = imgRef.current;
+              if (!container || !img) return null;
+              
+              const scaleX = container.offsetWidth / (img.naturalWidth || 1);
+              const scaleY = container.offsetHeight / (img.naturalHeight || 1);
+              
+              return (
+                <div
+                  key={sticker.id}
+                  className="absolute cursor-move select-none"
+                  style={{
+                    left: sticker.x * scaleX,
+                    top: sticker.y * scaleY,
+                    fontSize: sticker.size * Math.min(scaleX, scaleY),
+                  }}
+                  onMouseDown={(e) => handleDragStart('sticker', sticker.id, e)}
+                  onTouchStart={(e) => handleDragStart('sticker', sticker.id, e)}
+                >
+                  {sticker.emoji}
+                </div>
+              );
+            })}
           </>
         )}
       </div>
@@ -895,10 +1016,13 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
 
           {textOverlays.length > 0 && (
             <div className="space-y-2">
-              <Label>Added Text:</Label>
+              <Label>Added Text (drag to reposition):</Label>
               {textOverlays.map((overlay, idx) => (
                 <div key={idx} className="flex items-center justify-between p-2 bg-muted rounded">
-                  <span className="text-sm">{overlay.text}</span>
+                  <div className="flex items-center gap-2">
+                    <Move className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm">{overlay.text}</span>
+                  </div>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -908,6 +1032,9 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
                   </Button>
                 </div>
               ))}
+              <p className="text-xs text-muted-foreground">
+                Drag text directly on the image to reposition
+              </p>
             </div>
           )}
         </TabsContent>

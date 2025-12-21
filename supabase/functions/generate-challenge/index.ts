@@ -214,6 +214,33 @@ Each challenge should feel fresh, exciting, and valuable without monetary prizes
 
     console.log(`Successfully generated and saved ${insertedChallenges.length} challenge(s)`);
 
+    // Generate images for each challenge asynchronously
+    for (const challenge of insertedChallenges) {
+      try {
+        const imageResponse = await fetch(`${supabaseUrl}/functions/v1/generate-challenge-image`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${supabaseServiceKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            challengeId: challenge.id,
+            title: challenge.title,
+            description: challenge.description
+          }),
+        });
+        
+        if (!imageResponse.ok) {
+          console.error(`Failed to generate image for challenge ${challenge.id}`);
+        } else {
+          console.log(`Image generated for challenge ${challenge.id}`);
+        }
+      } catch (imageError) {
+        console.error(`Error generating image for challenge ${challenge.id}:`, imageError);
+        // Continue with other challenges even if one image fails
+      }
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true, 
