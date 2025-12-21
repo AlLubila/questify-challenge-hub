@@ -139,8 +139,8 @@ const ChallengeDetail = () => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 20 * 1024 * 1024) {
-        toast.error("File must be less than 20MB");
+      if (file.size > 100 * 1024 * 1024) {
+        toast.error("File must be less than 100MB");
         return;
       }
 

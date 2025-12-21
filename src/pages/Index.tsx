@@ -93,11 +93,30 @@ const Index = () => {
               </p>
 
               <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="bg-gradient-primary hover:shadow-glow text-lg px-8 h-14">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-primary hover:shadow-glow text-lg px-8 h-14"
+                  onClick={() => {
+                    const challengesSection = document.getElementById('challenges');
+                    if (challengesSection) {
+                      challengesSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
                   <Sparkles className="w-5 h-5 mr-2" />
                   {t("hero.cta")}
                 </Button>
-                <Button size="lg" variant="outline" className="text-lg px-8 h-14">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="text-lg px-8 h-14"
+                  onClick={() => {
+                    const challengesSection = document.getElementById('challenges');
+                    if (challengesSection) {
+                      challengesSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
                   {t("hero.howItWorks")}
                 </Button>
               </div>

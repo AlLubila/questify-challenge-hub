@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { Heart, MessageCircle, Send, Zap, Pencil } from "lucide-react";
+import { Heart, MessageCircle, Send, Zap } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -12,7 +12,8 @@ import { toast } from "sonner";
 import { useNavigate, Link } from "react-router-dom";
 import { BoostSubmissionDialog } from "@/components/BoostSubmissionDialog";
 import { FollowButton } from "@/components/FollowButton";
-import { ReEditSubmissionDialog } from "@/components/ReEditSubmissionDialog";
+import { SubmissionViewDialog } from "@/components/SubmissionViewDialog";
+
 
 interface SubmissionCardProps {
   submission: any;
@@ -218,34 +219,31 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
         </div>
       </div>
 
-      {/* Submission Content */}
-      <div className="aspect-video bg-muted relative">
-        {submission.content_url.match(/\.(mp4|webm|ogg)$/i) ? (
-          <video
-            src={submission.content_url}
-            controls
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <img
-            src={submission.content_url}
-            alt="Submission"
-            className="w-full h-full object-cover"
-          />
-        )}
-        {user && user.id === submission.user_id && (
-          <ReEditSubmissionDialog submission={submission}>
-            <Button
-              size="sm"
-              variant="secondary"
-              className="absolute bottom-2 right-2 gap-1"
-            >
-              <Pencil className="w-3 h-3" />
-              Edit
-            </Button>
-          </ReEditSubmissionDialog>
-        )}
-      </div>
+      {/* Submission Content - Clickable to view full */}
+      <SubmissionViewDialog 
+        contentUrl={submission.content_url}
+        isVideo={submission.content_url.match(/\.(mp4|webm|ogg)$/i) !== null}
+      >
+        <div className="aspect-video bg-muted relative cursor-pointer hover:opacity-95 transition-opacity">
+          {submission.content_url.match(/\.(mp4|webm|ogg)$/i) ? (
+            <video
+              src={submission.content_url}
+              className="w-full h-full object-cover pointer-events-none"
+            />
+          ) : (
+            <img
+              src={submission.content_url}
+              alt="Submission"
+              className="w-full h-full object-cover"
+            />
+          )}
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/20">
+            <span className="text-white text-sm font-medium bg-black/50 px-3 py-1 rounded-full">
+              Click to view full
+            </span>
+          </div>
+        </div>
+      </SubmissionViewDialog>
 
       {/* Caption */}
       {submission.caption && (

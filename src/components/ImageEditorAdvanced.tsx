@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { RotateCw, Check, X, Scissors, Type, Smile, Sparkles, Brush, Undo2, Redo2, Save, Layers, Palette, Eye, EyeOff, MoveUp, MoveDown, Trash2 } from "lucide-react";
+import { RotateCw, Check, X, Scissors, Type, Smile, Sparkles, Undo2, Redo2, Save, Palette, Eye, EyeOff, MoveUp, MoveDown, Trash2, Move } from "lucide-react";
 import { toast } from "sonner";
 
 interface ImageEditorAdvancedProps {
@@ -633,7 +633,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
       </div>
 
       <Tabs defaultValue="filters" className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="filters">
             <Sparkles className="w-4 h-4 mr-1" />
             Filters
@@ -653,14 +653,6 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           <TabsTrigger value="stickers">
             <Smile className="w-4 h-4 mr-1" />
             Stickers
-          </TabsTrigger>
-          <TabsTrigger value="draw">
-            <Brush className="w-4 h-4 mr-1" />
-            Draw
-          </TabsTrigger>
-          <TabsTrigger value="layers">
-            <Layers className="w-4 h-4 mr-1" />
-            Layers
           </TabsTrigger>
         </TabsList>
 
@@ -990,64 +982,11 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           )}
         </TabsContent>
 
-        <TabsContent value="draw" className="space-y-4">
-          <div className="space-y-4">
-            <div>
-              <Label>Brush Size: {brushSize}px</Label>
-              <Slider
-                value={[brushSize]}
-                onValueChange={([value]) => setBrushSize(value)}
-                min={1}
-                max={20}
-                step={1}
-              />
-            </div>
-
-            <div>
-              <Label>Brush Color</Label>
-              <div className="flex gap-2 items-center">
-                <Input
-                  type="color"
-                  value={brushColor}
-                  onChange={(e) => setBrushColor(e.target.value)}
-                  className="w-20 h-10"
-                />
-                <div className="flex gap-1">
-                  {["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff", "#ffffff", "#000000"].map((color) => (
-                    <Button
-                      key={color}
-                      variant="outline"
-                      size="sm"
-                      className="w-8 h-8 p-0"
-                      style={{ backgroundColor: color }}
-                      onClick={() => setBrushColor(color)}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {drawingPaths.length > 0 && (
-              <Button
-                variant="outline"
-                onClick={() => setDrawingPaths([])}
-                className="w-full"
-              >
-                Clear Drawing
-              </Button>
-            )}
-
-            <p className="text-sm text-muted-foreground">
-              Click and drag on the image above to draw
-            </p>
-          </div>
-        </TabsContent>
-
         <TabsContent value="layers" className="space-y-4">
           <div className="space-y-2">
-            {textOverlays.length === 0 && stickers.length === 0 && drawingPaths.length === 0 ? (
+            {textOverlays.length === 0 && stickers.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">
-                No layers yet. Add text, stickers, or drawings to see them here.
+                No layers yet. Add text or stickers to see them here.
               </p>
             ) : (
               <>
@@ -1137,48 +1076,6 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
                   </Card>
                 ))}
 
-                {drawingPaths.map((path, idx) => (
-                  <Card key={path.id} className="p-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2 flex-1">
-                        <Brush className="w-4 h-4" />
-                        <span className="text-sm">Drawing {idx + 1}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => toggleLayerVisibility('draw', path.id)}
-                        >
-                          {path.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => moveLayer('draw', path.id, 'up')}
-                          disabled={idx === 0}
-                        >
-                          <MoveUp className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => moveLayer('draw', path.id, 'down')}
-                          disabled={idx === drawingPaths.length - 1}
-                        >
-                          <MoveDown className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => deleteLayer('draw', path.id)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
               </>
             )}
           </div>
