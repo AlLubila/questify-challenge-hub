@@ -11,9 +11,9 @@ export interface CompressionOptions {
 }
 
 const DEFAULT_OPTIONS: Required<CompressionOptions> = {
-  maxWidth: 1920,
-  maxHeight: 1920,
-  quality: 0.85,
+  maxWidth: 2560,
+  maxHeight: 2560,
+  quality: 0.9,
   outputFormat: 'image/jpeg',
 };
 
@@ -83,8 +83,8 @@ export const compressImage = async (
     return file;
   }
 
-  // Skip compression for small files (less than 200KB)
-  const MIN_SIZE_FOR_COMPRESSION = 200 * 1024; // 200KB
+  // Skip compression for small files (less than 500KB)
+  const MIN_SIZE_FOR_COMPRESSION = 500 * 1024; // 500KB
   if (file.size < MIN_SIZE_FOR_COMPRESSION) {
     console.log('File is small enough, skipping compression');
     return file;

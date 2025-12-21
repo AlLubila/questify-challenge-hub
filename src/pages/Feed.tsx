@@ -87,18 +87,32 @@ const Feed = () => {
           )
         `, { count: 'exact' })
         .eq("status", "approved")
-        .order("submitted_at", { ascending: false })
-        .range(pageParam, pageParam + ITEMS_PER_PAGE - 1);
+        .order("submitted_at", { ascending: false });
 
-      // Apply search filter
+      // Apply search filter on caption only (Supabase limitation with nested relations)
       if (debouncedSearch) {
-        query = query.or(`caption.ilike.%${debouncedSearch}%,profiles.username.ilike.%${debouncedSearch}%,profiles.display_name.ilike.%${debouncedSearch}%,challenges.title.ilike.%${debouncedSearch}%`);
+        query = query.ilike("caption", `%${debouncedSearch}%`);
       }
+
+      query = query.range(pageParam, pageParam + ITEMS_PER_PAGE - 1);
 
       const { data, error, count } = await query;
 
       if (error) throw error;
-      return { data, count, nextPage: pageParam + ITEMS_PER_PAGE };
+      
+      // Additional client-side filtering for username/challenge title
+      let filteredData = data;
+      if (debouncedSearch && data) {
+        const searchLower = debouncedSearch.toLowerCase();
+        filteredData = data.filter((item: any) => 
+          item.caption?.toLowerCase().includes(searchLower) ||
+          item.profiles?.username?.toLowerCase().includes(searchLower) ||
+          item.profiles?.display_name?.toLowerCase().includes(searchLower) ||
+          item.challenges?.title?.toLowerCase().includes(searchLower)
+        );
+      }
+      
+      return { data: filteredData || [], count, nextPage: pageParam + ITEMS_PER_PAGE };
     },
     getNextPageParam: (lastPage, allPages) => {
       const totalFetched = allPages.reduce((acc, page) => acc + page.data.length, 0);
@@ -155,15 +169,23 @@ const Feed = () => {
         .order("submitted_at", { ascending: false })
         .range(pageParam, pageParam + ITEMS_PER_PAGE - 1);
 
-      // Apply search filter
-      if (debouncedSearch) {
-        query = query.or(`caption.ilike.%${debouncedSearch}%,profiles.username.ilike.%${debouncedSearch}%,profiles.display_name.ilike.%${debouncedSearch}%,challenges.title.ilike.%${debouncedSearch}%`);
-      }
-
       const { data, error, count } = await query;
 
       if (error) throw error;
-      return { data, count, nextPage: pageParam + ITEMS_PER_PAGE };
+      
+      // Client-side filtering for search
+      let filteredData = data;
+      if (debouncedSearch && data) {
+        const searchLower = debouncedSearch.toLowerCase();
+        filteredData = data.filter((item: any) => 
+          item.caption?.toLowerCase().includes(searchLower) ||
+          item.profiles?.username?.toLowerCase().includes(searchLower) ||
+          item.profiles?.display_name?.toLowerCase().includes(searchLower) ||
+          item.challenges?.title?.toLowerCase().includes(searchLower)
+        );
+      }
+      
+      return { data: filteredData || [], count, nextPage: pageParam + ITEMS_PER_PAGE };
     },
     getNextPageParam: (lastPage, allPages) => {
       const totalFetched = allPages.reduce((acc, page) => acc + page.data.length, 0);
