@@ -204,6 +204,12 @@ const Index = () => {
             <Button
               size="lg"
               className="bg-gradient-primary hover:shadow-glow text-xl px-12 h-16"
+              onClick={() => {
+                const challengesSection = document.getElementById('challenges');
+                if (challengesSection) {
+                  challengesSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
               <Sparkles className="w-6 h-6 mr-2" />
               {t("cta.button")}
