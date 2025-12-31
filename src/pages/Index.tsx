@@ -1,15 +1,14 @@
 import { Header } from "@/components/Header";
 import { ChallengeCard } from "@/components/ChallengeCard";
-import { StatsCard } from "@/components/StatsCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Trophy, Users, Zap, TrendingUp, Award, RefreshCw } from "lucide-react";
+import { Sparkles, Award, HelpCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-image.jpg";
 import challenge1 from "@/assets/challenge-1.jpg";
 import challenge2 from "@/assets/challenge-2.jpg";
 import challenge3 from "@/assets/challenge-3.jpg";
 import { useChallenges, calculateTimeLeft } from "@/hooks/useChallenges";
-import { useGenerateChallenge } from "@/hooks/useGenerateChallenge";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ChallengeCardSkeleton } from "@/components/skeletons/ChallengeCardSkeleton";
 import { TrendingChallenges } from "@/components/TrendingChallenges";
@@ -20,9 +19,9 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
   const { data: challenges, isLoading } = useChallenges();
-  const { mutate: generateChallenge, isPending: isGenerating } = useGenerateChallenge();
   const { t } = useLanguage();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   // Fallback challenges for when database is empty
   const fallbackChallenges = [
@@ -95,28 +94,11 @@ const Index = () => {
               <div className="flex flex-wrap gap-4">
                 <Button 
                   size="lg" 
-                  className="bg-gradient-primary hover:shadow-glow text-lg px-8 h-14"
-                  onClick={() => {
-                    const challengesSection = document.getElementById('challenges');
-                    if (challengesSection) {
-                      challengesSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                >
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  {t("hero.cta")}
-                </Button>
-                <Button 
-                  size="lg" 
                   variant="outline" 
                   className="text-lg px-8 h-14"
-                  onClick={() => {
-                    const challengesSection = document.getElementById('challenges');
-                    if (challengesSection) {
-                      challengesSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
+                  onClick={() => navigate('/faq')}
                 >
+                  <HelpCircle className="w-5 h-5 mr-2" />
                   {t("hero.howItWorks")}
                 </Button>
               </div>
