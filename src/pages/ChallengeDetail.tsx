@@ -82,18 +82,75 @@ const ChallengeDetail = () => {
         .from("submissions")
         .getPublicUrl(filePath);
 
-      // Create submission
-      const { error: submitError } = await supabase
+      // Create submission with pending status
+      const { data: submissionData, error: submitError } = await supabase
         .from("submissions")
         .insert({
           user_id: user.id,
           challenge_id: id,
           content_url: urlData.publicUrl,
           caption: caption.trim() || null,
-          status: "approved", // Auto-approve for now
-        });
+          status: "pending",
+          moderation_status: "pending",
+        })
+        .select()
+        .single();
 
       if (submitError) throw submitError;
+
+      // Verify image authenticity for image submissions
+      if (contentFile.type.startsWith('image/')) {
+        toast.loading("Verifying image authenticity...", { id: "verify" });
+        
+        try {
+          const { data: verifyResult, error: verifyError } = await supabase.functions.invoke(
+            "verify-image-authenticity",
+            {
+              body: { 
+                imageUrl: urlData.publicUrl,
+                submissionId: submissionData.id 
+              },
+            }
+          );
+
+          if (verifyError) {
+            console.error("Verification error:", verifyError);
+            toast.dismiss("verify");
+          } else if (verifyResult?.analysis && !verifyResult.analysis.isAuthentic) {
+            // Image is not authentic - reject
+            toast.error(
+              `Submission rejected: ${verifyResult.analysis.reason || "Image appears to be AI-generated or from the internet"}`,
+              { id: "verify", duration: 5000 }
+            );
+            throw new Error("Image failed authenticity check - AI-generated or internet-sourced images are not allowed");
+          } else {
+            toast.success("Image verified as authentic!", { id: "verify" });
+            
+            // Update status to approved
+            await supabase
+              .from("submissions")
+              .update({ status: "approved", moderation_status: "approved" })
+              .eq("id", submissionData.id);
+          }
+        } catch (verifyErr: any) {
+          if (verifyErr.message?.includes("authenticity check")) {
+            throw verifyErr;
+          }
+          // If verification fails for technical reasons, approve anyway
+          console.error("Verification failed:", verifyErr);
+          toast.dismiss("verify");
+          await supabase
+            .from("submissions")
+            .update({ status: "approved" })
+            .eq("id", submissionData.id);
+        }
+      } else {
+        // For videos, auto-approve for now
+        await supabase
+          .from("submissions")
+          .update({ status: "approved" })
+          .eq("id", submissionData.id);
+      }
 
       // Award points and update level
       if (challenge) {
@@ -104,13 +161,13 @@ const ChallengeDetail = () => {
           .single();
 
         if (currentProfile) {
-          const newXp = currentProfile.xp + challenge.points;
+          const newXp = (currentProfile.xp || 0) + challenge.points;
           const newLevel = Math.floor(newXp / 1000) + 1;
 
           await supabase
             .from("profiles")
             .update({
-              points: currentProfile.points + challenge.points,
+              points: (currentProfile.points || 0) + challenge.points,
               xp: newXp,
               level: newLevel,
             })

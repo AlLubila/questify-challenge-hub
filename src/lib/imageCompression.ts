@@ -83,8 +83,8 @@ export const compressImage = async (
     return file;
   }
 
-  // Skip compression for small files (less than 500KB)
-  const MIN_SIZE_FOR_COMPRESSION = 500 * 1024; // 500KB
+  // Skip compression for small files (less than 2MB)
+  const MIN_SIZE_FOR_COMPRESSION = 2 * 1024 * 1024; // 2MB
   if (file.size < MIN_SIZE_FOR_COMPRESSION) {
     console.log('File is small enough, skipping compression');
     return file;
