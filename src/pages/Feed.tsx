@@ -69,6 +69,7 @@ const Feed = () => {
   } = useInfiniteQuery({
     queryKey: ["feed-submissions", debouncedSearch],
     queryFn: async ({ pageParam = 0 }) => {
+      // First fetch all approved submissions (we'll filter client-side for flexible search)
       let query = supabase
         .from("submissions")
         .select(`
@@ -89,22 +90,15 @@ const Feed = () => {
         .eq("status", "approved")
         .order("submitted_at", { ascending: false });
 
-      // Apply search filter on caption only (Supabase limitation with nested relations)
-      if (debouncedSearch) {
-        query = query.ilike("caption", `%${debouncedSearch}%`);
-      }
-
-      query = query.range(pageParam, pageParam + ITEMS_PER_PAGE - 1);
-
       const { data, error, count } = await query;
 
       if (error) throw error;
       
-      // Additional client-side filtering for username/challenge title
-      let filteredData = data;
-      if (debouncedSearch && data) {
-        const searchLower = debouncedSearch.toLowerCase();
-        filteredData = data.filter((item: any) => 
+      // Client-side flexible filtering for username/challenge title/caption
+      let filteredData = data || [];
+      if (debouncedSearch) {
+        const searchLower = debouncedSearch.toLowerCase().trim();
+        filteredData = filteredData.filter((item: any) => 
           item.caption?.toLowerCase().includes(searchLower) ||
           item.profiles?.username?.toLowerCase().includes(searchLower) ||
           item.profiles?.display_name?.toLowerCase().includes(searchLower) ||
@@ -112,7 +106,14 @@ const Feed = () => {
         );
       }
       
-      return { data: filteredData || [], count, nextPage: pageParam + ITEMS_PER_PAGE };
+      // Apply pagination on filtered results
+      const paginatedData = filteredData.slice(pageParam, pageParam + ITEMS_PER_PAGE);
+      
+      return { 
+        data: paginatedData, 
+        count: filteredData.length, 
+        nextPage: pageParam + ITEMS_PER_PAGE 
+      };
     },
     getNextPageParam: (lastPage, allPages) => {
       const totalFetched = allPages.reduce((acc, page) => acc + page.data.length, 0);
@@ -315,10 +316,10 @@ const Feed = () => {
                     <h3 className="text-xl font-bold mb-2">
                       {debouncedSearch ? "No results found" : "No submissions from followed users"}
                     </h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground max-w-md">
                       {debouncedSearch
                         ? "Try adjusting your search"
-                        : "Follow creators to see their latest submissions here!"}
+                        : "You're not following anyone yet. Visit user profiles in the Discover tab and click the Follow button to see their submissions here!"}
                     </p>
                   </div>
                 </div>

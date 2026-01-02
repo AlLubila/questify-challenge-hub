@@ -64,8 +64,20 @@ export const Header = () => {
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <Avatar className="h-10 w-10">
+                  <Button 
+                    variant="ghost" 
+                    className="relative h-10 w-10 rounded-full p-0"
+                    onClick={(e) => {
+                      // Prevent dropdown from opening on direct click, navigate to profile
+                      if (e.detail === 1) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    <Avatar 
+                      className="h-10 w-10 cursor-pointer" 
+                      onClick={() => navigate('/profile')}
+                    >
                       <AvatarImage src={profile.avatar_url || undefined} alt={profile.username} />
                       <AvatarFallback className="bg-gradient-primary text-primary-foreground">
                         {profile.username.substring(0, 2).toUpperCase()}

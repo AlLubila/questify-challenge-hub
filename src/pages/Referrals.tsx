@@ -13,13 +13,6 @@ export default function Referrals() {
   const { data, isLoading } = useReferrals();
   const { t } = useLanguage();
 
-  const copyReferralCode = () => {
-    if (data?.referralCode) {
-      navigator.clipboard.writeText(data.referralCode);
-      toast.success("Referral code copied to clipboard!");
-    }
-  };
-
   const copyReferralLink = () => {
     if (data?.referralCode) {
       const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
@@ -46,47 +39,6 @@ export default function Referrals() {
       } else {
         copyReferralLink();
       }
-    }
-  };
-
-  const shareOnTwitter = () => {
-    if (data?.referralCode) {
-      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
-      const text = `🎮 Join me on Questify! Complete fun challenges, earn rewards, and level up! 🚀\n\nUse my code to get 25 bonus points when you sign up! 🎁`;
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(link)}`;
-      window.open(twitterUrl, '_blank', 'width=550,height=420');
-    }
-  };
-
-  const shareOnFacebook = () => {
-    if (data?.referralCode) {
-      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
-      const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`;
-      window.open(facebookUrl, '_blank', 'width=550,height=420');
-    }
-  };
-
-  const shareOnInstagram = () => {
-    if (data?.referralCode) {
-      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
-      const text = `🎮 Join me on Questify! Complete fun challenges, earn rewards, and level up! 🚀\n\nUse my code to get 25 bonus points: ${data.referralCode}\n\nSign up here: ${link}`;
-      
-      navigator.clipboard.writeText(text);
-      toast.success("Message copied! Paste it in your Instagram post or story", {
-        duration: 4000,
-      });
-    }
-  };
-
-  const shareOnTikTok = () => {
-    if (data?.referralCode) {
-      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
-      const text = `🎮 Join me on Questify! Complete fun challenges, earn rewards, and level up! 🚀\n\nUse my code to get 25 bonus points: ${data.referralCode}\n\nSign up here: ${link}`;
-      
-      navigator.clipboard.writeText(text);
-      toast.success("Message copied! Paste it in your TikTok video description", {
-        duration: 4000,
-      });
     }
   };
 
@@ -166,9 +118,6 @@ export default function Referrals() {
                 {data?.referralCode || "XXXXXXXX"}
               </p>
             </div>
-            <Button onClick={copyReferralCode} variant="outline" size="icon" className="h-14 w-14">
-              <Copy className="h-5 w-5" />
-            </Button>
           </div>
 
           <div className="flex gap-2 w-full">
@@ -181,7 +130,6 @@ export default function Referrals() {
               {t("referrals.share")}
             </Button>
           </div>
-
         </div>
 
         <div className="mt-8 p-4 bg-background/50 rounded-lg">
