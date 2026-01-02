@@ -116,6 +116,7 @@ const ChallengeDetail = () => {
           if (verifyError) {
             console.error("Verification error:", verifyError);
             toast.dismiss("verify");
+            throw new Error(verifyError.message || "Image verification failed");
           } else if (verifyResult?.analysis && !verifyResult.analysis.isAuthentic) {
             // Image is not authentic - reject
             toast.error(
@@ -136,13 +137,10 @@ const ChallengeDetail = () => {
           if (verifyErr.message?.includes("authenticity check")) {
             throw verifyErr;
           }
-          // If verification fails for technical reasons, approve anyway
           console.error("Verification failed:", verifyErr);
           toast.dismiss("verify");
-          await supabase
-            .from("submissions")
-            .update({ status: "approved" })
-            .eq("id", submissionData.id);
+          toast.error(verifyErr.message || "Image verification failed");
+          throw verifyErr;
         }
       } else {
         // For videos, auto-approve for now
