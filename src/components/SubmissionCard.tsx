@@ -26,6 +26,11 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
 
+  // Safety check - if profiles or challenges is null, don't render
+  if (!submission?.profiles || !submission?.challenges) {
+    return null;
+  }
+
   // Check if user has voted
   const { data: userVote } = useQuery({
     queryKey: ["user-vote", submission.id, user?.id],
