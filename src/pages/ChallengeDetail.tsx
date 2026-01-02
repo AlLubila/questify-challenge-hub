@@ -205,7 +205,6 @@ const ChallengeDetail = () => {
       let finalFile = file;
       if (file.type.startsWith('image/')) {
         setIsCompressing(true);
-        toast.loading("Compressing image...", { id: "compress" });
         
         try {
           finalFile = await compressImage(file, {
@@ -213,16 +212,8 @@ const ChallengeDetail = () => {
             maxHeight: 1920,
             quality: 0.85,
           });
-          
-          const savings = ((1 - finalFile.size / file.size) * 100).toFixed(1);
-          if (finalFile.size < file.size) {
-            toast.success(`Image compressed! ${savings}% smaller`, { id: "compress" });
-          } else {
-            toast.dismiss("compress");
-          }
         } catch (error) {
           console.error('Compression error:', error);
-          toast.error("Compression failed, using original", { id: "compress" });
         } finally {
           setIsCompressing(false);
         }
@@ -253,7 +244,6 @@ const ChallengeDetail = () => {
     if (file) {
       // Compress the captured image
       setIsCompressing(true);
-      toast.loading("Compressing image...", { id: "compress" });
       
       try {
         const compressedFile = await compressImage(file, {
@@ -261,13 +251,6 @@ const ChallengeDetail = () => {
           maxHeight: 1920,
           quality: 0.85,
         });
-        
-        const savings = ((1 - compressedFile.size / file.size) * 100).toFixed(1);
-        if (compressedFile.size < file.size) {
-          toast.success(`Image compressed! ${savings}% smaller`, { id: "compress" });
-        } else {
-          toast.dismiss("compress");
-        }
         
         setContentFile(compressedFile);
         const reader = new FileReader();
@@ -277,7 +260,6 @@ const ChallengeDetail = () => {
         reader.readAsDataURL(compressedFile);
       } catch (error) {
         console.error('Compression error:', error);
-        toast.error("Compression failed, using original", { id: "compress" });
         setContentFile(file);
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -295,7 +277,6 @@ const ChallengeDetail = () => {
     if (file) {
       // Compress the selected image
       setIsCompressing(true);
-      toast.loading("Compressing image...", { id: "compress" });
       
       try {
         const compressedFile = await compressImage(file, {
@@ -303,13 +284,6 @@ const ChallengeDetail = () => {
           maxHeight: 1920,
           quality: 0.85,
         });
-        
-        const savings = ((1 - compressedFile.size / file.size) * 100).toFixed(1);
-        if (compressedFile.size < file.size) {
-          toast.success(`Image compressed! ${savings}% smaller`, { id: "compress" });
-        } else {
-          toast.dismiss("compress");
-        }
         
         setContentFile(compressedFile);
         const reader = new FileReader();
@@ -319,7 +293,6 @@ const ChallengeDetail = () => {
         reader.readAsDataURL(compressedFile);
       } catch (error) {
         console.error('Compression error:', error);
-        toast.error("Compression failed, using original", { id: "compress" });
         setContentFile(file);
         const reader = new FileReader();
         reader.onloadend = () => {
