@@ -4,9 +4,10 @@ import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Sparkles, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { SubmissionCardSkeleton } from "@/components/skeletons/SubmissionCardSkeleton";
@@ -23,6 +24,7 @@ const ITEMS_PER_PAGE = 10;
 const Feed = () => {
   const { t } = useLanguage();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
@@ -273,15 +275,23 @@ const Feed = () => {
               ) : (
                 <div className="max-w-2xl mx-auto">
                   <div className="flex flex-col items-center justify-center py-20 text-center">
-                    <Sparkles className="w-16 h-16 mb-4 text-muted-foreground" />
-                    <h3 className="text-xl font-bold mb-2">
+                    <div className="w-20 h-20 mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Sparkles className="w-10 h-10 text-primary" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-3">
                       {debouncedSearch ? "No results found" : "No submissions yet"}
                     </h3>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground max-w-md mb-6">
                       {debouncedSearch
-                        ? "Try adjusting your search"
-                        : "Be the first to submit an entry to a challenge!"}
+                        ? `No submissions match "${debouncedSearch}". Try a different search term.`
+                        : "Be the first to participate in a challenge and share your creativity with the community!"}
                     </p>
+                    {!debouncedSearch && (
+                      <Button onClick={() => navigate('/')} className="bg-gradient-primary">
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        Explore Challenges
+                      </Button>
+                    )}
                   </div>
                 </div>
               )}
