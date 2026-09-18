@@ -8,28 +8,37 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { PageErrorBoundary } from "@/components/PageErrorBoundary";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import Profile from "./pages/Profile";
-import ChallengeDetail from "./pages/ChallengeDetail";
-import Leaderboard from "./pages/Leaderboard";
-import Feed from "./pages/Feed";
-import Wallet from "./pages/Wallet";
-import Referrals from "./pages/Referrals";
-import FAQ from "./pages/FAQ";
-import NotFound from "./pages/NotFound";
-import { AdminDashboard } from "@/pages/admin/AdminDashboard";
-import { UserManagement } from "@/pages/admin/UserManagement";
-import { SubmissionModeration } from "@/pages/admin/SubmissionModeration";
-import { ChallengeModeration } from "@/pages/admin/ChallengeModeration";
-import { Analytics } from "@/pages/admin/Analytics";
-import { ActivityLogs } from "@/pages/admin/ActivityLogs";
-import { AdminLayout } from "@/pages/admin/AdminLayout";
-import PaymentAnalytics from "@/pages/admin/PaymentAnalytics";
-import { CreateChallenge } from "@/pages/admin/CreateChallenge";
-import { RewardsManagement } from "@/pages/admin/RewardsManagement";
+import { lazy, Suspense } from "react";
+import { Loader2 } from "lucide-react";
+
+const Index = lazy(() => import("./pages/Index"));
+const Auth = lazy(() => import("./pages/Auth"));
+const Profile = lazy(() => import("./pages/Profile"));
+const ChallengeDetail = lazy(() => import("./pages/ChallengeDetail"));
+const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+const Feed = lazy(() => import("./pages/Feed"));
+const Wallet = lazy(() => import("./pages/Wallet"));
+const Referrals = lazy(() => import("./pages/Referrals"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard").then((module) => ({ default: module.AdminDashboard })));
+const UserManagement = lazy(() => import("@/pages/admin/UserManagement").then((module) => ({ default: module.UserManagement })));
+const SubmissionModeration = lazy(() => import("@/pages/admin/SubmissionModeration").then((module) => ({ default: module.SubmissionModeration })));
+const ChallengeModeration = lazy(() => import("@/pages/admin/ChallengeModeration").then((module) => ({ default: module.ChallengeModeration })));
+const Analytics = lazy(() => import("@/pages/admin/Analytics").then((module) => ({ default: module.Analytics })));
+const ActivityLogs = lazy(() => import("@/pages/admin/ActivityLogs").then((module) => ({ default: module.ActivityLogs })));
+const AdminLayout = lazy(() => import("@/pages/admin/AdminLayout").then((module) => ({ default: module.AdminLayout })));
+const PaymentAnalytics = lazy(() => import("@/pages/admin/PaymentAnalytics"));
+const CreateChallenge = lazy(() => import("@/pages/admin/CreateChallenge").then((module) => ({ default: module.CreateChallenge })));
+const RewardsManagement = lazy(() => import("@/pages/admin/RewardsManagement").then((module) => ({ default: module.RewardsManagement })));
 
 const queryClient = new QueryClient();
+
+const RouteFallback = () => (
+  <div className="flex min-h-screen items-center justify-center bg-background" role="status" aria-label="Loading page">
+    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+  </div>
+);
 
 // Inner component that uses push notifications
 const AppContent = () => {
@@ -37,7 +46,8 @@ const AppContent = () => {
   usePushNotifications();
 
   return (
-    <Routes>
+    <Suspense fallback={<RouteFallback />}>
+      <Routes>
       <Route path="/" element={<PageErrorBoundary pageName="Home"><Index /></PageErrorBoundary>} />
       <Route path="/auth" element={<PageErrorBoundary pageName="Authentication"><Auth /></PageErrorBoundary>} />
       <Route path="/profile" element={<PageErrorBoundary pageName="Profile"><Profile /></PageErrorBoundary>} />
@@ -61,7 +71,8 @@ const AppContent = () => {
       </Route>
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 };
 
@@ -71,7 +82,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <AuthProvider>
             <LanguageProvider>
               <AppContent />

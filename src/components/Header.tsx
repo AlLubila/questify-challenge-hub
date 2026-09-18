@@ -67,17 +67,9 @@ export const Header = () => {
                   <Button 
                     variant="ghost" 
                     className="relative h-10 w-10 rounded-full p-0"
-                    onClick={(e) => {
-                      // Prevent dropdown from opening on direct click, navigate to profile
-                      if (e.detail === 1) {
-                        e.preventDefault();
-                      }
-                    }}
+                    aria-label="Open account menu"
                   >
-                    <Avatar 
-                      className="h-10 w-10 cursor-pointer" 
-                      onClick={() => navigate('/profile')}
-                    >
+                    <Avatar className="h-10 w-10 cursor-pointer">
                       <AvatarImage src={profile.avatar_url || undefined} alt={profile.username} />
                       <AvatarFallback className="bg-gradient-primary text-primary-foreground">
                         {profile.username.substring(0, 2).toUpperCase()}
@@ -173,6 +165,20 @@ export const Header = () => {
                       <p className="text-sm text-muted-foreground">{profile.points} points</p>
                     </div>
                   </div>
+                  <Button variant="ghost" className="w-full justify-start" onClick={() => { navigate('/profile'); setIsMenuOpen(false); }}>
+                    <User className="w-4 h-4 mr-2" />
+                    {t("nav.profile")}
+                  </Button>
+                  <Button variant="ghost" className="w-full justify-start" onClick={() => { navigate('/wallet'); setIsMenuOpen(false); }}>
+                    <Wallet className="w-4 h-4 mr-2" />
+                    {t("nav.wallet")}
+                  </Button>
+                  {isAdminOrModerator && (
+                    <Button variant="ghost" className="w-full justify-start" onClick={() => { navigate('/admin'); setIsMenuOpen(false); }}>
+                      <Shield className="w-4 h-4 mr-2" />
+                      {t("nav.admin")}
+                    </Button>
+                  )}
                   <Button variant="outline" className="w-full" onClick={signOut}>
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign Out

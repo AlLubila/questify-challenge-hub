@@ -15,21 +15,60 @@ import { FollowButton } from "@/components/FollowButton";
 import { SubmissionViewDialog } from "@/components/SubmissionViewDialog";
 
 
+interface SubmissionProfile {
+  id: string;
+  username: string;
+  display_name: string | null;
+  avatar_url: string | null;
+}
+
+interface SubmissionChallenge {
+  id: string;
+  title: string;
+  difficulty: "easy" | "medium" | "hard";
+  points: number;
+}
+
+interface SubmissionComment {
+  id: string;
+  content: string;
+  created_at: string;
+  profiles: Pick<SubmissionProfile, "username" | "display_name" | "avatar_url"> | null;
+}
+
+interface Submission {
+  id: string;
+  user_id: string;
+  content_url: string;
+  caption: string | null;
+  votes: number;
+  boost_level: string | null;
+  submitted_at: string;
+  profiles: SubmissionProfile | null;
+  challenges: SubmissionChallenge | null;
+}
+
 interface SubmissionCardProps {
-  submission: any;
+  submission: Submission;
 }
 
 export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
+  if (!submission?.profiles || !submission?.challenges) return null;
+
+  return <SubmissionCardContent submission={submission as Submission & {
+    profiles: SubmissionProfile;
+    challenges: SubmissionChallenge;
+  }} />;
+};
+
+const SubmissionCardContent = ({ submission }: {
+  submission: Submission & { profiles: SubmissionProfile; challenges: SubmissionChallenge };
+}) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
-
-  // Safety check - if profiles or challenges is null, don't render
-  if (!submission?.profiles || !submission?.challenges) {
-    return null;
-  }
 
   // Check if user has voted
   const { data: userVote } = useQuery({
@@ -113,7 +152,7 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
       queryClient.invalidateQueries({ queryKey: ["user-vote"] });
       queryClient.invalidateQueries({ queryKey: ["feed-submissions"] });
     },
-    onError: (error: any, _variables, context) => {
+    onError: (error: Error, _variables, context) => {
       // Rollback on error
       if (context?.previousVote !== undefined) {
         queryClient.setQueryData(["user-vote", submission.id, user?.id], context.previousVote);
@@ -148,7 +187,7 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
       setCommentText("");
       toast.success("Comment added!");
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       if (error.message.includes("logged in")) {
         toast.error("Sign in to comment");
         navigate("/auth");
@@ -185,7 +224,7 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
       {/* User Info Header */}
       <div className="p-4 flex items-center justify-between">
         <Link
-          to={`/profile?userId=${submission.profiles.id}`}
+          to={`/profile/${submission.profiles.id}`}
           className="flex items-center gap-3 hover:opacity-80 transition-opacity"
         >
           <Avatar className="h-10 w-10">
@@ -297,21 +336,21 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
         <div className="border-t border-border">
           <div className="p-4 space-y-4 max-h-96 overflow-y-auto">
             {comments && comments.length > 0 ? (
-              comments.map((comment: any) => (
+              comments.map((comment: SubmissionComment) => (
                 <div key={comment.id} className="flex gap-3">
                   <Avatar className="h-8 w-8">
                     <AvatarImage
-                      src={comment.profiles.avatar_url || undefined}
-                      alt={comment.profiles.username}
+                      src={comment.profiles?.avatar_url || undefined}
+                      alt={comment.profiles?.username || "Questify creator"}
                     />
                     <AvatarFallback className="text-xs bg-gradient-primary text-primary-foreground">
-                      {comment.profiles.username.substring(0, 2).toUpperCase()}
+                      {(comment.profiles?.username || "Q").substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
                     <p className="text-sm">
                       <span className="font-bold">
-                        {comment.profiles.display_name || comment.profiles.username}
+                        {comment.profiles?.display_name || comment.profiles?.username || "Questify creator"}
                       </span>{" "}
                       <span className="text-muted-foreground">{comment.content}</span>
                     </p>
@@ -335,7 +374,7 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
                 placeholder="Add a comment..."
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleComment()}
+                onKeyDown={(e) => e.key === "Enter" && handleComment()}
                 maxLength={500}
               />
               <Button

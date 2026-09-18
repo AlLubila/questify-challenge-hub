@@ -21,11 +21,11 @@ const translations: Record<string, string> = {
     "nav.getStarted": "Get Started",
     
     // Hero Section
-    "hero.badge": "Join 100k+ Creators Worldwide",
+    "hero.badge": "Fresh creative quests. Real community rewards.",
     "hero.title1": "Create.",
     "hero.title2": "Compete.",
     "hero.title3": "Win Big.",
-    "hero.description": "Join daily creative challenges, earn points and badges, compete with creators worldwide, and win real cash prizes. Your creativity has never been this rewarding!",
+    "hero.description": "Take on creative challenges, earn points and badges, meet other creators, and compete for featured rewards.",
     "hero.cta": "Start Creating Now",
     "hero.howItWorks": "See How It Works",
     "hero.prizesWon": "Prizes Won",
@@ -57,7 +57,7 @@ const translations: Record<string, string> = {
     
     // CTA
     "cta.title": "Ready to Turn Your Creativity Into Cash?",
-    "cta.description": "Join thousands of creators earning money doing what they love. Sign up now and get 100 bonus points!",
+    "cta.description": "Build your creator profile, share original work, and climb the leaderboard one challenge at a time.",
     "cta.button": "Join Questify Free",
     
     // Auth

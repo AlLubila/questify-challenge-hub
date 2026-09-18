@@ -15,6 +15,7 @@ interface ChallengeCardProps {
   timeLeft: string;
   points: number;
   difficulty: "easy" | "medium" | "hard";
+  isEnded?: boolean;
 }
 
 export const ChallengeCard = ({
@@ -27,6 +28,7 @@ export const ChallengeCard = ({
   timeLeft,
   points,
   difficulty,
+  isEnded = false,
 }: ChallengeCardProps) => {
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -45,6 +47,7 @@ export const ChallengeCard = ({
         <img
           src={image}
           alt={title}
+          loading="lazy"
           className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute top-3 right-3 flex gap-2">
@@ -85,8 +88,9 @@ export const ChallengeCard = ({
           <Button 
             className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
             onClick={() => navigate(`/challenge/${id}`)}
+            disabled={isEnded}
           >
-            {t("challenges.joinChallenge")}
+            {isEnded ? "Challenge ended" : t("challenges.joinChallenge")}
           </Button>
         </div>
       </div>

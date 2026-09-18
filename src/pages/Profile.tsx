@@ -342,7 +342,7 @@ const Profile = () => {
                 </>
               )}
 
-              <div className="grid grid-cols-5 gap-4 pt-4">
+              <div className="grid grid-cols-2 gap-3 pt-4 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
                 <Card 
                   className="p-4 text-center cursor-pointer hover:bg-accent/50 transition-colors"
                   onClick={() => {

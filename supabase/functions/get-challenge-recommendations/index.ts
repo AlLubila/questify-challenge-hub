@@ -81,7 +81,7 @@ serve(async (req) => {
     const participatedChallengeIds = userSubmissions?.map(s => s.challenge_id) || [];
 
     // Query for recommended challenges
-    let query = supabase
+    const query = supabase
       .from("challenges")
       .select("*")
       .eq("publish_status", "published")

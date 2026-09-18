@@ -72,7 +72,7 @@ const Feed = () => {
     queryKey: ["feed-submissions", debouncedSearch],
     queryFn: async ({ pageParam = 0 }) => {
       // First fetch all approved submissions (we'll filter client-side for flexible search)
-      let query = supabase
+      const query = supabase
         .from("submissions")
         .select(`
           *,
@@ -150,7 +150,7 @@ const Feed = () => {
       const followingIds = follows.map((f) => f.following_id);
       
       // Then get submissions from those users
-      let query = supabase
+      const query = supabase
         .from("submissions")
         .select(`
           *,

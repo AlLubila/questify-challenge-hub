@@ -119,7 +119,7 @@ export const RewardsManagement = () => {
     { name: "Top Creator Spotlight", description: "Featured on homepage for 24 hours", icon: "🚀" },
   ];
 
-  const useTemplate = (template: typeof rewardTemplates[0]) => {
+  const applyTemplate = (template: typeof rewardTemplates[0]) => {
     setNewBadge({
       name: template.name,
       description: template.description,
@@ -282,7 +282,7 @@ export const RewardsManagement = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => useTemplate(template)}
+                      onClick={() => applyTemplate(template)}
                     >
                       Use Template
                     </Button>

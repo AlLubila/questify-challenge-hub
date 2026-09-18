@@ -2,12 +2,11 @@ import { Header } from "@/components/Header";
 import { ChallengeCard } from "@/components/ChallengeCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { Sparkles, Award, HelpCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-image.jpg";
 import challenge1 from "@/assets/challenge-1.jpg";
-import challenge2 from "@/assets/challenge-2.jpg";
-import challenge3 from "@/assets/challenge-3.jpg";
 import { useChallenges, calculateTimeLeft } from "@/hooks/useChallenges";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ChallengeCardSkeleton } from "@/components/skeletons/ChallengeCardSkeleton";
@@ -18,49 +17,21 @@ import { AchievementsShowcase } from "@/components/AchievementsShowcase";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
-  const { data: challenges, isLoading } = useChallenges();
+  const { data: challenges, isLoading, isError, refetch } = useChallenges();
   const { t } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Fallback challenges for when database is empty
-  const fallbackChallenges = [
-    {
-      id: "1",
-      title: "Golden Hour Photography",
-      description: "Capture the perfect sunset moment in your city. Show us your best golden hour shot!",
-      image_url: challenge1,
-      prize: "$500 Cash",
-      participants_count: 12458,
-      end_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-      points: 500,
-      difficulty: "medium" as const,
-    },
-    {
-      id: "2",
-      title: "Digital Art Fusion",
-      description: "Create a unique digital artwork combining nature and technology themes.",
-      image_url: challenge2,
-      prize: "$1000 Cash",
-      participants_count: 8932,
-      end_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-      points: 750,
-      difficulty: "hard" as const,
-    },
-    {
-      id: "3",
-      title: "30-Second Dance Challenge",
-      description: "Show off your best moves! Create an original 30-second dance routine.",
-      image_url: challenge3,
-      prize: "$250 Cash",
-      participants_count: 24876,
-      end_date: new Date(Date.now() + 18 * 60 * 60 * 1000).toISOString(),
-      points: 300,
-      difficulty: "easy" as const,
-    },
-  ];
+  const now = Date.now();
+  const activeChallenges = challenges?.filter((challenge) => (
+    new Date(challenge.start_date).getTime() <= now && new Date(challenge.end_date).getTime() > now
+  )) ?? [];
+  const displayChallenges = activeChallenges.length > 0 ? activeChallenges : (challenges ?? []);
+  const showingArchive = !isLoading && activeChallenges.length === 0 && displayChallenges.length > 0;
 
-  const displayChallenges = challenges && challenges.length > 0 ? challenges : fallbackChallenges;
+  const scrollToChallenges = () => {
+    document.getElementById("challenges")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -92,6 +63,14 @@ const Index = () => {
               </p>
 
               <div className="flex flex-wrap gap-4">
+                <Button
+                  size="lg"
+                  className="bg-gradient-primary text-lg px-8 h-14 hover:shadow-glow"
+                  onClick={scrollToChallenges}
+                >
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  {t("hero.cta")}
+                </Button>
                 <Button 
                   size="lg" 
                   variant="outline" 
@@ -124,10 +103,10 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
             <div>
               <h2 className="text-4xl font-bold text-foreground mb-3">
-                {t("challenges.featured")}
+                {showingArchive ? "Recent Challenges" : t("challenges.featured")}
               </h2>
               <p className="text-muted-foreground text-lg">
-                {t("challenges.trending")}
+                {showingArchive ? "New challenges are on the way. Explore recently completed quests in the meantime." : t("challenges.trending")}
               </p>
             </div>
           </div>
@@ -140,7 +119,13 @@ const Index = () => {
                     <ChallengeCardSkeleton key={i} />
                   ))}
                 </div>
-              ) : (
+              ) : isError ? (
+                <Card className="p-8 text-center">
+                  <h3 className="text-xl font-semibold">Challenges could not be loaded</h3>
+                  <p className="mt-2 text-muted-foreground">Check your connection and try again.</p>
+                  <Button className="mt-5" onClick={() => refetch()}>Try again</Button>
+                </Card>
+              ) : displayChallenges.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-6">
                   {displayChallenges.map((challenge, index) => (
                     <div key={challenge.id} style={{ animationDelay: `${index * 0.1}s` }}>
@@ -154,10 +139,17 @@ const Index = () => {
                         timeLeft={calculateTimeLeft(challenge.end_date)}
                         points={challenge.points}
                         difficulty={challenge.difficulty}
+                        isEnded={new Date(challenge.end_date).getTime() <= now}
                       />
                     </div>
                   ))}
                 </div>
+              ) : (
+                <Card className="p-10 text-center">
+                  <Sparkles className="mx-auto h-10 w-10 text-primary" />
+                  <h3 className="mt-4 text-2xl font-semibold">The next quest is being prepared</h3>
+                  <p className="mx-auto mt-2 max-w-md text-muted-foreground">Check back soon for a fresh creative challenge.</p>
+                </Card>
               )}
             </div>
 
@@ -186,12 +178,7 @@ const Index = () => {
             <Button
               size="lg"
               className="bg-gradient-primary hover:shadow-glow text-xl px-12 h-16"
-              onClick={() => {
-                const challengesSection = document.getElementById('challenges');
-                if (challengesSection) {
-                  challengesSection.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
+              onClick={scrollToChallenges}
             >
               <Sparkles className="w-6 h-6 mr-2" />
               {t("cta.button")}

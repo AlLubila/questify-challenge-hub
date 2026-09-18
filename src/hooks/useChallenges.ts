@@ -24,7 +24,8 @@ export const useChallenges = () => {
       const { data, error } = await supabase
         .from("challenges")
         .select("*")
-        .order("created_at", { ascending: false })
+        .eq("publish_status", "published")
+        .order("end_date", { ascending: false })
         .limit(6);
 
       if (error) throw error;
