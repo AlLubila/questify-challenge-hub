@@ -32,11 +32,26 @@ select policies_are(
   'Stripe events have no client policies'
 );
 
-select has_policy('public', 'profiles', 'Users can view their own full profile', 'Profiles have an owner read policy');
-select has_policy('public', 'profiles', 'Staff can view profiles', 'Staff can read profiles');
-select has_policy('public', 'submissions', 'Owners can edit submission content', 'Submission owners have a guarded edit policy');
-select has_policy('public', 'challenges', 'Admins can create challenges', 'Challenge creation is admin-only');
-select has_policy('public', 'challenges', 'Published challenges are public', 'Only published challenges are public');
+select ok(
+  exists(select 1 from pg_policies where schemaname = 'public' and tablename = 'profiles' and policyname = 'Users can view their own full profile'),
+  'Profiles have an owner read policy'
+);
+select ok(
+  exists(select 1 from pg_policies where schemaname = 'public' and tablename = 'profiles' and policyname = 'Staff can view profiles'),
+  'Staff can read profiles'
+);
+select ok(
+  exists(select 1 from pg_policies where schemaname = 'public' and tablename = 'submissions' and policyname = 'Owners can edit submission content'),
+  'Submission owners have a guarded edit policy'
+);
+select ok(
+  exists(select 1 from pg_policies where schemaname = 'public' and tablename = 'challenges' and policyname = 'Admins can create challenges'),
+  'Challenge creation is admin-only'
+);
+select ok(
+  exists(select 1 from pg_policies where schemaname = 'public' and tablename = 'challenges' and policyname = 'Published challenges are public'),
+  'Only published challenges are public'
+);
 
 select trigger_is(
   'public', 'profiles', 'protect_profile_managed_fields',
