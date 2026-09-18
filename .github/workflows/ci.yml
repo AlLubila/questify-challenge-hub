@@ -77,6 +77,12 @@ jobs:
   browser-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      # Smoke tests cover anonymous UI and route guards only. These values are
+      # deliberately inert and avoid depending on any remote project or secret.
+      VITE_SUPABASE_PROJECT_ID: ci
+      VITE_SUPABASE_URL: https://example.supabase.co
+      VITE_SUPABASE_PUBLISHABLE_KEY: ci-public-anon-key
 
     steps:
       - name: Check out repository
