@@ -1,17 +1,15 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { corsHeaders, json, requireRole, requireUser } from "../_shared/security.ts";
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: corsHeaders(req) });
   }
 
   try {
+    const user = await requireUser(req);
+    await requireRole(user.id, ["admin"]);
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
@@ -24,11 +22,20 @@ serve(async (req) => {
       throw new Error("Supabase configuration missing");
     }
 
-    const { challengeId, title, description } = await req.json();
+    const { challengeId } = await req.json();
 
-    if (!challengeId || !title) {
-      throw new Error("Challenge ID and title are required");
+    if (typeof challengeId !== "string" || !/^[0-9a-f-]{36}$/i.test(challengeId)) {
+      return json(req, { error: "Valid challenge ID is required" }, 400);
     }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, { auth: { persistSession: false } });
+    const { data: challenge, error: challengeError } = await supabase
+      .from("challenges")
+      .select("id,title,description")
+      .eq("id", challengeId)
+      .single();
+    if (challengeError || !challenge) return json(req, { error: "Challenge not found" }, 404);
+    const { title, description } = challenge;
 
     console.log(`Generating image for challenge: ${title}`);
 
@@ -80,11 +87,10 @@ serve(async (req) => {
     }
 
     // Upload to Supabase Storage
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-    const fileName = `challenge-covers/${challengeId}-${Date.now()}.png`;
+    const fileName = `${challengeId}/${Date.now()}.png`;
 
     const { error: uploadError } = await supabase.storage
-      .from("submissions")
+      .from("challenge-covers")
       .upload(fileName, bytes, {
         contentType: "image/png",
         upsert: true
@@ -97,7 +103,7 @@ serve(async (req) => {
 
     // Get public URL
     const { data: urlData } = supabase.storage
-      .from("submissions")
+      .from("challenge-covers")
       .getPublicUrl(fileName);
 
     const imageUrl = urlData.publicUrl;
@@ -121,7 +127,7 @@ serve(async (req) => {
         imageUrl,
         message: "Challenge image generated successfully"
       }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { headers: { ...corsHeaders(req), "Content-Type": "application/json" } }
     );
 
   } catch (error) {
@@ -130,7 +136,7 @@ serve(async (req) => {
       JSON.stringify({ 
         error: error instanceof Error ? error.message : "Unknown error occurred" 
       }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: error instanceof Error && error.message === "Unauthorized" ? 401 : 500, headers: { ...corsHeaders(req), "Content-Type": "application/json" } }
     );
   }
 });

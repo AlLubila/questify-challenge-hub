@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import type { Json } from "@/integrations/supabase/types";
 
 export const SubmissionModeration = () => {
   const queryClient = useQueryClient();
@@ -79,19 +80,30 @@ export const SubmissionModeration = () => {
 
   const updateStatus = useMutation({
     mutationFn: async ({ ids, status, reason }: { ids: string[]; status: string; reason?: string }) => {
-      const { error } = await supabase
-        .from("submissions")
-        .update({ 
-          status,
-          moderation_status: status === "approved" ? "approved" : "rejected",
-          moderated_at: new Date().toISOString(),
-          moderated_by: user?.id,
-        })
-        .in("id", ids);
-      
-      if (error) throw error;
+      const reviewSnapshots = [...(submissions || []), ...(flaggedSubmissions || [])];
+      const reviews = ids.map((id) => {
+        const snapshot = reviewSnapshots.find((submission) => submission.id === id);
+        if (!snapshot) {
+          throw new Error("Submission is no longer in the review queue. Refresh and try again.");
+        }
+        return {
+          id: snapshot.id,
+          content_url: snapshot.content_url,
+          caption: snapshot.caption,
+          moderation_status: snapshot.moderation_status,
+          moderation_flags: snapshot.moderation_flags,
+        };
+      });
 
-      // Log activity for each submission
+      const { data: reviewedCount, error } = await supabase.rpc("moderate_submission_batch", {
+        p_reviews: reviews as Json,
+        p_status: status,
+      });
+      if (error) throw error;
+      if (reviewedCount !== ids.length) {
+        throw new Error("Not all submissions were moderated. Refresh and review the latest content.");
+      }
+
       for (const id of ids) {
         await logActivity(
           status === "approved" ? "approve_submission" : "reject_submission",

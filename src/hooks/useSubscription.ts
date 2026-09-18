@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-export const useSubscription = () => {
+export const useSubscription = (enabled = true) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -17,6 +17,7 @@ export const useSubscription = () => {
         subscription_end: string | null;
       };
     },
+    enabled,
     refetchInterval: 60000, // Check every minute
   });
 

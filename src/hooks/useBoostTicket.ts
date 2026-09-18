@@ -10,7 +10,7 @@ export const useBoostTicket = () => {
   const purchaseBoost = useMutation({
     mutationFn: async ({ boostType, submissionId }: { boostType: BoostType; submissionId: string }) => {
       const { data, error } = await supabase.functions.invoke("create-boost-checkout", {
-        body: { boostType, submissionId },
+        body: { boostType, submissionId, requestId: crypto.randomUUID() },
       });
       if (error) throw error;
       return data as { url: string };

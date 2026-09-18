@@ -65,7 +65,7 @@ const Profile = () => {
     enabled: !!viewedUserId,
   });
   
-  const { subscriptionData, createCheckout, isCreatingCheckout, openCustomerPortal, isOpeningPortal } = useSubscription();
+  const { subscriptionData, createCheckout, isCreatingCheckout, openCustomerPortal, isOpeningPortal } = useSubscription(isOwnProfile);
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
   const [followersModalTab, setFollowersModalTab] = useState<"followers" | "following">("followers");
 
@@ -74,7 +74,7 @@ const Profile = () => {
 
   useEffect(() => {
     const processSubscriptionSuccess = async () => {
-      if (subscriptionSuccess === "true" && sessionId) {
+      if (isOwnProfile && subscriptionSuccess === "true" && sessionId) {
         try {
           const { error } = await supabase.functions.invoke("process-payment-success", {
             body: { sessionId },
@@ -97,7 +97,7 @@ const Profile = () => {
     };
 
     processSubscriptionSuccess();
-  }, [subscriptionSuccess, sessionId, searchParams, setSearchParams]);
+  }, [isOwnProfile, subscriptionSuccess, sessionId, searchParams, setSearchParams]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [displayName, setDisplayName] = useState("");
@@ -123,14 +123,19 @@ const Profile = () => {
 
   // Fetch user submissions
   const { data: submissions } = useQuery({
-    queryKey: ["user-submissions", viewedUserId],
+    queryKey: ["user-submissions", viewedUserId, isOwnProfile],
     queryFn: async () => {
       if (!viewedUserId) return [];
-      const { data, error } = await supabase
+      let query = supabase
         .from("submissions")
         .select("*, challenges(*)")
-        .eq("user_id", viewedUserId)
-        .order("submitted_at", { ascending: false });
+        .eq("user_id", viewedUserId);
+
+      if (!isOwnProfile) {
+        query = query.eq("status", "approved");
+      }
+
+      const { data, error } = await query.order("submitted_at", { ascending: false });
       if (error) throw error;
       return data;
     },
@@ -210,8 +215,8 @@ const Profile = () => {
 
   const handleRefresh = async () => {
     await queryClient.invalidateQueries({ queryKey: ["profile", viewedUserId] });
-    await queryClient.invalidateQueries({ queryKey: ["profile-submissions"] });
-    await queryClient.invalidateQueries({ queryKey: ["profile-badges"] });
+    await queryClient.invalidateQueries({ queryKey: ["user-submissions", viewedUserId] });
+    await queryClient.invalidateQueries({ queryKey: ["user-badges", viewedUserId] });
   };
 
   if (authLoading || profileLoading) {
@@ -397,10 +402,10 @@ const Profile = () => {
 
         {/* Tabs for Badges, Submissions, and Subscription */}
         <Tabs defaultValue="badges" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="badges">Badges ({userBadges?.length || 0})</TabsTrigger>
-            <TabsTrigger value="submissions">Submissions ({submissions?.length || 0})</TabsTrigger>
-            <TabsTrigger value="subscription">Subscription</TabsTrigger>
+            <TabsList className={`grid w-full ${isOwnProfile ? "grid-cols-3" : "grid-cols-2"}`}>
+              <TabsTrigger value="badges">Badges ({userBadges?.length || 0})</TabsTrigger>
+              <TabsTrigger value="submissions">Submissions ({submissions?.length || 0})</TabsTrigger>
+              {isOwnProfile && <TabsTrigger value="subscription">Subscription</TabsTrigger>}
           </TabsList>
 
           <TabsContent value="badges" className="space-y-4">
@@ -440,11 +445,22 @@ const Profile = () => {
                 {submissions.map((submission: any) => (
                   <Card key={submission.id} className="overflow-hidden">
                      <div className="aspect-video bg-muted relative">
-                       <img
-                         src={submission.content_url}
-                         alt="Submission"
-                         className="w-full h-full object-cover"
-                       />
+                       {/\.(mp4|webm|ogg|mov)(?:$|[?#])/i.test(submission.content_url) ? (
+                         <video
+                           src={submission.content_url}
+                           controls
+                           preload="metadata"
+                           className="h-full w-full object-cover"
+                           aria-label={`Video submission for ${submission.challenges.title}`}
+                         />
+                       ) : (
+                         <img
+                           src={submission.content_url}
+                           alt={`Submission for ${submission.challenges.title}`}
+                           loading="lazy"
+                           className="w-full h-full object-cover"
+                         />
+                       )}
                        <Badge className="absolute top-2 right-2">
                          {submission.status}
                        </Badge>
@@ -492,7 +508,7 @@ const Profile = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="subscription" className="space-y-4">
+          {isOwnProfile && <TabsContent value="subscription" className="space-y-4">
             <Card className="p-8">
               <div className="flex items-start gap-4 mb-6">
                 <div className="p-3 rounded-full bg-gradient-primary">
@@ -569,7 +585,7 @@ const Profile = () => {
                 </div>
               )}
             </Card>
-          </TabsContent>
+          </TabsContent>}
         </Tabs>
       </div>
       

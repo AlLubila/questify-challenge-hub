@@ -10,6 +10,8 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { PageErrorBoundary } from "@/components/PageErrorBoundary";
 import { lazy, Suspense } from "react";
 import { Loader2 } from "lucide-react";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { RoleRoute } from "@/components/RoleRoute";
 
 const Index = lazy(() => import("./pages/Index"));
 const Auth = lazy(() => import("./pages/Auth"));
@@ -55,19 +57,25 @@ const AppContent = () => {
       <Route path="/challenge/:id" element={<PageErrorBoundary pageName="Challenge"><ChallengeDetail /></PageErrorBoundary>} />
       <Route path="/leaderboard" element={<PageErrorBoundary pageName="Leaderboard"><Leaderboard /></PageErrorBoundary>} />
       <Route path="/feed" element={<PageErrorBoundary pageName="Feed"><Feed /></PageErrorBoundary>} />
-      <Route path="/wallet" element={<PageErrorBoundary pageName="Wallet"><Wallet /></PageErrorBoundary>} />
-      <Route path="/referrals" element={<PageErrorBoundary pageName="Referrals"><Referrals /></PageErrorBoundary>} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/wallet" element={<PageErrorBoundary pageName="Wallet"><Wallet /></PageErrorBoundary>} />
+        <Route path="/referrals" element={<PageErrorBoundary pageName="Referrals"><Referrals /></PageErrorBoundary>} />
+      </Route>
       <Route path="/faq" element={<PageErrorBoundary pageName="FAQ"><FAQ /></PageErrorBoundary>} />
-      <Route path="/admin" element={<PageErrorBoundary pageName="Admin"><AdminLayout /></PageErrorBoundary>}>
-        <Route index element={<AdminDashboard />} />
-        <Route path="users" element={<UserManagement />} />
-        <Route path="submissions" element={<SubmissionModeration />} />
-        <Route path="challenges" element={<ChallengeModeration />} />
-        <Route path="create-challenge" element={<CreateChallenge />} />
-        <Route path="rewards" element={<RewardsManagement />} />
-        <Route path="analytics" element={<Analytics />} />
-        <Route path="payments" element={<PaymentAnalytics />} />
-        <Route path="logs" element={<ActivityLogs />} />
+      <Route element={<RoleRoute allowedRoles={["admin", "moderator"]} />}>
+        <Route path="/admin" element={<PageErrorBoundary pageName="Admin"><AdminLayout /></PageErrorBoundary>}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="submissions" element={<SubmissionModeration />} />
+          <Route path="challenges" element={<ChallengeModeration />} />
+          <Route element={<RoleRoute allowedRoles={["admin"]} />}>
+            <Route path="users" element={<UserManagement />} />
+            <Route path="create-challenge" element={<CreateChallenge />} />
+            <Route path="rewards" element={<RewardsManagement />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="payments" element={<PaymentAnalytics />} />
+            <Route path="logs" element={<ActivityLogs />} />
+          </Route>
+        </Route>
       </Route>
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
@@ -82,7 +90,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <BrowserRouter>
           <AuthProvider>
             <LanguageProvider>
               <AppContent />

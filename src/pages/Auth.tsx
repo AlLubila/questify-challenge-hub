@@ -7,20 +7,27 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Sparkles, Mail, Chrome } from "lucide-react";
+import { Sparkles, Mail, Chrome, ArrowLeft, KeyRound, Loader2 } from "lucide-react";
 import { z } from "zod";
-import { Navigate, useSearchParams } from "react-router-dom";
+import { Navigate, useLocation, useSearchParams } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const emailSchema = z.string().trim().email("Invalid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
 const usernameSchema = z.string().trim().min(3, "Username must be at least 3 characters").max(20, "Username must be less than 20 characters");
+type AuthView = "login" | "signup" | "forgot" | "reset";
 
 const Auth = () => {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [referralCode, setReferralCode] = useState<string | null>(null);
+  const isRecoveryLink = searchParams.get("mode") === "reset" ||
+    searchParams.get("type") === "recovery" ||
+    window.location.hash.includes("type=recovery");
+  const [authView, setAuthView] = useState<AuthView>(isRecoveryLink ? "reset" : "login");
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const { t } = useLanguage();
 
   // Login form state
@@ -32,6 +39,9 @@ const Auth = () => {
   const [signupPassword, setSignupPassword] = useState("");
   const [signupUsername, setSignupUsername] = useState("");
   const [signupDisplayName, setSignupDisplayName] = useState("");
+  const [recoveryEmail, setRecoveryEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // Check for referral code in URL
   useEffect(() => {
@@ -43,9 +53,65 @@ const Auth = () => {
   }, [searchParams]);
 
   // Redirect if already logged in
-  if (user && !isLoading) {
-    return <Navigate to="/" replace />;
+  if (user && !isLoading && authView !== "reset") {
+    const requestedPath = (location.state as { from?: { pathname?: string; search?: string } } | null)?.from;
+    const destination = requestedPath?.pathname
+      ? `${requestedPath.pathname}${requestedPath.search ?? ""}`
+      : "/";
+    return <Navigate to={destination} replace />;
   }
+
+  const handleRecoveryRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatusMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      const email = emailSchema.parse(recoveryEmail);
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth?mode=reset`,
+      });
+      if (error) throw error;
+      setStatusMessage("If an account exists for this email, a secure reset link is on its way.");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      } else {
+        toast.error(error instanceof Error ? error.message : "Unable to send the reset email");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePasswordUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatusMessage(null);
+
+    try {
+      passwordSchema.parse(newPassword);
+      if (newPassword !== confirmPassword) {
+        throw new Error("Passwords do not match");
+      }
+
+      setIsSubmitting(true);
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) throw error;
+
+      toast.success("Password updated successfully");
+      setStatusMessage("Your password has been updated. You can now continue to Questify.");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      } else {
+        toast.error(error instanceof Error ? error.message : "Unable to update your password");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,20 +158,6 @@ const Auth = () => {
       passwordSchema.parse(signupPassword);
       usernameSchema.parse(signupUsername);
 
-      // Get referrer profile ID from referral code if exists
-      let referredById = null;
-      if (referralCode) {
-        const { data: referrerProfile } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("referral_code", referralCode)
-          .single();
-        
-        if (referrerProfile) {
-          referredById = referrerProfile.id;
-        }
-      }
-
       const redirectUrl = `${window.location.origin}/`;
 
       const { error } = await supabase.auth.signUp({
@@ -116,7 +168,9 @@ const Auth = () => {
           data: {
             username: signupUsername,
             display_name: signupDisplayName || signupUsername,
-            referred_by: referredById,
+            // The database resolves the code after the auth user is created.
+            // Never expose or trust a referrer profile id supplied by the client.
+            referral_code: referralCode,
           },
         },
       });
@@ -165,7 +219,7 @@ const Auth = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <Loader2 className="h-10 w-10 animate-spin text-primary" role="status" aria-label="Loading your session" />
       </div>
     );
   }
@@ -186,7 +240,72 @@ const Auth = () => {
         </div>
 
         <Card className="p-6">
-          <Tabs defaultValue="login" className="w-full">
+          {authView === "forgot" ? (
+            <div className="space-y-6">
+              <div className="space-y-2 text-center">
+                <KeyRound className="mx-auto h-10 w-10 text-primary" aria-hidden="true" />
+                <h2 className="text-2xl font-bold">Reset your password</h2>
+                <p className="text-sm text-muted-foreground">
+                  Enter your email and we’ll send you a secure reset link.
+                </p>
+              </div>
+              {statusMessage && (
+                <p className="rounded-lg border border-success/30 bg-success/10 p-3 text-sm" role="status">
+                  {statusMessage}
+                </p>
+              )}
+              <form onSubmit={handleRecoveryRequest} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="recovery-email">Email</Label>
+                  <Input
+                    id="recovery-email"
+                    type="email"
+                    autoComplete="email"
+                    value={recoveryEmail}
+                    onChange={(event) => setRecoveryEmail(event.target.value)}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full bg-gradient-primary" disabled={isSubmitting}>
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
+                  Send reset link
+                </Button>
+              </form>
+              <Button variant="ghost" className="w-full" onClick={() => { setAuthView("login"); setStatusMessage(null); }}>
+                <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
+                Back to sign in
+              </Button>
+            </div>
+          ) : authView === "reset" ? (
+            <div className="space-y-6">
+              <div className="space-y-2 text-center">
+                <KeyRound className="mx-auto h-10 w-10 text-primary" aria-hidden="true" />
+                <h2 className="text-2xl font-bold">Choose a new password</h2>
+                <p className="text-sm text-muted-foreground">Use at least 6 characters for your new password.</p>
+              </div>
+              {statusMessage && (
+                <p className="rounded-lg border border-success/30 bg-success/10 p-3 text-sm" role="status">
+                  {statusMessage}
+                </p>
+              )}
+              <form onSubmit={handlePasswordUpdate} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="new-password">New password</Label>
+                  <Input id="new-password" type="password" autoComplete="new-password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirm-password">Confirm new password</Label>
+                  <Input id="confirm-password" type="password" autoComplete="new-password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} required />
+                </div>
+                <Button type="submit" className="w-full bg-gradient-primary" disabled={isSubmitting}>
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
+                  Update password
+                </Button>
+              </form>
+              {statusMessage && <Button className="w-full" onClick={() => window.location.assign("/")}>Continue to Questify</Button>}
+            </div>
+          ) : (
+          <Tabs value={authView} onValueChange={(value) => setAuthView(value as AuthView)} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="login">{t("auth.login")}</TabsTrigger>
               <TabsTrigger value="signup">{t("auth.signup")}</TabsTrigger>
@@ -203,6 +322,7 @@ const Auth = () => {
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     required
+                    autoComplete="email"
                   />
                 </div>
                 <div className="space-y-2">
@@ -214,6 +334,7 @@ const Auth = () => {
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     required
+                    autoComplete="current-password"
                   />
                 </div>
                 <Button
@@ -225,6 +346,10 @@ const Auth = () => {
                   {isSubmitting ? t("auth.signingIn") : t("auth.signIn")}
                 </Button>
               </form>
+
+              <Button type="button" variant="link" className="h-auto w-full p-0 text-sm" onClick={() => { setAuthView("forgot"); setStatusMessage(null); }}>
+                Forgot your password?
+              </Button>
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -265,6 +390,7 @@ const Auth = () => {
                     value={signupUsername}
                     onChange={(e) => setSignupUsername(e.target.value)}
                     required
+                    autoComplete="username"
                   />
                 </div>
                 <div className="space-y-2">
@@ -286,6 +412,7 @@ const Auth = () => {
                     value={signupEmail}
                     onChange={(e) => setSignupEmail(e.target.value)}
                     required
+                    autoComplete="email"
                   />
                 </div>
                 <div className="space-y-2">
@@ -297,6 +424,7 @@ const Auth = () => {
                     value={signupPassword}
                     onChange={(e) => setSignupPassword(e.target.value)}
                     required
+                    autoComplete="new-password"
                   />
                 </div>
                 <Button
@@ -330,6 +458,7 @@ const Auth = () => {
               </Button>
             </TabsContent>
           </Tabs>
+          )}
         </Card>
       </div>
     </div>
