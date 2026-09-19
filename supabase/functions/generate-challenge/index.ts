@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -39,8 +39,12 @@ serve(async (req) => {
       throw new Error("Unauthorized");
     }
 
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: { persistSession: false },
+    });
+
     // Check if user is admin
-    const { data: userRoles, error: roleError } = await authClient
+    const { data: userRoles, error: roleError } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", user.id);
@@ -63,8 +67,6 @@ serve(async (req) => {
     if (typeof count !== "number" || count < 1 || count > 10) {
       throw new Error("Invalid count. Must be between 1 and 10");
     }
-
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     console.log(`Generating ${count} ${type} challenge(s)...`);
 
@@ -197,9 +199,11 @@ Each challenge should feel fresh, exciting, and valuable without monetary prizes
       points: challenge.points,
       challenge_type: type,
       is_ai_generated: true,
+      created_by: user.id,
       start_date: now.toISOString(),
       end_date: endDate.toISOString(),
-      participants_count: Math.floor(Math.random() * 5000) + 1000 // Random initial count
+      participants_count: 0,
+      publish_status: "published",
     }));
 
     const { data: insertedChallenges, error: insertError } = await supabase
@@ -220,7 +224,7 @@ Each challenge should feel fresh, exciting, and valuable without monetary prizes
         const imageResponse = await fetch(`${supabaseUrl}/functions/v1/generate-challenge-image`, {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${supabaseServiceKey}`,
+            "Authorization": authHeader,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

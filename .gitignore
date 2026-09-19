@@ -11,6 +11,13 @@ node_modules
 dist
 dist-ssr
 *.local
+.superdesign/
+.env
+.env.*
+!.env.example
+supabase/.temp/
+test-results/
+playwright-report/
 
 # Editor directories and files
 .vscode/*

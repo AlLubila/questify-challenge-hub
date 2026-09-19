@@ -725,6 +725,10 @@ export type Database = {
         Returns: undefined
       }
       is_admin_or_moderator: { Args: { _user_id: string }; Returns: boolean }
+      moderate_submission_batch: {
+        Args: { p_reviews: Json; p_status: string }
+        Returns: number
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

@@ -1,124 +1,51 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { corsHeaders, json, requireRole, requireUser } from "../_shared/security.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
-
-interface PushNotificationRequest {
-  user_id: string;
-  title: string;
-  body: string;
-  data?: Record<string, any>;
-}
+const allowedTypes = new Set([
+  "new_challenge", "submission_approved", "submission_rejected", "prize_won",
+  "ranking_change", "badge_earned", "new_follower", "subscription_activated", "boost_applied",
+]);
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders(req) });
+  if (req.method !== "POST") return json(req, { error: "Method not allowed" }, 405);
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-    
-    if (!supabaseUrl || !supabaseServiceKey) {
-      throw new Error("Supabase configuration missing");
-    }
+    const caller = await requireUser(req);
+    await requireRole(caller.id, ["admin", "moderator"]);
+    const url = Deno.env.get("SUPABASE_URL");
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!url || !serviceKey) throw new Error("Supabase configuration missing");
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-    
-    const { user_id, title, body, data } = await req.json() as PushNotificationRequest;
+    const { user_id, title, body, data = {} } = await req.json();
+    if (typeof user_id !== "string" || !/^[0-9a-f-]{36}$/i.test(user_id)) return json(req, { error: "Valid user_id is required" }, 400);
+    if (typeof title !== "string" || !title.trim() || title.length > 120) return json(req, { error: "Invalid title" }, 400);
+    if (typeof body !== "string" || !body.trim() || body.length > 500) return json(req, { error: "Invalid body" }, 400);
+    const type = typeof data.type === "string" && allowedTypes.has(data.type) ? data.type : null;
+    if (!type) return json(req, { error: "Invalid notification type" }, 400);
 
-    if (!user_id || !title || !body) {
-      throw new Error("Missing required fields: user_id, title, body");
-    }
-
-    console.log(`Sending push notification to user: ${user_id}`);
-
-    // Get user's push tokens
-    const { data: tokens, error: tokensError } = await supabase
+    const service = createClient(url, serviceKey, { auth: { persistSession: false } });
+    const { count, error: tokenError } = await service
       .from("push_tokens")
-      .select("token, platform")
+      .select("id", { count: "exact", head: true })
       .eq("user_id", user_id);
+    if (tokenError) throw tokenError;
 
-    if (tokensError) {
-      throw tokensError;
-    }
+    const { error: notificationError } = await service.from("notifications").insert({
+      user_id,
+      type,
+      title: title.trim(),
+      message: body.trim(),
+      metadata: { ...data, type: undefined },
+    });
+    if (notificationError) throw notificationError;
 
-    if (!tokens || tokens.length === 0) {
-      console.log("No push tokens found for user");
-      return new Response(
-        JSON.stringify({ success: true, message: "No devices registered" }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // In a production app, you would send notifications via FCM (Firebase Cloud Messaging) for Android
-    // and APNs (Apple Push Notification service) for iOS here
-    // For now, we'll just create in-app notifications
-    
-    console.log(`Found ${tokens.length} device(s) for user ${user_id}`);
-    
-    // Create in-app notification record
-    const { error: notificationError } = await supabase
-      .from("notifications")
-      .insert({
-        user_id: user_id,
-        type: data?.type || "general",
-        title: title,
-        message: body,
-        metadata: data || {},
-      });
-
-    if (notificationError) {
-      console.error("Error creating notification:", notificationError);
-    }
-
-    // Here you would integrate with FCM/APNs
-    // Example for FCM (Firebase Cloud Messaging):
-    /*
-    const FCM_SERVER_KEY = Deno.env.get("FCM_SERVER_KEY");
-    
-    for (const device of tokens) {
-      if (device.platform === 'android') {
-        await fetch('https://fcm.googleapis.com/fcm/send', {
-          method: 'POST',
-          headers: {
-            'Authorization': `key=${FCM_SERVER_KEY}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            to: device.token,
-            notification: {
-              title: title,
-              body: body,
-            },
-            data: data || {},
-          }),
-        });
-      }
-    }
-    */
-
-    console.log("Push notification sent successfully");
-
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: "Push notification sent",
-        devices: tokens.length 
-      }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
-
+    return json(req, { success: true, devices: count ?? 0 });
   } catch (error) {
-    console.error("Error in send-push-notification function:", error);
-    return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : "Unknown error occurred" 
-      }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("send-push-notification failed", { message });
+    const status = message === "Unauthorized" ? 401 : message === "Forbidden" ? 403 : 500;
+    return json(req, { error: message }, status);
   }
 });

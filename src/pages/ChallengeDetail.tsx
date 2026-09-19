@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import { Trophy, Clock, Users, Upload, Sparkles, ArrowLeft, Wand2, Camera, Image as ImageIcon } from "lucide-react";
 import { calculateTimeLeft } from "@/hooks/useChallenges";
 import { useState } from "react";
-import challenge1 from "@/assets/challenge-1.jpg";
 import { ImageEditorAdvanced } from "@/components/ImageEditorAdvanced";
 import { useCamera } from "@/hooks/useCamera";
 import { compressImage } from "@/lib/imageCompression";
@@ -68,6 +67,16 @@ const ChallengeDetail = () => {
         throw new Error("Missing required data");
       }
 
+      if (!challenge) throw new Error("Challenge not found");
+      const now = Date.now();
+      if (
+        challenge.publish_status !== "published" ||
+        now < new Date(challenge.start_date).getTime() ||
+        now > new Date(challenge.end_date).getTime()
+      ) {
+        throw new Error("This challenge is not accepting submissions");
+      }
+
       // Upload content to storage
       const fileExt = contentFile.name.split(".").pop();
       const filePath = `${user.id}/${id}/${Date.now()}.${fileExt}`;
@@ -82,21 +91,27 @@ const ChallengeDetail = () => {
         .from("submissions")
         .getPublicUrl(filePath);
 
-      // Create submission with pending status
-      const { data: submissionData, error: submitError } = await supabase
-        .from("submissions")
-        .insert({
-          user_id: user.id,
-          challenge_id: id,
-          content_url: urlData.publicUrl,
-          caption: caption.trim() || null,
-          status: "pending",
-          moderation_status: "pending",
-        })
-        .select()
-        .single();
+      let submissionData: { id: string };
+      try {
+        const { data, error: submitError } = await supabase
+          .from("submissions")
+          .insert({
+            user_id: user.id,
+            challenge_id: id,
+            content_url: urlData.publicUrl,
+            caption: caption.trim() || null,
+            status: "pending",
+            moderation_status: "pending_review",
+          })
+          .select("id")
+          .single();
 
-      if (submitError) throw submitError;
+        if (submitError) throw submitError;
+        submissionData = data;
+      } catch (error) {
+        await supabase.storage.from("submissions").remove([filePath]);
+        throw error;
+      }
 
       // Verify image authenticity for image submissions
       if (contentFile.type.startsWith('image/')) {
@@ -115,73 +130,26 @@ const ChallengeDetail = () => {
 
           if (verifyError) {
             console.error("Verification error:", verifyError);
-            toast.dismiss("verify");
-            throw new Error(verifyError.message || "Image verification failed");
+            toast.error("Automatic verification is unavailable. Your entry remains queued for review.", { id: "verify" });
           } else if (verifyResult?.analysis && !verifyResult.analysis.isAuthentic) {
-            // Image is not authentic - reject
-            toast.error(
-              `Submission rejected: ${verifyResult.analysis.reason || "Image appears to be AI-generated or from the internet"}`,
+            toast.warning(
+              `Automatic checks flagged this entry for review: ${verifyResult.analysis.reason || "additional verification is needed"}`,
               { id: "verify", duration: 5000 }
             );
-            throw new Error("Image failed authenticity check - AI-generated or internet-sourced images are not allowed");
           } else {
-            toast.success("Image verified as authentic!", { id: "verify" });
-            
-            // Update status to approved
-            await supabase
-              .from("submissions")
-              .update({ status: "approved", moderation_status: "approved" })
-              .eq("id", submissionData.id);
+            toast.success("Automatic checks completed. Your entry remains queued for staff review.", { id: "verify" });
           }
-        } catch (verifyErr: any) {
-          if (verifyErr.message?.includes("authenticity check")) {
-            throw verifyErr;
-          }
+        } catch (verifyErr: unknown) {
           console.error("Verification failed:", verifyErr);
-          toast.dismiss("verify");
-          toast.error(verifyErr.message || "Image verification failed");
-          throw verifyErr;
+          const message = verifyErr instanceof Error ? verifyErr.message : "Image verification failed";
+          toast.error(`${message}. Your entry remains queued for review.`, { id: "verify" });
         }
-      } else {
-        // For videos, auto-approve for now
-        await supabase
-          .from("submissions")
-          .update({ status: "approved" })
-          .eq("id", submissionData.id);
-      }
-
-      // Award points and update level
-      if (challenge) {
-        const { data: currentProfile } = await supabase
-          .from("profiles")
-          .select("points, xp, level")
-          .eq("id", user.id)
-          .single();
-
-        if (currentProfile) {
-          const newXp = (currentProfile.xp || 0) + challenge.points;
-          const newLevel = Math.floor(newXp / 1000) + 1;
-
-          await supabase
-            .from("profiles")
-            .update({
-              points: (currentProfile.points || 0) + challenge.points,
-              xp: newXp,
-              level: newLevel,
-            })
-            .eq("id", user.id);
-        }
-
-        // Check for new badges
-        await supabase.functions.invoke("award-badges", {
-          body: { user_id: user.id },
-        });
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["submission"] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      toast.success(`Submission added! You earned ${challenge?.points} points!`);
+      toast.success("Submission received and queued for moderation.");
       setContentFile(null);
       setCaption("");
       setPreview("");
@@ -354,11 +322,17 @@ const ChallengeDetail = () => {
           {/* Challenge Info */}
           <div className="space-y-6">
             <Card className="overflow-hidden">
-              <img
-                src={challenge.image_url || challenge1}
-                alt={challenge.title}
-                className="w-full h-64 object-cover"
-              />
+              {challenge.image_url ? (
+                <img
+                  src={challenge.image_url}
+                  alt={challenge.title}
+                  className="h-64 w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-64 items-center justify-center bg-muted" role="img" aria-label={`${challenge.title} has no cover image`}>
+                  <Camera className="h-10 w-10 text-muted-foreground" />
+                </div>
+              )}
               <div className="p-6 space-y-4">
                 <div className="flex items-start justify-between gap-4">
                   <h1 className="text-3xl font-bold">{challenge.title}</h1>
