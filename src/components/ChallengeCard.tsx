@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Trophy, Clock, Users, Sparkles } from "lucide-react";
+import { Camera, Trophy, Clock, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -42,20 +42,25 @@ export const ChallengeCard = ({
   const difficultyLabel = t(`challenges.${difficulty}`);
 
   return (
-    <Card className="group overflow-hidden bg-card border-border hover:shadow-glow transition-all duration-300 hover:scale-[1.02] animate-fade-in">
+    <Card className="group overflow-hidden border-border bg-card transition-colors duration-200 hover:border-primary/40">
       <div className="relative overflow-hidden">
-        <img
-          src={image}
-          alt={title}
-          loading="lazy"
-          className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-        />
+        {image ? (
+          <img
+            src={image}
+            alt={title}
+            loading="lazy"
+            className="h-48 w-full object-cover"
+          />
+        ) : (
+          <div className="flex h-48 items-center justify-center bg-muted" role="img" aria-label={`${title} has no cover image`}>
+            <Camera className="h-8 w-8 text-muted-foreground" />
+          </div>
+        )}
         <div className="absolute top-3 right-3 flex gap-2">
           <Badge className={difficultyColors[difficulty]} variant="secondary">
             {difficultyLabel}
           </Badge>
-          <Badge className="bg-gradient-primary text-primary-foreground border-0">
-            <Sparkles className="w-3 h-3 mr-1" />
+          <Badge variant="outline" className="border-border bg-background/90 text-foreground backdrop-blur-sm">
             {points} {t("challenges.points").toLowerCase()}
           </Badge>
         </div>
@@ -63,7 +68,7 @@ export const ChallengeCard = ({
 
       <div className="p-5 space-y-4">
         <div>
-          <h3 className="font-bold text-xl text-foreground mb-2 group-hover:text-primary transition-colors">
+          <h3 className="mb-2 text-xl font-bold text-foreground">
             {title}
           </h3>
           <p className="text-muted-foreground text-sm line-clamp-2">{description}</p>
@@ -86,7 +91,6 @@ export const ChallengeCard = ({
             <span className="text-foreground font-medium">{timeLeft}</span>
           </div>
           <Button 
-            className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
             onClick={() => navigate(`/challenge/${id}`)}
             disabled={isEnded}
           >

@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import { Trophy, Clock, Users, Upload, Sparkles, ArrowLeft, Wand2, Camera, Image as ImageIcon } from "lucide-react";
 import { calculateTimeLeft } from "@/hooks/useChallenges";
 import { useState } from "react";
-import challenge1 from "@/assets/challenge-1.jpg";
 import { ImageEditorAdvanced } from "@/components/ImageEditorAdvanced";
 import { useCamera } from "@/hooks/useCamera";
 import { compressImage } from "@/lib/imageCompression";
@@ -323,11 +322,17 @@ const ChallengeDetail = () => {
           {/* Challenge Info */}
           <div className="space-y-6">
             <Card className="overflow-hidden">
-              <img
-                src={challenge.image_url || challenge1}
-                alt={challenge.title}
-                className="w-full h-64 object-cover"
-              />
+              {challenge.image_url ? (
+                <img
+                  src={challenge.image_url}
+                  alt={challenge.title}
+                  className="h-64 w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-64 items-center justify-center bg-muted" role="img" aria-label={`${challenge.title} has no cover image`}>
+                  <Camera className="h-10 w-10 text-muted-foreground" />
+                </div>
+              )}
               <div className="p-6 space-y-4">
                 <div className="flex items-start justify-between gap-4">
                   <h1 className="text-3xl font-bold">{challenge.title}</h1>

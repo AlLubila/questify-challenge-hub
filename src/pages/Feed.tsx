@@ -229,7 +229,7 @@ const Feed = () => {
           <div className="text-center space-y-2">
             <h1 className="text-4xl font-bold">Community Feed</h1>
             <p className="text-muted-foreground text-lg">
-              Discover amazing creations from talented creators
+              Browse recent submissions from the Questify community.
             </p>
           </div>
 
@@ -287,7 +287,7 @@ const Feed = () => {
                         : "Be the first to participate in a challenge and share your creativity with the community!"}
                     </p>
                     {!debouncedSearch && (
-                      <Button onClick={() => navigate('/')} className="bg-gradient-primary">
+                      <Button onClick={() => navigate('/')}>
                         <Sparkles className="w-4 h-4 mr-2" />
                         Explore Challenges
                       </Button>

@@ -1,25 +1,18 @@
 import { Header } from "@/components/Header";
 import { ChallengeCard } from "@/components/ChallengeCard";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Sparkles, Award, HelpCircle } from "lucide-react";
+import { ArrowRight, HelpCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import heroImage from "@/assets/hero-image.jpg";
-import challenge1 from "@/assets/challenge-1.jpg";
 import { useChallenges, calculateTimeLeft } from "@/hooks/useChallenges";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ChallengeCardSkeleton } from "@/components/skeletons/ChallengeCardSkeleton";
 import { TrendingChallenges } from "@/components/TrendingChallenges";
-import { PersonalizedChallenges } from "@/components/PersonalizedChallenges";
 import { WeeklyTopPerformers } from "@/components/WeeklyTopPerformers";
-import { AchievementsShowcase } from "@/components/AchievementsShowcase";
-import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
   const { data: challenges, isLoading, isError, refetch } = useChallenges();
   const { t } = useLanguage();
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   const now = Date.now();
@@ -37,81 +30,84 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 px-4">
-        <div className="absolute inset-0 bg-gradient-primary opacity-10 blur-3xl" />
-        <div className="container relative">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8 animate-fade-in">
-              <Badge className="bg-gradient-accent text-accent-foreground border-0 px-4 py-2 w-fit">
-                <Sparkles className="w-4 h-4 mr-2" />
+      <section className="border-b border-border px-4 py-14 md:py-20">
+        <div className="container">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.9fr)] lg:gap-16">
+            <div className="space-y-7">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary">
                 {t("hero.badge")}
-              </Badge>
+              </p>
               
-              <h1 className="text-5xl md:text-7xl font-black leading-tight">
+              <h1 className="max-w-3xl text-4xl font-bold leading-[1.08] tracking-tight md:text-6xl">
                 {t("hero.title1")}
                 <br />
-                <span className="bg-gradient-primary bg-clip-text text-transparent">
-                  {t("hero.title2")}
-                </span>
+                {t("hero.title2")}
                 <br />
-                {t("hero.title3")}
+                <span className="text-primary">{t("hero.title3")}</span>
               </h1>
 
-              <p className="text-xl text-muted-foreground max-w-lg">
+              <p className="max-w-xl text-lg leading-8 text-muted-foreground">
                 {t("hero.description")}
               </p>
 
               <div className="flex flex-wrap gap-4">
                 <Button
                   size="lg"
-                  className="bg-gradient-primary text-lg px-8 h-14 hover:shadow-glow"
+                  className="h-12 px-6 text-base"
                   onClick={scrollToChallenges}
                 >
-                  <Sparkles className="w-5 h-5 mr-2" />
                   {t("hero.cta")}
+                  <ArrowRight className="h-4 w-4" />
                 </Button>
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="text-lg px-8 h-14"
+                  className="h-12 px-6 text-base"
                   onClick={() => navigate('/faq')}
                 >
-                  <HelpCircle className="w-5 h-5 mr-2" />
+                  <HelpCircle className="h-4 w-4" />
                   {t("hero.howItWorks")}
                 </Button>
               </div>
-
             </div>
 
-            <div className="relative animate-float">
-              <div className="absolute inset-0 bg-gradient-secondary blur-3xl opacity-30 rounded-full" />
-              <img
-                src={heroImage}
-                alt="Questify Hero"
-                className="relative rounded-3xl shadow-card border border-border/50"
-              />
+            <div className="rounded-xl border border-border bg-card p-6 shadow-card md:p-8">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-muted-foreground">How an entry works</p>
+              <ol className="mt-6 divide-y divide-border">
+                {[
+                  ["01", "Choose an open brief", "Check the rules, deadline, reward, and judging criteria."],
+                  ["02", "Submit original work", "Upload your own photo or video before the challenge closes."],
+                  ["03", "Get reviewed", "Approved entries earn points and appear in the community feed."],
+                ].map(([step, title, description]) => (
+                  <li key={step} className="grid grid-cols-[2.5rem_1fr] gap-4 py-5 first:pt-0 last:pb-0">
+                    <span className="font-mono text-sm text-primary">{step}</span>
+                    <div>
+                      <h2 className="font-semibold text-foreground">{title}</h2>
+                      <p className="mt-1 text-sm leading-6 text-muted-foreground">{description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
         </div>
       </section>
 
 
-      {/* Featured Challenges */}
-      <section className="py-20 px-4" id="challenges">
+      <section className="px-4 py-16" id="challenges">
         <div className="container">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
+          <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <h2 className="text-4xl font-bold text-foreground mb-3">
+              <h2 className="mb-2 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
                 {showingArchive ? "Recent Challenges" : t("challenges.featured")}
               </h2>
-              <p className="text-muted-foreground text-lg">
+              <p className="max-w-2xl text-muted-foreground">
                 {showingArchive ? "New challenges are on the way. Explore recently completed quests in the meantime." : t("challenges.trending")}
               </p>
             </div>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px]">
             <div>
               {isLoading ? (
                 <div className="grid md:grid-cols-2 gap-6">
@@ -133,7 +129,7 @@ const Index = () => {
                         id={challenge.id}
                         title={challenge.title}
                         description={challenge.description}
-                        image={challenge.image_url || challenge1}
+                        image={challenge.image_url || ""}
                         prize={challenge.prize}
                         participants={challenge.participants_count}
                         timeLeft={calculateTimeLeft(challenge.end_date)}
@@ -146,44 +142,36 @@ const Index = () => {
                 </div>
               ) : (
                 <Card className="p-10 text-center">
-                  <Sparkles className="mx-auto h-10 w-10 text-primary" />
-                  <h3 className="mt-4 text-2xl font-semibold">The next quest is being prepared</h3>
+                  <h3 className="text-xl font-semibold">No open challenges right now</h3>
                   <p className="mx-auto mt-2 max-w-md text-muted-foreground">Check back soon for a fresh creative challenge.</p>
                 </Card>
               )}
             </div>
 
-            <div className="hidden lg:block space-y-6 sticky top-6 h-fit">
+            <aside className="hidden h-fit space-y-6 lg:sticky lg:top-24 lg:block">
               <WeeklyTopPerformers />
-              <AchievementsShowcase />
               <TrendingChallenges />
-              {user && <PersonalizedChallenges />}
-            </div>
+            </aside>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-primary opacity-10" />
-        <div className="container relative">
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <Award className="w-20 h-20 mx-auto text-primary animate-pulse-glow" />
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-              {t("cta.title")}
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              {t("cta.description")}
-            </p>
+      <section className="px-4 pb-20">
+        <div className="container">
+          <Card className="flex flex-col items-start justify-between gap-6 p-8 md:flex-row md:items-center md:p-10">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">{t("cta.title")}</h2>
+              <p className="mt-2 max-w-2xl text-muted-foreground">{t("cta.description")}</p>
+            </div>
             <Button
               size="lg"
-              className="bg-gradient-primary hover:shadow-glow text-xl px-12 h-16"
+              className="shrink-0"
               onClick={scrollToChallenges}
             >
-              <Sparkles className="w-6 h-6 mr-2" />
               {t("cta.button")}
+              <ArrowRight className="h-4 w-4" />
             </Button>
-          </div>
+          </Card>
         </div>
       </section>
     </div>

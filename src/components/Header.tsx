@@ -31,7 +31,7 @@ export const Header = () => {
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
             <Sparkles className="w-6 h-6 text-primary" />
-            <span className="text-2xl font-black bg-gradient-primary bg-clip-text text-transparent">
+            <span className="text-2xl font-bold tracking-tight text-foreground">
               Questify
             </span>
           </div>
@@ -55,8 +55,8 @@ export const Header = () => {
         <div className="flex items-center gap-4">
           {user && profile ? (
             <div className="hidden md:flex items-center gap-3">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-accent/10 border border-accent/20">
-                <Sparkles className="w-4 h-4 text-accent" />
+              <div className="flex items-center gap-2 rounded-md border border-border bg-muted/40 px-3 py-2">
+                <Sparkles className="w-4 h-4 text-primary" />
                 <span className="text-sm font-semibold">{profile.points.toLocaleString()} pts</span>
               </div>
 
@@ -71,7 +71,7 @@ export const Header = () => {
                   >
                     <Avatar className="h-10 w-10 cursor-pointer">
                       <AvatarImage src={profile.avatar_url || undefined} alt={profile.username} />
-                      <AvatarFallback className="bg-gradient-primary text-primary-foreground">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
                         {profile.username.substring(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -114,7 +114,7 @@ export const Header = () => {
           ) : (
             <div className="hidden md:flex items-center gap-3">
               <Button variant="outline" onClick={() => navigate('/auth')}>{t("nav.signIn")}</Button>
-              <Button className="bg-gradient-primary hover:shadow-glow" onClick={() => navigate('/auth')}>
+              <Button onClick={() => navigate('/auth')}>
                 {t("nav.getStarted")}
               </Button>
             </div>
@@ -156,7 +156,7 @@ export const Header = () => {
                   <div className="flex items-center gap-3 p-3 rounded-lg bg-muted">
                     <Avatar className="h-10 w-10">
                       <AvatarImage src={profile.avatar_url || undefined} alt={profile.username} />
-                      <AvatarFallback className="bg-gradient-primary text-primary-foreground">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
                         {profile.username.substring(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -189,7 +189,7 @@ export const Header = () => {
                   <Button variant="outline" className="w-full" onClick={() => navigate('/auth')}>
                     Sign In
                   </Button>
-                  <Button className="w-full bg-gradient-primary" onClick={() => navigate('/auth')}>
+                  <Button className="w-full" onClick={() => navigate('/auth')}>
                     Get Started
                   </Button>
                 </>

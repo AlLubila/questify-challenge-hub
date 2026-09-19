@@ -72,7 +72,7 @@ export const AchievementsShowcase = () => {
             <div className="pl-10">
               <Badge 
                 variant="secondary" 
-                className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20 text-sm"
+                className="border-border bg-muted/60 text-sm"
               >
                 {achievement.badges.icon && (
                   <span className="mr-1.5">{achievement.badges.icon}</span>

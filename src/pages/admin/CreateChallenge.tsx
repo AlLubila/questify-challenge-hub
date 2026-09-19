@@ -12,7 +12,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Upload, Loader2, Eye } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ChallengeCard } from "@/components/ChallengeCard";
-import challenge1 from "@/assets/challenge-1.jpg";
 
 export const CreateChallenge = () => {
   const { t } = useLanguage();
@@ -339,7 +338,7 @@ export const CreateChallenge = () => {
             id="preview"
             title={title || "Challenge Title"}
             description={description || "Challenge description will appear here..."}
-            image={imagePreview || challenge1}
+            image={imagePreview || ""}
             prize={prize || "Reward"}
             participants={0}
             timeLeft={challengeType === "daily" ? `${duration || 1} day${duration !== "1" ? "s" : ""} left` : `${duration || 1} week${duration !== "1" ? "s" : ""} left`}

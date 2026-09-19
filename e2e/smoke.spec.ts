@@ -3,8 +3,8 @@ import { expect, test } from "@playwright/test";
 test("renders the public landing page", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { name: /Create\. Compete\. Win Big\./i })).toBeVisible();
-  await expect(page.getByRole("button", { name: /Start Creating Now/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Browse a brief\. Submit original work\. Earn recognition\./i })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Browse challenges/i })).toBeVisible();
   await expect(page).toHaveTitle(/Questify/i);
 });
 

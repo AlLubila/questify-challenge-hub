@@ -21,13 +21,13 @@ const translations: Record<string, string> = {
     "nav.getStarted": "Get Started",
     
     // Hero Section
-    "hero.badge": "Fresh creative quests. Real community rewards.",
-    "hero.title1": "Create.",
-    "hero.title2": "Compete.",
-    "hero.title3": "Win Big.",
-    "hero.description": "Take on creative challenges, earn points and badges, meet other creators, and compete for featured rewards.",
-    "hero.cta": "Start Creating Now",
-    "hero.howItWorks": "See How It Works",
+    "hero.badge": "Open photo and video challenges",
+    "hero.title1": "Browse a brief.",
+    "hero.title2": "Submit original work.",
+    "hero.title3": "Earn recognition.",
+    "hero.description": "Enter challenges with clear rules, real deadlines, and listed rewards. Build a public body of work as you go.",
+    "hero.cta": "Browse challenges",
+    "hero.howItWorks": "How it works",
     "hero.prizesWon": "Prizes Won",
     "hero.activeUsers": "Active Users",
     "hero.challenges": "Challenges",
@@ -43,8 +43,8 @@ const translations: Record<string, string> = {
     "stats.perMonth": "Per month",
     
     // Challenges
-    "challenges.featured": "Featured Challenges",
-    "challenges.trending": "Join these trending challenges and start earning today",
+    "challenges.featured": "Active Challenges",
+    "challenges.trending": "Choose an open brief and submit before the deadline.",
     "challenges.joinChallenge": "Join Challenge",
     "challenges.participants": "Participants",
     "challenges.timeLeft": "Time Left",
@@ -56,9 +56,9 @@ const translations: Record<string, string> = {
     "challenges.hard": "Hard",
     
     // CTA
-    "cta.title": "Ready to Turn Your Creativity Into Cash?",
-    "cta.description": "Build your creator profile, share original work, and climb the leaderboard one challenge at a time.",
-    "cta.button": "Join Questify Free",
+    "cta.title": "Ready to enter?",
+    "cta.description": "Choose an open challenge, read the brief, and submit original work before the deadline.",
+    "cta.button": "Browse open challenges",
     
     // Auth
     "auth.login": "Login",
