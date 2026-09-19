@@ -2,32 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Questify's flat mission-zine design system. All colors are HSL. */
 
 @layer base {
   :root {
-    --background: 240 10% 8%;
-    --foreground: 0 0% 98%;
+    --background: 225 10% 12%;
+    --foreground: 42 48% 94%;
 
-    --card: 240 8% 12%;
-    --card-foreground: 0 0% 98%;
+    --card: 225 9% 17%;
+    --card-foreground: 42 48% 94%;
 
-    --popover: 240 8% 12%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 225 9% 17%;
+    --popover-foreground: 42 48% 94%;
 
-    --primary: 280 80% 60%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 81 84% 69%;
+    --primary-foreground: 225 10% 8%;
 
-    --secondary: 330 80% 60%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 7 100% 68%;
+    --secondary-foreground: 225 10% 8%;
 
-    --muted: 240 6% 20%;
-    --muted-foreground: 240 5% 65%;
+    --muted: 225 7% 24%;
+    --muted-foreground: 44 9% 72%;
 
-    --accent: 45 100% 55%;
-    --accent-foreground: 240 10% 8%;
+    --accent: 198 80% 68%;
+    --accent-foreground: 225 10% 8%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
@@ -35,18 +33,13 @@ All colors MUST be HSL.
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
 
-    --border: 240 6% 20%;
-    --input: 240 6% 20%;
-    --ring: 280 80% 60%;
+    --border: 225 7% 31%;
+    --input: 225 7% 31%;
+    --ring: 81 84% 69%;
 
     --radius: 0.75rem;
 
-    --gradient-primary: linear-gradient(hsl(280 80% 60%), hsl(280 80% 60%));
-    --gradient-secondary: linear-gradient(hsl(330 80% 60%), hsl(330 80% 60%));
-    --gradient-accent: linear-gradient(hsl(45 100% 55%), hsl(45 100% 55%));
-    
-    --shadow-glow: 0 0 0 1px hsl(280 80% 60% / 0.18);
-    --shadow-card: 0 12px 30px hsl(0 0% 0% / 0.24);
+    --shadow-card: 4px 4px 0 hsl(225 12% 5%);
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -60,6 +53,26 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground antialiased;
   }
+}
+
+@layer components {
+  .mission-card {
+    transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms cubic-bezier(.2,.8,.2,1), border-color 180ms ease;
+  }
+  .mission-card:hover {
+    transform: translateY(-3px);
+    border-color: hsl(var(--primary));
+    box-shadow: 7px 7px 0 hsl(225 12% 5%);
+  }
+  .mission-card:active { transform: translateY(1px); }
+  .mission-stamp { transition: transform 180ms cubic-bezier(.2,1.4,.4,1); }
+  .mission-card:hover .mission-stamp { transform: rotate(-3deg) translateY(-1px); }
+  .route-path { stroke-dasharray: 12 10; animation: route-draw 900ms ease-out both; }
+}
+
+@keyframes route-draw {
+  from { stroke-dashoffset: 120; }
+  to { stroke-dashoffset: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

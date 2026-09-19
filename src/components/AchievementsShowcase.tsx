@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useRecentAchievements } from "@/hooks/useRecentAchievements";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Award, Sparkles } from "lucide-react";
+import { Award, Flag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 
@@ -42,7 +42,7 @@ export const AchievementsShowcase = () => {
       <div className="flex items-center gap-2 mb-4">
         <Award className="h-5 w-5 text-purple-500" />
         <h3 className="font-semibold">Recent Achievements</h3>
-        <Sparkles className="h-4 w-4 text-yellow-500 ml-auto" />
+        <Flag className="ml-auto h-4 w-4 text-primary" />
       </div>
       <div className="space-y-4">
         {achievements.map((achievement) => (
