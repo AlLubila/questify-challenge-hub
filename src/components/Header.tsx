@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Sparkles, Menu, X, User, LogOut, Wallet, Shield, Gift } from "lucide-react";
+import { Flag, Menu, X, User, LogOut, Wallet, Shield, Gift } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { QuestifyLogo } from "@/components/QuestifyLogo";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,15 +27,12 @@ export const Header = () => {
   const { t } = useLanguage();
 
   return (
-    <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+    <header className="sticky top-0 z-50 border-b-2 border-border bg-background">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <Sparkles className="w-6 h-6 text-primary" />
-            <span className="text-2xl font-bold tracking-tight text-foreground">
-              Questify
-            </span>
-          </div>
+          <button className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => navigate('/')} aria-label="Questify home">
+            <QuestifyLogo />
+          </button>
           
           <nav className="hidden md:flex items-center gap-6">
             <button onClick={() => navigate('/')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
@@ -56,7 +54,7 @@ export const Header = () => {
           {user && profile ? (
             <div className="hidden md:flex items-center gap-3">
               <div className="flex items-center gap-2 rounded-md border border-border bg-muted/40 px-3 py-2">
-                <Sparkles className="w-4 h-4 text-primary" />
+                <Flag className="w-4 h-4 text-primary" />
                 <span className="text-sm font-semibold">{profile.points.toLocaleString()} pts</span>
               </div>
 

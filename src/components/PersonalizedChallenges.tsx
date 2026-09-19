@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useChallengeRecommendations } from "@/hooks/useChallengeRecommendations";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Sparkles, Trophy } from "lucide-react";
+import { Flag, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -17,7 +17,7 @@ export const PersonalizedChallenges = () => {
     return (
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="h-5 w-5 text-primary" />
+          <Flag className="h-5 w-5 text-primary" />
           <h3 className="font-semibold">For You</h3>
         </div>
         <div className="space-y-3">
@@ -42,7 +42,7 @@ export const PersonalizedChallenges = () => {
   return (
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="h-5 w-5 text-primary" />
+        <Flag className="h-5 w-5 text-primary" />
         <h3 className="font-semibold">For You</h3>
         <Badge variant="secondary" className="text-xs ml-auto">
           Personalized

@@ -101,6 +101,36 @@ export type Database = {
         }
         Relationships: []
       }
+      challenge_automation_settings: {
+        Row: {
+          creative_brief: string
+          enabled: boolean
+          hour_utc: number
+          id: boolean
+          updated_at: string
+          updated_by: string | null
+          weekday: number
+        }
+        Insert: {
+          creative_brief?: string
+          enabled?: boolean
+          hour_utc?: number
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+          weekday?: number
+        }
+        Update: {
+          creative_brief?: string
+          enabled?: boolean
+          hour_utc?: number
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+          weekday?: number
+        }
+        Relationships: []
+      }
       challenges: {
         Row: {
           challenge_type: string

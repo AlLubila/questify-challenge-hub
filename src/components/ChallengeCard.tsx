@@ -1,9 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Camera, Trophy, Clock, Users } from "lucide-react";
+import { Trophy, Clock, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ChallengeArtwork } from "@/components/ChallengeArtwork";
 
 interface ChallengeCardProps {
   id: string;
@@ -42,25 +43,17 @@ export const ChallengeCard = ({
   const difficultyLabel = t(`challenges.${difficulty}`);
 
   return (
-    <Card className="group overflow-hidden border-border bg-card transition-colors duration-200 hover:border-primary/40">
-      <div className="relative overflow-hidden">
-        {image ? (
-          <img
-            src={image}
-            alt={title}
-            loading="lazy"
-            className="h-48 w-full object-cover"
-          />
-        ) : (
-          <div className="flex h-48 items-center justify-center bg-muted" role="img" aria-label={`${title} has no cover image`}>
-            <Camera className="h-8 w-8 text-muted-foreground" />
-          </div>
-        )}
+    <Card className="mission-card group overflow-hidden border-2 border-border bg-card shadow-card">
+      <div className="relative h-52 overflow-hidden border-b-2 border-border">
+        <ChallengeArtwork src={image} alt={title} />
+        <div className="absolute left-3 top-3 border-2 border-background bg-[#f7f2e8] px-2 py-1 font-mono text-[11px] font-bold text-[#101113]">
+          MISSION
+        </div>
         <div className="absolute top-3 right-3 flex gap-2">
           <Badge className={difficultyColors[difficulty]} variant="secondary">
             {difficultyLabel}
           </Badge>
-          <Badge variant="outline" className="border-border bg-background/90 text-foreground backdrop-blur-sm">
+          <Badge variant="outline" className="border-2 border-background bg-background text-foreground">
             {points} {t("challenges.points").toLowerCase()}
           </Badge>
         </div>
@@ -85,12 +78,12 @@ export const ChallengeCard = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-3 border-t border-border">
+        <div className="flex items-center justify-between border-t-2 border-dashed border-border pt-3">
           <div className="flex items-center gap-2 text-sm">
             <Clock className="w-4 h-4 text-secondary" />
             <span className="text-foreground font-medium">{timeLeft}</span>
           </div>
-          <Button 
+          <Button className="mission-stamp border-2 border-primary shadow-[3px_3px_0_hsl(var(--background))]"
             onClick={() => navigate(`/challenge/${id}`)}
             disabled={isEnded}
           >

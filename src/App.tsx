@@ -33,6 +33,7 @@ const AdminLayout = lazy(() => import("@/pages/admin/AdminLayout").then((module)
 const PaymentAnalytics = lazy(() => import("@/pages/admin/PaymentAnalytics"));
 const CreateChallenge = lazy(() => import("@/pages/admin/CreateChallenge").then((module) => ({ default: module.CreateChallenge })));
 const RewardsManagement = lazy(() => import("@/pages/admin/RewardsManagement").then((module) => ({ default: module.RewardsManagement })));
+const ChallengeAutomation = lazy(() => import("@/pages/admin/ChallengeAutomation").then((module) => ({ default: module.ChallengeAutomation })));
 
 const queryClient = new QueryClient();
 
@@ -70,6 +71,7 @@ const AppContent = () => {
           <Route element={<RoleRoute allowedRoles={["admin"]} />}>
             <Route path="users" element={<UserManagement />} />
             <Route path="create-challenge" element={<CreateChallenge />} />
+            <Route path="automation" element={<ChallengeAutomation />} />
             <Route path="rewards" element={<RewardsManagement />} />
             <Route path="analytics" element={<Analytics />} />
             <Route path="payments" element={<PaymentAnalytics />} />
