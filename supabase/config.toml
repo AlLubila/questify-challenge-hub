@@ -3,6 +3,9 @@ project_id = "fgvxgbkzdzngyzaesddh"
 [functions.generate-challenge]
 verify_jwt = true
 
+[functions.generate-weekly-challenge]
+verify_jwt = false
+
 [functions.award-badges]
 verify_jwt = true
 

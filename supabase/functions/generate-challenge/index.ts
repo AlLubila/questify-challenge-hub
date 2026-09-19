@@ -70,11 +70,26 @@ serve(async (req) => {
 
     console.log(`Generating ${count} ${type} challenge(s)...`);
 
-    const systemPrompt = `You are a creative challenge designer for Questify, a Gen Z social app combining TikTok-style content with gamified challenges. Generate ${type} challenges that are:
-- Trendy, viral-worthy, and Gen Z-friendly
-- Creative and engaging
-- Suitable for photo/video submissions
-- Fun and achievable within the timeframe
+    const { data: recentChallenges } = await supabase
+      .from("challenges")
+      .select("title,description")
+      .order("created_at", { ascending: false })
+      .limit(30);
+
+    const recentIdeas = (recentChallenges ?? []).map((item) => `${item.title}: ${item.description}`).join("\n");
+
+    const systemPrompt = `You are Questify's senior challenge editor. Generate ${type} creator missions for a young audience. Every mission must be original, safe, cheap to attempt, visually obvious in the first second, and easy to explain in one TikTok caption.
+
+Editorial rules:
+- Build around a surprising constraint, transformation, social remix, or playful real-world observation—not a generic photo prompt.
+- Give the creator a strong visual hook, a clear action, and room for personal interpretation.
+- Make it achievable with a phone in the allotted time; never require trespassing, dangerous stunts, harassment, deception, or expensive equipment.
+- Avoid engagement bait, brand impersonation, copyrighted characters, humiliation, pranks on strangers, and tired ideas such as dance challenges, golden-hour portraits, or "show your day".
+- Titles must be memorable, natural, and under 60 characters. Descriptions must explain what to make and include the shareable twist in 100–200 characters.
+- Vary the creative mechanic and difficulty. Do not repeat or lightly rename any recent challenge listed below.
+
+Recent challenges to avoid:
+${recentIdeas || "None yet."}
 
 IMPORTANT: Only use NON-MONETARY rewards that feel exciting and valuable:
 🏅 Exclusive badges or titles (e.g., "Trend Setter", "Legend", "Viral Star", "Challenge Master")
@@ -83,9 +98,9 @@ IMPORTANT: Only use NON-MONETARY rewards that feel exciting and valuable:
 🌈 Profile effects or customizations (e.g., "Gold Profile Frame", "Animated Avatar", "Rainbow Username Effect")
 🎯 Exclusive challenge access (e.g., "Early Access to Premium Challenges", "VIP Challenge Pass")
 
-Each challenge should feel fresh, exciting, and valuable without monetary prizes!`;
+Each challenge should feel like a real editorial commission with genuine viral potential, not AI-generated filler.`;
 
-    const userPrompt = `Generate ${count} ${type} creative challenge(s) for our community. Make them trendy, fun, and potentially viral. Include a mix of difficulties.`;
+    const userPrompt = `Create ${count} publish-ready ${type} mission(s). Internally evaluate at least five concepts for originality, visual clarity, safety, replayability, and TikTok shareability; return only the strongest non-duplicate concept(s).`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

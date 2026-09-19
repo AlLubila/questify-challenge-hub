@@ -40,7 +40,9 @@ serve(async (req) => {
     console.log(`Generating image for challenge: ${title}`);
 
     // Generate image using Lovable AI (Gemini image generation)
-    const imagePrompt = `A vibrant, eye-catching 16:9 social media challenge cover image for: "${title}". ${description || ''}. Style: Modern, colorful, Gen Z aesthetic, suitable for a viral social media challenge. No text in the image. Ultra high resolution.`;
+    const imagePrompt = `Create a fun 16:9 editorial illustration that specifically depicts this creative mission: "${title}". Brief: ${description || ''}.
+
+Art direction: bold flat screenprint and cut-paper collage, playful surreal situation, chunky ink outlines, limited palette of quest lime, sky blue, coral, warm paper, and near-black. Dynamic composition that communicates the challenge instantly at thumbnail size. Add subtle paper grain only. No photorealism, no gradients, no glow, no 3D render, no text, no letters, no logos, no watermark, no generic stock imagery.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
