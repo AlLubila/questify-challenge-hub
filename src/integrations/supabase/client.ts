@@ -3,8 +3,12 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 import { brokeredPreviewStorage } from './previewAuthStorage';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+// These are public browser credentials, not server secrets. Keep production
+// usable if a hosting environment is rebuilt before its VITE variables are set.
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+  || "https://fgvxgbkzdzngyzaesddh.lovable.cloud";
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+  || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZndnhnYmt6ZHpuZ3l6YWVzZGRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5Nzc0NTEsImV4cCI6MjA3ODU1MzQ1MX0.65QFVvLUAHGI17f_zVYGBEcN0zYdT3C5EbrE4Qvs_nY";
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
