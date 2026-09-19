@@ -7,15 +7,16 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Sparkles, Mail, Chrome, ArrowLeft, KeyRound, Loader2 } from "lucide-react";
+import { Mail, Chrome, ArrowLeft, KeyRound, Loader2, Flag } from "lucide-react";
 import { z } from "zod";
 import { Navigate, useLocation, useSearchParams } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { WavazoLogo } from "@/components/WavazoLogo";
 
 const emailSchema = z.string().trim().email("Invalid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
 const usernameSchema = z.string().trim().min(3, "Username must be at least 3 characters").max(20, "Username must be less than 20 characters");
-type AuthView = "login" | "signup" | "forgot" | "reset";
+type AuthView = "login" | "signup" | "otp" | "forgot" | "reset";
 
 const Auth = () => {
   const { user, isLoading } = useAuth();
@@ -42,6 +43,9 @@ const Auth = () => {
   const [recoveryEmail, setRecoveryEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [pendingEmail, setPendingEmail] = useState("");
+  const [otpType, setOtpType] = useState<"email" | "signup">("email");
 
   // Check for referral code in URL
   useEffect(() => {
@@ -99,7 +103,7 @@ const Auth = () => {
       if (error) throw error;
 
       toast.success("Password updated successfully");
-      setStatusMessage("Your password has been updated. You can now continue to Questify.");
+      setStatusMessage("Your password has been updated. You can now continue to Wavazo.");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
@@ -136,7 +140,18 @@ const Auth = () => {
         return;
       }
 
-      toast.success("Welcome back!");
+      await supabase.auth.signOut({ scope: "local" });
+      const { error: otpError } = await supabase.auth.signInWithOtp({
+        email: loginEmail,
+        options: { shouldCreateUser: false },
+      });
+      if (otpError) throw otpError;
+
+      setPendingEmail(loginEmail);
+      setOtpType("email");
+      setOtpCode("");
+      setStatusMessage("We sent a 6-digit confirmation code to your email.");
+      setAuthView("otp");
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
@@ -184,13 +199,52 @@ const Auth = () => {
         return;
       }
 
-      toast.success("Account created! Check your email to verify.");
+      setPendingEmail(signupEmail);
+      setOtpType("signup");
+      setOtpCode("");
+      setStatusMessage("Account created. Enter the 6-digit code sent to your email.");
+      setAuthView("otp");
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
       } else {
         toast.error("An error occurred during signup");
       }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleOtpVerification = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        email: pendingEmail,
+        token: otpCode.trim(),
+        type: otpType,
+      });
+      if (error) throw error;
+      toast.success("Email confirmed. Welcome to Wavazo!");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "That code could not be verified");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleOtpResend = async () => {
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: pendingEmail,
+        options: { shouldCreateUser: false },
+      });
+      if (error) throw error;
+      setOtpType("email");
+      setStatusMessage("A new confirmation code is on its way.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not resend the code");
     } finally {
       setIsSubmitting(false);
     }
@@ -228,11 +282,8 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-2">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Sparkles className="w-8 h-8 text-primary" />
-            <h1 className="text-4xl font-black bg-gradient-primary bg-clip-text text-transparent">
-              Questify
-            </h1>
+          <div className="mb-4 flex items-center justify-center">
+            <WavazoLogo className="scale-125" />
           </div>
           <p className="text-muted-foreground">
             Join the creative challenge community
@@ -266,7 +317,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full bg-gradient-primary" disabled={isSubmitting}>
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
                   Send reset link
                 </Button>
@@ -297,12 +348,46 @@ const Auth = () => {
                   <Label htmlFor="confirm-password">Confirm new password</Label>
                   <Input id="confirm-password" type="password" autoComplete="new-password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} required />
                 </div>
-                <Button type="submit" className="w-full bg-gradient-primary" disabled={isSubmitting}>
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
                   Update password
                 </Button>
               </form>
-              {statusMessage && <Button className="w-full" onClick={() => window.location.assign("/")}>Continue to Questify</Button>}
+              {statusMessage && <Button className="w-full" onClick={() => window.location.assign("/")}>Continue to Wavazo</Button>}
+            </div>
+          ) : authView === "otp" ? (
+            <div className="space-y-6">
+              <div className="space-y-2 text-center">
+                <KeyRound className="mx-auto h-10 w-10 text-primary" aria-hidden="true" />
+                <h2 className="text-2xl font-bold">Confirm your email</h2>
+                <p className="text-sm text-muted-foreground">Enter the 6-digit code sent to {pendingEmail}.</p>
+              </div>
+              {statusMessage && <p className="rounded-lg border border-primary/30 bg-primary/10 p-3 text-sm" role="status">{statusMessage}</p>}
+              <form onSubmit={handleOtpVerification} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email-code">Confirmation code</Label>
+                  <Input
+                    id="email-code"
+                    value={otpCode}
+                    onChange={(event) => setOtpCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    placeholder="000000"
+                    className="text-center text-2xl font-black tracking-[0.45em]"
+                    minLength={6}
+                    maxLength={6}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={isSubmitting || otpCode.length !== 6}>
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
+                  Confirm and enter
+                </Button>
+              </form>
+              <div className="flex gap-2">
+                <Button variant="outline" className="flex-1" onClick={handleOtpResend} disabled={isSubmitting}>Resend code</Button>
+                <Button variant="ghost" className="flex-1" onClick={() => { setAuthView("login"); setStatusMessage(null); }}>Back</Button>
+              </div>
             </div>
           ) : (
           <Tabs value={authView} onValueChange={(value) => setAuthView(value as AuthView)} className="w-full">
@@ -339,7 +424,7 @@ const Auth = () => {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-primary"
+                  className="w-full"
                   disabled={isSubmitting}
                 >
                   <Mail className="w-4 h-4 mr-2" />
@@ -429,10 +514,10 @@ const Auth = () => {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-primary"
+                  className="w-full"
                   disabled={isSubmitting}
                 >
-                  <Sparkles className="w-4 h-4 mr-2" />
+                  <Flag className="w-4 h-4 mr-2" />
                   {isSubmitting ? t("auth.creatingAccount") : t("auth.createAccount")}
                 </Button>
               </form>

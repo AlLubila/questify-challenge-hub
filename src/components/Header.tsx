@@ -14,9 +14,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { QuestifyLogo } from "@/components/QuestifyLogo";
+import { WavazoLogo } from "@/components/WavazoLogo";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,23 +30,23 @@ export const Header = () => {
     <header className="sticky top-0 z-50 border-b-2 border-border bg-background">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
-          <button className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => navigate('/')} aria-label="Questify home">
-            <QuestifyLogo />
-          </button>
+          <Link className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" to="/" aria-label="Wavazo home">
+            <WavazoLogo />
+          </Link>
           
           <nav className="hidden md:flex items-center gap-6">
-            <button onClick={() => navigate('/')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <NavLink to="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               {t("nav.home")}
-            </button>
+            </NavLink>
             <a href="/#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               {t("nav.challenges")}
             </a>
-            <button onClick={() => navigate('/feed')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <NavLink to="/feed" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               {t("nav.feed")}
-            </button>
-            <button onClick={() => navigate('/leaderboard')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            </NavLink>
+            <NavLink to="/leaderboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               {t("nav.leaderboard")}
-            </button>
+            </NavLink>
           </nav>
         </div>
 
@@ -131,18 +131,18 @@ export const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden border-t border-border">
           <nav className="container py-4 flex flex-col gap-4">
-            <button onClick={() => navigate('/')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
+            <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
               Home
-            </button>
+            </Link>
             <a href="/#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Challenges
             </a>
-            <button onClick={() => navigate('/feed')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
+            <Link to="/feed" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
               Feed
-            </button>
-            <button onClick={() => navigate('/leaderboard')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
+            </Link>
+            <Link to="/leaderboard" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
               Leaderboard
-            </button>
+            </Link>
             {user && (
               <button onClick={() => navigate('/referrals')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
                 Referrals

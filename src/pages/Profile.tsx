@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Trophy, Zap, Upload, Save, Award, Crown, Users, Pencil } from "lucide-react";
+import { Flag, Trophy, Zap, Upload, Save, Award, Crown, Users, Pencil } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -266,7 +266,7 @@ const Profile = () => {
                   src={avatarPreview || profile.avatar_url || undefined} 
                   alt={profile.username} 
                 />
-                <AvatarFallback className="bg-gradient-primary text-primary-foreground text-3xl">
+                <AvatarFallback className="bg-primary text-primary-foreground text-3xl">
                   {profile.username.substring(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
@@ -376,7 +376,7 @@ const Profile = () => {
                 </Card>
                 <Card className="p-4 text-center">
                   <div className="flex items-center justify-center gap-2 mb-2">
-                    <Sparkles className="w-4 h-4 text-accent" />
+                    <Flag className="w-4 h-4 text-accent" />
                     <p className="text-2xl font-bold">{profile.points}</p>
                   </div>
                   <p className="text-sm text-muted-foreground">Points</p>
@@ -499,7 +499,7 @@ const Profile = () => {
               </div>
             ) : (
               <Card className="p-12 text-center">
-                <Sparkles className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                <Flag className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
                 <h3 className="text-xl font-bold mb-2">No submissions yet</h3>
                 <p className="text-muted-foreground">
                   Join a challenge and submit your first entry!
@@ -511,7 +511,7 @@ const Profile = () => {
           {isOwnProfile && <TabsContent value="subscription" className="space-y-4">
             <Card className="p-8">
               <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 rounded-full bg-gradient-primary">
+                <div className="p-3 rounded-full bg-primary">
                   <Crown className="h-6 w-6 text-primary-foreground" />
                 </div>
                 <div>
@@ -544,7 +544,7 @@ const Profile = () => {
                       <span className="text-sm">Exclusive Creator Badge</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Sparkles className="h-4 w-4 text-primary" />
+                      <Flag className="h-4 w-4 text-primary" />
                       <span className="text-sm">Access to Premium Stats</span>
                     </div>
                   </div>
@@ -570,13 +570,13 @@ const Profile = () => {
                       <span className="text-sm">Exclusive Creator Badge</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Sparkles className="h-4 w-4 text-primary" />
+                      <Flag className="h-4 w-4 text-primary" />
                       <span className="text-sm">Access to Premium Stats</span>
                     </div>
                   </div>
 
                   <Button
-                    className="bg-gradient-primary hover:shadow-glow"
+                    className="bg-primary"
                     onClick={() => createCheckout()}
                     disabled={isCreatingCheckout}
                   >

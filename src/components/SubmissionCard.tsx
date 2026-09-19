@@ -232,7 +232,7 @@ const SubmissionCardContent = ({ submission }: {
               src={submission.profiles.avatar_url || undefined}
               alt={submission.profiles.username}
             />
-            <AvatarFallback className="bg-gradient-primary text-primary-foreground">
+            <AvatarFallback className="bg-primary text-primary-foreground">
               {submission.profiles.username.substring(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -341,16 +341,16 @@ const SubmissionCardContent = ({ submission }: {
                   <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={comment.profiles?.avatar_url || undefined}
-                      alt={comment.profiles?.username || "Questify creator"}
+                      alt={comment.profiles?.username || "Wavazo creator"}
                     />
-                    <AvatarFallback className="text-xs bg-gradient-primary text-primary-foreground">
+                    <AvatarFallback className="text-xs bg-primary text-primary-foreground">
                       {(comment.profiles?.username || "Q").substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
                     <p className="text-sm">
                       <span className="font-bold">
-                        {comment.profiles?.display_name || comment.profiles?.username || "Questify creator"}
+                        {comment.profiles?.display_name || comment.profiles?.username || "Wavazo creator"}
                       </span>{" "}
                       <span className="text-muted-foreground">{comment.content}</span>
                     </p>

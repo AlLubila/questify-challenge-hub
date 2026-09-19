@@ -12,13 +12,13 @@ import { lazy, Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { RoleRoute } from "@/components/RoleRoute";
+import Leaderboard from "./pages/Leaderboard";
+import Feed from "./pages/Feed";
 
 const Index = lazy(() => import("./pages/Index"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Profile = lazy(() => import("./pages/Profile"));
 const ChallengeDetail = lazy(() => import("./pages/ChallengeDetail"));
-const Leaderboard = lazy(() => import("./pages/Leaderboard"));
-const Feed = lazy(() => import("./pages/Feed"));
 const Wallet = lazy(() => import("./pages/Wallet"));
 const Referrals = lazy(() => import("./pages/Referrals"));
 const FAQ = lazy(() => import("./pages/FAQ"));

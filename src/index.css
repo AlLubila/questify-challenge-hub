@@ -2,17 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Questify's flat mission-zine design system. All colors are HSL. */
+/* Wavazo's flat mission-zine design system. All colors are HSL. */
 
 @layer base {
   :root {
-    --background: 225 10% 12%;
+    --background: 225 10% 15%;
     --foreground: 42 48% 94%;
 
-    --card: 225 9% 17%;
+    --card: 225 9% 20%;
     --card-foreground: 42 48% 94%;
 
-    --popover: 225 9% 17%;
+    --popover: 225 9% 20%;
     --popover-foreground: 42 48% 94%;
 
     --primary: 81 84% 69%;

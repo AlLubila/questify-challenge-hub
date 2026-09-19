@@ -1,6 +1,6 @@
-# Questify Challenge Hub
+# Wavazo Challenge Hub
 
-Questify is a responsive challenge platform where creators discover daily and weekly challenges, submit image or video entries, vote and comment, earn badges, follow other creators, and manage boosts or a Creator Pass subscription.
+Wavazo is a responsive challenge platform where creators discover daily and weekly challenges, submit image or video entries, vote and comment, earn badges, follow other creators, and manage boosts or a Creator Pass subscription.
 
 ## Architecture
 

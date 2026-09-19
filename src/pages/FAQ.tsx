@@ -14,8 +14,8 @@ const FAQ = () => {
       icon: HelpCircle,
       questions: [
         {
-          q: "What is Questify?",
-          a: "Questify is a creative challenge platform where you can participate in photo and video challenges to win real cash prizes! New challenges are automatically generated for you every day."
+          q: "What is Wavazo?",
+          a: "Wavazo is a creative challenge platform where you can participate in photo and video challenges to win real cash prizes! New challenges are automatically generated for you every day."
         },
         {
           q: "How do I participate in a challenge?",
@@ -37,7 +37,7 @@ const FAQ = () => {
         },
         {
           q: "What are the prizes?",
-          a: "Each challenge displays its prize (e.g., $500 Cash). Winners receive their winnings directly in their Questify wallet, which they can then withdraw."
+          a: "Each challenge displays its prize (e.g., $500 Cash). Winners receive their winnings directly in their Wavazo wallet, which they can then withdraw."
         },
         {
           q: "What are points for?",
@@ -138,7 +138,7 @@ const FAQ = () => {
             Frequently Asked Questions
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to know to become a Questify pro!
+            Everything you need to know to become a Wavazo pro!
           </p>
         </div>
 
@@ -168,7 +168,7 @@ const FAQ = () => {
           ))}
         </div>
 
-        <Card className="p-8 text-center bg-gradient-to-r from-primary/10 to-accent/10">
+        <Card className="p-8 text-center bg-primary/10">
           <h2 className="text-2xl font-bold mb-4">
             Still have questions?
           </h2>
@@ -177,8 +177,8 @@ const FAQ = () => {
           </p>
           <Button 
             size="lg" 
-            className="bg-gradient-primary"
-            onClick={() => window.location.href = 'mailto:support@questify.app'}
+            className="bg-primary"
+            onClick={() => window.location.href = 'mailto:support@wavazo.app'}
           >
             Contact Us
           </Button>

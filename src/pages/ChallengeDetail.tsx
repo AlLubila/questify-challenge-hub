@@ -10,7 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Trophy, Clock, Users, Upload, Sparkles, ArrowLeft, Wand2, Camera, Image as ImageIcon } from "lucide-react";
+import { Trophy, Clock, Users, Upload, Flag, ArrowLeft, Wand2, Camera, Image as ImageIcon } from "lucide-react";
 import { calculateTimeLeft } from "@/hooks/useChallenges";
 import { useState } from "react";
 import { ImageEditorAdvanced } from "@/components/ImageEditorAdvanced";
@@ -352,7 +352,7 @@ const ChallengeDetail = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-primary" />
+                    <Flag className="w-5 h-5 text-primary" />
                     <div>
                       <p className="text-sm text-muted-foreground">Points</p>
                       <p className="font-bold">{challenge.points} pts</p>
@@ -485,7 +485,7 @@ const ChallengeDetail = () => {
                         <Button
                           onClick={() => submitMutation.mutate()}
                           disabled={!contentFile || submitMutation.isPending}
-                          className="w-full bg-gradient-primary"
+                          className="w-full bg-primary"
                         >
                           <Upload className="w-4 h-4 mr-2" />
                           {submitMutation.isPending ? "Submitting..." : "Submit Entry"}
@@ -505,12 +505,12 @@ const ChallengeDetail = () => {
               )
             ) : (
               <Card className="p-6 text-center">
-                <Sparkles className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                <Flag className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
                 <h2 className="text-2xl font-bold mb-2">Sign in to participate</h2>
                 <p className="text-muted-foreground mb-4">
                   Create an account to submit your entry and compete for prizes!
                 </p>
-                <Button onClick={() => navigate("/auth")} className="bg-gradient-primary">
+                <Button onClick={() => navigate("/auth")} className="bg-primary">
                   Get Started
                 </Button>
               </Card>

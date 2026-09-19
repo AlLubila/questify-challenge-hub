@@ -24,12 +24,12 @@ export default function Referrals() {
   const shareReferral = async () => {
     if (data?.referralCode) {
       const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
-      const text = `Join Questify with my referral code and get 25 bonus points! ${link}`;
+      const text = `Join Wavazo with my referral code and get 25 bonus points! ${link}`;
 
       if (navigator.share) {
         try {
           await navigator.share({
-            title: "Join Questify",
+            title: "Join Wavazo",
             text: text,
             url: link,
           });
@@ -105,7 +105,7 @@ export default function Referrals() {
       </div>
 
       {/* Referral Code Card */}
-      <Card className="p-8 mb-8 bg-gradient-to-br from-primary/5 to-primary/10">
+      <Card className="p-8 mb-8 bg-primary/10">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold mb-2">{t("referrals.yourCode")}</h2>
           <p className="text-muted-foreground">{t("referrals.shareCode")}</p>

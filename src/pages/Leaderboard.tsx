@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import PullToRefresh from "react-simple-pull-to-refresh";
 import { useAuth } from "@/contexts/AuthContext";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 interface ChallengeLeaderEntry {
   user_id: string;
@@ -54,6 +55,8 @@ const Leaderboard = () => {
   const {
     data: leaderboardData,
     isLoading,
+    isError,
+    error: leaderboardError,
     refetch,
   } = useQuery({
     queryKey: ["challenge-leaderboard", selectedChallenge, debouncedSearch],
@@ -91,10 +94,15 @@ const Leaderboard = () => {
 
       // Get comment counts for each submission
       const submissionIds = submissions?.map(s => s.id) || [];
-      const { data: commentCounts } = await supabase
-        .from("comments")
-        .select("submission_id")
-        .in("submission_id", submissionIds);
+      let commentCounts: Array<{ submission_id: string }> = [];
+      if (submissionIds.length > 0) {
+        const { data, error: commentsError } = await supabase
+          .from("comments")
+          .select("submission_id")
+          .in("submission_id", submissionIds);
+        if (commentsError) throw commentsError;
+        commentCounts = data || [];
+      }
 
       // Count comments per submission
       const commentCountMap: Record<string, number> = {};
@@ -180,6 +188,19 @@ const Leaderboard = () => {
       );
     }
 
+    if (isError) {
+      return (
+        <Card className="p-10 text-center" role="alert">
+          <Trophy className="mx-auto mb-4 h-12 w-12 text-primary" />
+          <h3 className="mb-2 text-xl font-bold">Leaderboard could not load</h3>
+          <p className="mb-5 text-muted-foreground">
+            {leaderboardError instanceof Error ? leaderboardError.message : "Please try again."}
+          </p>
+          <Button onClick={() => refetch()}>Try again</Button>
+        </Card>
+      );
+    }
+
     const top10 = leaderboardData?.slice(0, 10) || [];
 
     if (top10.length === 0) {
@@ -257,9 +278,9 @@ const Leaderboard = () => {
             <Card
               key={entry.user_id}
               className={`p-4 transition-all hover:shadow-lg cursor-pointer ${
-                isTopThree ? "border-2 border-primary/50 bg-gradient-to-r from-primary/5 to-transparent" : ""
+                isTopThree ? "border-2 border-primary/50 bg-primary/5" : ""
               } ${isCurrentUser ? "ring-2 ring-primary" : ""}`}
-              onClick={() => navigate(`/profile?userId=${entry.user_id}`)}
+              onClick={() => navigate(`/profile/${entry.user_id}`)}
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 flex items-center justify-center">
