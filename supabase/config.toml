@@ -1,10 +1,10 @@
-project_id = "fgvxgbkzdzngyzaesddh"
+project_id = "wfaeptwxocikjumzwddu"
 
 [functions.generate-challenge]
 verify_jwt = true
 
 [functions.generate-weekly-challenge]
-verify_jwt = false
+verify_jwt = true
 
 [functions.award-badges]
 verify_jwt = true
