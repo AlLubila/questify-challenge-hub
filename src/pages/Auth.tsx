@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Mail, Chrome, ArrowLeft, KeyRound, Loader2, Flag } from "lucide-react";
 import { z } from "zod";
-import { Navigate, useLocation, useSearchParams } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AChallengeLogo } from "@/components/AChallengeLogo";
 
@@ -23,6 +23,7 @@ type AuthView = "login" | "signup" | "otp" | "forgot" | "reset";
 const Auth = () => {
   const { user, isLoading } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [referralCode, setReferralCode] = useState<string | null>(null);
@@ -63,7 +64,7 @@ const Auth = () => {
   }, [searchParams]);
 
   // Redirect if already logged in
-  if (user && !isLoading && authView !== "reset") {
+  if (user && !isLoading && !isSubmitting && authView !== "reset" && authView !== "otp") {
     const requestedPath = (location.state as { from?: { pathname?: string; search?: string } } | null)?.from;
     const destination = requestedPath?.pathname
       ? `${requestedPath.pathname}${requestedPath.search ?? ""}`
@@ -160,23 +161,38 @@ const Auth = () => {
         return;
       }
 
-      await supabase.auth.signOut({ scope: "local" });
+      // Show the code entry screen before starting the email challenge. This
+      // keeps the flow usable even when the email is delivered but the Auth
+      // request subsequently reports a transient or rate-limit error.
+      setPendingEmail(loginEmail);
+      setOtpType("email");
+      setOtpCode("");
+      setStatusMessage("Requesting a confirmation code...");
+      setAuthView("otp");
+
+      const { error: signOutError } = await supabase.auth.signOut({ scope: "local" });
+      if (signOutError) {
+        setStatusMessage("We could not start email verification. Return to sign in and try again.");
+        toast.error(signOutError.message);
+        return;
+      }
+
       const { error: otpError } = await supabase.auth.signInWithOtp({
         email: loginEmail,
         options: { shouldCreateUser: false },
       });
-      if (otpError) throw otpError;
+      if (otpError) {
+        setStatusMessage("If you already received a code, enter it below. Otherwise, use Resend code.");
+        toast.error(otpError.message);
+        return;
+      }
 
-      setPendingEmail(loginEmail);
-      setOtpType("email");
-      setOtpCode("");
       setStatusMessage("We sent a confirmation code to your email.");
-      setAuthView("otp");
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
       } else {
-        toast.error("An error occurred during login");
+        toast.error(error instanceof Error ? error.message : "Unable to start email verification");
       }
     } finally {
       setIsSubmitting(false);
@@ -250,6 +266,11 @@ const Auth = () => {
       });
       if (error) throw error;
       toast.success("Email confirmed. Welcome to A Challenge!");
+      const requestedPath = (location.state as { from?: { pathname?: string; search?: string } } | null)?.from;
+      const destination = requestedPath?.pathname
+        ? `${requestedPath.pathname}${requestedPath.search ?? ""}`
+        : "/";
+      navigate(destination, { replace: true });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "That code could not be verified");
     } finally {
