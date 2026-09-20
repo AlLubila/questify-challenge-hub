@@ -165,11 +165,11 @@ const Index = () => {
 
       <section className="px-4 pb-20">
         <div className="container">
-          <Card className="flex flex-col items-start justify-between gap-6 border-2 border-[#101113] bg-[#69c6f0] p-8 text-[#101113] shadow-card md:flex-row md:items-center md:p-10">
+          <Card className="flex flex-col items-start justify-between gap-6 border-2 border-[#101113] bg-secondary p-8 text-secondary-foreground shadow-card md:flex-row md:items-center md:p-10">
             <div>
               <p className="font-mono text-xs font-bold uppercase tracking-[0.16em]">Your next mission</p>
               <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">{t("cta.title")}</h2>
-              <p className="mt-2 max-w-2xl text-[#101113]/75">{t("cta.description")}</p>
+              <p className="mt-2 max-w-2xl text-secondary-foreground/80">{t("cta.description")}</p>
             </div>
             <Button
               size="lg"

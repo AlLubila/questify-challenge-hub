@@ -6,26 +6,26 @@
 
 @layer base {
   :root {
-    --background: 225 10% 15%;
-    --foreground: 42 48% 94%;
+    --background: 216 72% 15%;
+    --foreground: 39 52% 94%;
 
-    --card: 225 9% 20%;
-    --card-foreground: 42 48% 94%;
+    --card: 216 52% 21%;
+    --card-foreground: 39 52% 94%;
 
-    --popover: 225 9% 20%;
-    --popover-foreground: 42 48% 94%;
+    --popover: 216 55% 19%;
+    --popover-foreground: 39 52% 94%;
 
-    --primary: 81 84% 69%;
-    --primary-foreground: 225 10% 8%;
+    --primary: 30 100% 56%;
+    --primary-foreground: 216 72% 12%;
 
-    --secondary: 7 100% 68%;
-    --secondary-foreground: 225 10% 8%;
+    --secondary: 5 100% 62%;
+    --secondary-foreground: 39 52% 97%;
 
-    --muted: 225 7% 24%;
-    --muted-foreground: 44 9% 72%;
+    --muted: 216 39% 26%;
+    --muted-foreground: 34 20% 77%;
 
-    --accent: 198 80% 68%;
-    --accent-foreground: 225 10% 8%;
+    --accent: 5 100% 62%;
+    --accent-foreground: 39 52% 97%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
@@ -33,13 +33,13 @@
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
 
-    --border: 225 7% 31%;
-    --input: 225 7% 31%;
-    --ring: 81 84% 69%;
+    --border: 216 29% 38%;
+    --input: 216 29% 38%;
+    --ring: 30 100% 56%;
 
     --radius: 0.75rem;
 
-    --shadow-card: 4px 4px 0 hsl(225 12% 5%);
+    --shadow-card: 4px 4px 0 hsl(216 78% 7%);
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -62,7 +62,7 @@
   .mission-card:hover {
     transform: translateY(-3px);
     border-color: hsl(var(--primary));
-    box-shadow: 7px 7px 0 hsl(225 12% 5%);
+    box-shadow: 7px 7px 0 hsl(216 78% 7%);
   }
   .mission-card:active { transform: translateY(1px); }
   .mission-stamp { transition: transform 180ms cubic-bezier(.2,1.4,.4,1); }
