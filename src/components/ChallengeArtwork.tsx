@@ -24,7 +24,7 @@ export const ChallengeArtwork = ({ src, alt, className }: ChallengeArtworkProps)
   }
 
   return (
-    <div className={cn("h-full w-full bg-[#f7f2e8]", className)} role="img" aria-label={`${alt} — Wavazo illustrated cover`}>
+    <div className={cn("h-full w-full bg-[#f7f2e8]", className)} role="img" aria-label={`${alt} — A Challenge illustrated cover`}>
       <svg viewBox="0 0 640 360" className="h-full w-full" aria-hidden="true">
         <rect width="640" height="360" fill="#f7f2e8" />
         <circle cx="530" cy="72" r="42" fill="#ff4d3d" stroke="#12366b" strokeWidth="7" />

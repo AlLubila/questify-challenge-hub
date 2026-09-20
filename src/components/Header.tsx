@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { WavazoLogo } from "@/components/WavazoLogo";
+import { AChallengeLogo } from "@/components/AChallengeLogo";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,8 +30,8 @@ export const Header = () => {
     <header className="sticky top-0 z-50 border-b-2 border-border bg-background">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" to="/" aria-label="Wavazo home">
-            <WavazoLogo />
+          <Link className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" to="/" aria-label="A Challenge home">
+            <AChallengeLogo />
           </Link>
           
           <nav className="hidden md:flex items-center gap-6">

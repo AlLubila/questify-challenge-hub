@@ -69,12 +69,6 @@ const Leaderboard = () => {
           user_id,
           votes,
           challenge_id,
-          profiles!inner (
-            id,
-            username,
-            display_name,
-            avatar_url
-          ),
           challenges!inner (
             id,
             title,
@@ -91,6 +85,17 @@ const Leaderboard = () => {
 
       const { data: submissions, error } = await query;
       if (error) throw error;
+
+      const userIds = [...new Set((submissions ?? []).map((submission) => submission.user_id))];
+      const { data: publicProfiles, error: profilesError } = userIds.length > 0
+        ? await supabase
+            .from("public_profiles")
+            .select("id, username, display_name, avatar_url")
+            .in("id", userIds)
+        : { data: [], error: null };
+      if (profilesError) throw profilesError;
+
+      const profilesById = new Map((publicProfiles ?? []).map((profile) => [profile.id, profile]));
 
       // Get comment counts for each submission
       const submissionIds = submissions?.map(s => s.id) || [];
@@ -113,17 +118,19 @@ const Leaderboard = () => {
       // Aggregate by user
       const userScores: Record<string, ChallengeLeaderEntry> = {};
       
-      submissions?.forEach((sub: any) => {
+      submissions?.forEach((sub) => {
         const userId = sub.user_id;
+        const profile = profilesById.get(userId);
+        if (!profile?.username) return;
         const votes = sub.votes || 0;
         const comments = commentCountMap[sub.id] || 0;
         
         if (!userScores[userId]) {
           userScores[userId] = {
             user_id: userId,
-            username: sub.profiles.username,
-            display_name: sub.profiles.display_name,
-            avatar_url: sub.profiles.avatar_url,
+            username: profile.username,
+            display_name: profile.display_name,
+            avatar_url: profile.avatar_url,
             total_votes: 0,
             total_comments: 0,
             score: 0,
@@ -189,12 +196,13 @@ const Leaderboard = () => {
     }
 
     if (isError) {
+      const errorMessage = (leaderboardError as { message?: unknown } | null)?.message;
       return (
         <Card className="p-10 text-center" role="alert">
           <Trophy className="mx-auto mb-4 h-12 w-12 text-primary" />
           <h3 className="mb-2 text-xl font-bold">Leaderboard could not load</h3>
           <p className="mb-5 text-muted-foreground">
-            {leaderboardError instanceof Error ? leaderboardError.message : "Please try again."}
+            {typeof errorMessage === "string" ? errorMessage : "Please try again."}
           </p>
           <Button onClick={() => refetch()}>Try again</Button>
         </Card>

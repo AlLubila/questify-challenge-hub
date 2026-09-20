@@ -14,8 +14,8 @@ const FAQ = () => {
       icon: HelpCircle,
       questions: [
         {
-          q: "What is Wavazo?",
-          a: "Wavazo is a creative challenge platform where you can participate in photo and video challenges to win real cash prizes! New challenges are automatically generated for you every day."
+          q: "What is A Challenge?",
+          a: "A Challenge is a creative community where you can join original photo and video missions, share your work, and compete for listed rewards. A fresh challenge is published every week."
         },
         {
           q: "How do I participate in a challenge?",
@@ -37,7 +37,7 @@ const FAQ = () => {
         },
         {
           q: "What are the prizes?",
-          a: "Each challenge displays its prize (e.g., $500 Cash). Winners receive their winnings directly in their Wavazo wallet, which they can then withdraw."
+          a: "Each challenge displays its listed reward. Eligible winners receive their winnings in their A Challenge wallet, which they can then withdraw."
         },
         {
           q: "What are points for?",
@@ -138,7 +138,7 @@ const FAQ = () => {
             Frequently Asked Questions
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to know to become a Wavazo pro!
+            Everything you need to know to become an A Challenge pro!
           </p>
         </div>
 
@@ -178,7 +178,7 @@ const FAQ = () => {
           <Button 
             size="lg" 
             className="bg-primary"
-            onClick={() => window.location.href = 'mailto:support@wavazo.app'}
+            onClick={() => window.location.href = 'mailto:support@achallenge.app'}
           >
             Contact Us
           </Button>

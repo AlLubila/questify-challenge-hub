@@ -24,12 +24,12 @@ export default function Referrals() {
   const shareReferral = async () => {
     if (data?.referralCode) {
       const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
-      const text = `Join Wavazo with my referral code and get 25 bonus points! ${link}`;
+      const text = `Join A Challenge with my referral code and get 25 bonus points! ${link}`;
 
       if (navigator.share) {
         try {
           await navigator.share({
-            title: "Join Wavazo",
+            title: "Join A Challenge",
             text: text,
             url: link,
           });

@@ -14,6 +14,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { RoleRoute } from "@/components/RoleRoute";
 import Leaderboard from "./pages/Leaderboard";
 import Feed from "./pages/Feed";
+import { RouteMetadata } from "@/components/RouteMetadata";
 
 const Index = lazy(() => import("./pages/Index"));
 const Auth = lazy(() => import("./pages/Auth"));
@@ -95,6 +96,7 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <LanguageProvider>
+              <RouteMetadata />
               <AppContent />
             </LanguageProvider>
           </AuthProvider>

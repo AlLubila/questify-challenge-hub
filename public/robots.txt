@@ -12,3 +12,9 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /auth
+Disallow: /wallet
+Disallow: /referrals
+
+Sitemap: https://achallenge.vercel.app/sitemap.xml
