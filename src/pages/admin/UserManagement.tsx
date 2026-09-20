@@ -22,6 +22,16 @@ import {
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type UserRole = "admin" | "moderator" | "user";
 
@@ -29,6 +39,11 @@ export const UserManagement = () => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [roleToRemove, setRoleToRemove] = useState<{
+    userId: string;
+    username: string;
+    role: UserRole;
+  } | null>(null);
 
   const { data: users, isLoading } = useQuery({
     queryKey: ["adminUsers"],
@@ -87,6 +102,10 @@ export const UserManagement = () => {
 
   const removeRole = useMutation({
     mutationFn: async ({ userId, role }: { userId: string; role: UserRole }) => {
+      if (userId === user?.id && role === "admin") {
+        throw new Error("Your own administrator role is protected");
+      }
+
       const { error } = await supabase
         .from("user_roles")
         .delete()
@@ -99,6 +118,7 @@ export const UserManagement = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["adminUsers"] });
       toast.success("Role removed successfully");
+      setRoleToRemove(null);
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to remove role");
@@ -133,37 +153,53 @@ export const UserManagement = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users?.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.username}</TableCell>
-                  <TableCell>{user.display_name || "—"}</TableCell>
+              {users?.map((managedUser) => (
+                <TableRow key={managedUser.id}>
+                  <TableCell className="font-medium">{managedUser.username}</TableCell>
+                  <TableCell>{managedUser.display_name || "—"}</TableCell>
                   <TableCell>
-                    <div className="flex gap-2 flex-wrap">
-                      {user.roles.length === 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {managedUser.roles.length === 0 ? (
                         <Badge variant="outline">user</Badge>
                       ) : (
-                        user.roles.map((role) => (
-                          <Badge
-                            key={role}
-                            variant={role === "admin" ? "default" : "secondary"}
-                            className="cursor-pointer"
-                            onClick={() => removeRole.mutate({ userId: user.id, role })}
-                          >
-                            {role} ×
-                          </Badge>
-                        ))
+                        managedUser.roles.map((role) => {
+                          const isProtectedRole = role === "admin" && managedUser.id === user?.id;
+                          return (
+                            <div key={role} className="flex items-center gap-2">
+                              <Badge variant={role === "admin" ? "default" : "secondary"}>
+                                {role}
+                              </Badge>
+                              {isProtectedRole ? (
+                                <span className="text-xs font-medium text-muted-foreground">Protected</span>
+                              ) : (
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setRoleToRemove({
+                                    userId: managedUser.id,
+                                    username: managedUser.username,
+                                    role,
+                                  })}
+                                >
+                                  Remove {role}
+                                </Button>
+                              )}
+                            </div>
+                          );
+                        })
                       )}
                     </div>
                   </TableCell>
                   <TableCell>
-                    {new Date(user.created_at).toLocaleDateString()}
+                    {new Date(managedUser.created_at).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
-                    {selectedUserId === user.id ? (
+                    {selectedUserId === managedUser.id ? (
                       <div className="flex gap-2">
                         <Select
                           onValueChange={(role) =>
-                            assignRole.mutate({ userId: user.id, role: role as UserRole })
+                            assignRole.mutate({ userId: managedUser.id, role: role as UserRole })
                           }
                         >
                           <SelectTrigger className="w-32">
@@ -186,7 +222,7 @@ export const UserManagement = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setSelectedUserId(user.id)}
+                        onClick={() => setSelectedUserId(managedUser.id)}
                       >
                         Assign Role
                       </Button>
@@ -198,6 +234,38 @@ export const UserManagement = () => {
           </Table>
         </CardContent>
       </Card>
+      <AlertDialog
+        open={roleToRemove !== null}
+        onOpenChange={(open) => {
+          if (!open && !removeRole.isPending) setRoleToRemove(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove this role?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {roleToRemove
+                ? `Remove the ${roleToRemove.role} role from ${roleToRemove.username}? Their permissions will change immediately.`
+                : "This user's permissions will change immediately."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={removeRole.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={!roleToRemove || removeRole.isPending}
+              onClick={(event) => {
+                event.preventDefault();
+                if (roleToRemove) {
+                  removeRole.mutate({ userId: roleToRemove.userId, role: roleToRemove.role });
+                }
+              }}
+            >
+              {removeRole.isPending ? "Removing…" : "Yes, remove role"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

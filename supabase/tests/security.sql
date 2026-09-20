@@ -1,7 +1,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(20);
+select plan(23);
 
 select has_table('public', 'stripe_events', 'Stripe event idempotency table exists');
 select has_table('public', 'stripe_customers', 'Stripe customer mapping table exists');
@@ -62,6 +62,32 @@ select trigger_is(
   'public', 'submissions', 'guard_submission_state',
   'public', 'guard_submission_state',
   'Submission moderation state is protected by a trigger'
+);
+
+select trigger_is(
+  'public', 'user_roles', 'prevent_admin_self_demotion',
+  'public', 'prevent_admin_self_demotion',
+  'Administrators cannot accidentally delete their own admin role'
+);
+
+select ok(
+  position('old.user_id = (select auth.uid())' in lower(pg_get_functiondef('public.prevent_admin_self_demotion()'::regprocedure))) > 0
+  and position('old.role = ''admin''::public.app_role' in lower(pg_get_functiondef('public.prevent_admin_self_demotion()'::regprocedure))) > 0,
+  'The self-demotion guard is narrowly scoped to the caller admin role'
+);
+
+select ok(
+  exists (
+    select 1
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'user_roles'
+      and policyname = 'Only admins can delete roles'
+      and lower(qual) like '%not%'
+      and lower(qual) like '%user_id%auth.uid%'
+      and lower(qual) like '%role%admin%'
+  ),
+  'Role deletion policy blocks an administrator from targeting their own admin row'
 );
 
 select ok(

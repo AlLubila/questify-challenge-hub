@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Home, Users, FileText, Trophy, BarChart3, ScrollText, DollarSign, PlusCircle, Award, CalendarClock } from "lucide-react";
+import { ArrowLeft, Home, Users, FileText, Trophy, BarChart3, ScrollText, DollarSign, PlusCircle, Award, CalendarClock } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -75,6 +75,14 @@ export const AdminSidebar = () => {
           <SidebarGroupLabel>{t("admin.panel")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/">
+                    <ArrowLeft />
+                    <span>Return to site</span>
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
