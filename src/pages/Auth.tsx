@@ -16,6 +16,8 @@ import { AChallengeLogo } from "@/components/AChallengeLogo";
 const emailSchema = z.string().trim().email("Invalid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
 const usernameSchema = z.string().trim().min(3, "Username must be at least 3 characters").max(20, "Username must be less than 20 characters");
+const MIN_OTP_LENGTH = 6;
+const MAX_OTP_LENGTH = 10;
 type AuthView = "login" | "signup" | "otp" | "forgot" | "reset";
 
 const Auth = () => {
@@ -150,7 +152,7 @@ const Auth = () => {
       setPendingEmail(loginEmail);
       setOtpType("email");
       setOtpCode("");
-      setStatusMessage("We sent a 6-digit confirmation code to your email.");
+      setStatusMessage("We sent a confirmation code to your email.");
       setAuthView("otp");
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -202,7 +204,7 @@ const Auth = () => {
       setPendingEmail(signupEmail);
       setOtpType("signup");
       setOtpCode("");
-      setStatusMessage("Account created. Enter the 6-digit code sent to your email.");
+      setStatusMessage("Account created. Enter the confirmation code sent to your email.");
       setAuthView("otp");
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -217,6 +219,10 @@ const Auth = () => {
 
   const handleOtpVerification = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (otpCode.length < MIN_OTP_LENGTH || otpCode.length > MAX_OTP_LENGTH) {
+      toast.error("Enter the complete confirmation code from your email");
+      return;
+    }
     setIsSubmitting(true);
     try {
       const { error } = await supabase.auth.verifyOtp({
@@ -360,7 +366,7 @@ const Auth = () => {
               <div className="space-y-2 text-center">
                 <KeyRound className="mx-auto h-10 w-10 text-primary" aria-hidden="true" />
                 <h2 className="text-2xl font-bold">Confirm your email</h2>
-                <p className="text-sm text-muted-foreground">Enter the 6-digit code sent to {pendingEmail}.</p>
+                <p className="text-sm text-muted-foreground">Enter the complete code sent to {pendingEmail}.</p>
               </div>
               {statusMessage && <p className="rounded-lg border border-primary/30 bg-primary/10 p-3 text-sm" role="status">{statusMessage}</p>}
               <form onSubmit={handleOtpVerification} className="space-y-4">
@@ -369,17 +375,21 @@ const Auth = () => {
                   <Input
                     id="email-code"
                     value={otpCode}
-                    onChange={(event) => setOtpCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                    onChange={(event) => setOtpCode(event.target.value.replace(/\D/g, "").slice(0, MAX_OTP_LENGTH))}
                     inputMode="numeric"
                     autoComplete="one-time-code"
-                    placeholder="000000"
-                    className="text-center text-2xl font-black tracking-[0.45em]"
-                    minLength={6}
-                    maxLength={6}
+                    placeholder="Enter your code"
+                    className="text-center text-2xl font-black tracking-[0.2em]"
+                    minLength={MIN_OTP_LENGTH}
+                    maxLength={MAX_OTP_LENGTH}
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isSubmitting || otpCode.length !== 6}>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isSubmitting || otpCode.length < MIN_OTP_LENGTH || otpCode.length > MAX_OTP_LENGTH}
+                >
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
                   Confirm and enter
                 </Button>
