@@ -134,6 +134,20 @@ const Auth = () => {
       });
 
       if (error) {
+        if (error.message.toLowerCase().includes("email not confirmed")) {
+          const { error: resendError } = await supabase.auth.resend({
+            type: "signup",
+            email: loginEmail,
+            options: { emailRedirectTo: `${window.location.origin}/` },
+          });
+          if (resendError) throw resendError;
+          setPendingEmail(loginEmail);
+          setOtpType("signup");
+          setOtpCode("");
+          setStatusMessage("Your account still needs confirmation. We sent you a new code.");
+          setAuthView("otp");
+          return;
+        }
         if (error.message.includes("Invalid login credentials")) {
           toast.error("Invalid email or password");
         } else {
