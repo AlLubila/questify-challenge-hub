@@ -98,7 +98,7 @@ export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) =
             <X className="w-4 h-4 mr-2" />
             Cancel
           </Button>
-          <Button size="sm" onClick={handleSave} className="bg-gradient-primary">
+          <Button size="sm" onClick={handleSave} className="bg-primary">
             <Check className="w-4 h-4 mr-2" />
             Apply
           </Button>

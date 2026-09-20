@@ -14,7 +14,7 @@ export const StatsCard = ({
   title,
   value,
   subtitle,
-  gradient = "bg-gradient-primary",
+  gradient = "bg-primary",
 }: StatsCardProps) => {
   return (
     <Card className="p-6 bg-card border-border hover:shadow-glow transition-all duration-300 hover:scale-105 animate-fade-in">

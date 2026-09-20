@@ -200,7 +200,7 @@ export const RewardsManagement = () => {
           </Dialog>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-gradient-primary">
+              <Button className="bg-primary">
                 <Plus className="w-4 h-4 mr-2" />
                 Create Reward
               </Button>

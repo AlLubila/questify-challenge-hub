@@ -5,7 +5,7 @@ test("renders the public landing page", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: /Browse a brief\. Submit original work\. Earn recognition\./i })).toBeVisible();
   await expect(page.getByRole("button", { name: /Browse challenges/i })).toBeVisible();
-  await expect(page).toHaveTitle(/Questify/i);
+  await expect(page).toHaveTitle(/Wavazo/i);
 });
 
 test("redirects private and staff routes to sign in", async ({ page }) => {

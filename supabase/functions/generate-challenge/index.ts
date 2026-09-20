@@ -78,7 +78,7 @@ serve(async (req) => {
 
     const recentIdeas = (recentChallenges ?? []).map((item) => `${item.title}: ${item.description}`).join("\n");
 
-    const systemPrompt = `You are Questify's senior challenge editor. Generate ${type} creator missions for a young audience. Every mission must be original, safe, cheap to attempt, visually obvious in the first second, and easy to explain in one TikTok caption.
+    const systemPrompt = `You are Wavazo's senior challenge editor. Generate ${type} creator missions for a young audience. Every mission must be original, safe, cheap to attempt, visually obvious in the first second, and easy to explain in one TikTok caption.
 
 Editorial rules:
 - Build around a surprising constraint, transformation, social remix, or playful real-world observation—not a generic photo prompt.
@@ -119,7 +119,7 @@ Each challenge should feel like a real editorial commission with genuine viral p
             type: "function",
             function: {
               name: "create_challenges",
-              description: "Generate creative challenges for the Questify app",
+              description: "Generate creative challenges for the Wavazo app",
               parameters: {
                 type: "object",
                 properties: {

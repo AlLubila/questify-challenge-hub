@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { SubmissionCard } from "@/components/SubmissionCard";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, Loader2 } from "lucide-react";
+import { Flag, Loader2, Camera } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -229,7 +229,7 @@ const Feed = () => {
           <div className="text-center space-y-2">
             <h1 className="text-4xl font-bold">Community Feed</h1>
             <p className="text-muted-foreground text-lg">
-              Browse recent submissions from the Questify community.
+              Browse recent submissions from the Wavazo community.
             </p>
           </div>
 
@@ -276,7 +276,7 @@ const Feed = () => {
                 <div className="max-w-2xl mx-auto">
                   <div className="flex flex-col items-center justify-center py-20 text-center">
                     <div className="w-20 h-20 mb-6 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Sparkles className="w-10 h-10 text-primary" />
+                      <Flag className="w-10 h-10 text-primary" />
                     </div>
                     <h3 className="text-2xl font-bold mb-3">
                       {debouncedSearch ? "No results found" : "No submissions yet"}
@@ -288,7 +288,7 @@ const Feed = () => {
                     </p>
                     {!debouncedSearch && (
                       <Button onClick={() => navigate('/')}>
-                        <Sparkles className="w-4 h-4 mr-2" />
+                        <Flag className="w-4 h-4 mr-2" />
                         Explore Challenges
                       </Button>
                     )}
@@ -322,7 +322,7 @@ const Feed = () => {
               ) : (
                 <div className="max-w-2xl mx-auto">
                   <div className="flex flex-col items-center justify-center py-20 text-center">
-                    <Sparkles className="w-16 h-16 mb-4 text-muted-foreground" />
+                    <Camera className="w-16 h-16 mb-4 text-muted-foreground" />
                     <h3 className="text-xl font-bold mb-2">
                       {debouncedSearch ? "No results found" : "No submissions from followed users"}
                     </h3>

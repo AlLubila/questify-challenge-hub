@@ -137,7 +137,7 @@ export const ReEditSubmissionDialog = ({ submission, children }: ReEditSubmissio
               <Button
                 onClick={() => updateMutation.mutate()}
                 disabled={updateMutation.isPending}
-                className="w-full bg-gradient-primary"
+                className="w-full bg-primary"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 {updateMutation.isPending ? "Updating..." : "Update Submission"}

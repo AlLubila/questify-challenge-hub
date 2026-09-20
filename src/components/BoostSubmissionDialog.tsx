@@ -23,7 +23,7 @@ const BOOST_OPTIONS = [
     price: 1,
     multiplier: "2x",
     description: "Double your submission visibility",
-    color: "from-blue-500 to-cyan-500",
+    color: "bg-accent text-accent-foreground",
   },
   {
     type: "medium" as BoostType,
@@ -31,7 +31,7 @@ const BOOST_OPTIONS = [
     price: 2,
     multiplier: "5x",
     description: "5x your submission visibility",
-    color: "from-purple-500 to-pink-500",
+    color: "bg-secondary text-secondary-foreground",
   },
   {
     type: "large" as BoostType,
@@ -39,7 +39,7 @@ const BOOST_OPTIONS = [
     price: 3,
     multiplier: "10x",
     description: "10x your submission visibility",
-    color: "from-orange-500 to-red-500",
+    color: "bg-primary text-primary-foreground",
   },
 ];
 
@@ -73,13 +73,13 @@ export const BoostSubmissionDialog = ({ submissionId, children }: BoostSubmissio
               disabled={isPurchasing}
               className={cn(
                 "w-full p-4 rounded-lg border-2 border-border hover:border-primary transition-all",
-                "bg-gradient-to-r hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed",
+                "bg-card hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed",
                 "flex items-center justify-between group"
               )}
             >
               <div className="flex items-center gap-3">
-                <div className={cn("p-2 rounded-full bg-gradient-to-br", option.color)}>
-                  <TrendingUp className="h-5 w-5 text-white" />
+                <div className={cn("p-2 rounded-full", option.color)}>
+                  <TrendingUp className="h-5 w-5" />
                 </div>
                 <div className="text-left">
                   <p className="font-semibold">{option.name}</p>
@@ -87,7 +87,7 @@ export const BoostSubmissionDialog = ({ submissionId, children }: BoostSubmissio
                 </div>
               </div>
               <div className="flex flex-col items-end">
-                <span className={cn("text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent", option.color)}>
+                <span className="text-2xl font-bold text-foreground">
                   {option.multiplier}
                 </span>
                 <span className="text-sm font-medium">${option.price}</span>
