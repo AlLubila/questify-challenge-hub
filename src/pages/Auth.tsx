@@ -26,10 +26,14 @@ const Auth = () => {
   const [searchParams] = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [referralCode, setReferralCode] = useState<string | null>(null);
+  const isInvitationLink = searchParams.get("mode") === "invite" ||
+    searchParams.get("type") === "invite" ||
+    window.location.hash.includes("type=invite");
   const isRecoveryLink = searchParams.get("mode") === "reset" ||
     searchParams.get("type") === "recovery" ||
     window.location.hash.includes("type=recovery");
-  const [authView, setAuthView] = useState<AuthView>(isRecoveryLink ? "reset" : "login");
+  const isPasswordSetupLink = isInvitationLink || isRecoveryLink;
+  const [authView, setAuthView] = useState<AuthView>(isPasswordSetupLink ? "reset" : "login");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const { t } = useLanguage();
 
@@ -351,8 +355,14 @@ const Auth = () => {
             <div className="space-y-6">
               <div className="space-y-2 text-center">
                 <KeyRound className="mx-auto h-10 w-10 text-primary" aria-hidden="true" />
-                <h2 className="text-2xl font-bold">Choose a new password</h2>
-                <p className="text-sm text-muted-foreground">Use at least 6 characters for your new password.</p>
+                <h2 className="text-2xl font-bold">
+                  {isInvitationLink ? "Create your password" : "Choose a new password"}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  {isInvitationLink
+                    ? "Your invitation is confirmed. Create a password to finish setting up your account."
+                    : "Use at least 6 characters for your new password."}
+                </p>
               </div>
               {statusMessage && (
                 <p className="rounded-lg border border-success/30 bg-success/10 p-3 text-sm" role="status">
