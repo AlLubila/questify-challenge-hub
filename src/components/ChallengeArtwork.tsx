@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface ChallengeArtworkProps {
@@ -8,9 +8,8 @@ interface ChallengeArtworkProps {
 }
 
 export const ChallengeArtwork = ({ src, alt, className }: ChallengeArtworkProps) => {
-  const [failed, setFailed] = useState(!src);
-
-  useEffect(() => setFailed(!src), [src]);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const failed = !src || failedSrc === src;
 
   if (!failed && src) {
     return (
@@ -19,7 +18,7 @@ export const ChallengeArtwork = ({ src, alt, className }: ChallengeArtworkProps)
         alt={alt}
         loading="lazy"
         className={cn("h-full w-full object-cover", className)}
-        onError={() => setFailed(true)}
+        onError={() => setFailedSrc(src)}
       />
     );
   }
