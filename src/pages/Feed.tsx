@@ -229,7 +229,7 @@ const Feed = () => {
           <div className="text-center space-y-2">
             <h1 className="text-4xl font-bold">Community Feed</h1>
             <p className="text-muted-foreground text-lg">
-              Browse recent submissions from the Wavazo community.
+              Browse recent submissions from the A Challenge community.
             </p>
           </div>
 

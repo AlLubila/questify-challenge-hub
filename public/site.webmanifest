@@ -1,0 +1,17 @@
+{
+  "name": "A Challenge Creative Community",
+  "short_name": "A Challenge",
+  "description": "Original weekly photo and video challenges for creators.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b2852",
+  "theme_color": "#0b2852",
+  "icons": [
+    {
+      "src": "/a-challenge-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

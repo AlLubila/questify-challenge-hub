@@ -341,7 +341,7 @@ const SubmissionCardContent = ({ submission }: {
                   <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={comment.profiles?.avatar_url || undefined}
-                      alt={comment.profiles?.username || "Wavazo creator"}
+                      alt={comment.profiles?.username || "A Challenge creator"}
                     />
                     <AvatarFallback className="text-xs bg-primary text-primary-foreground">
                       {(comment.profiles?.username || "Q").substring(0, 2).toUpperCase()}
@@ -350,7 +350,7 @@ const SubmissionCardContent = ({ submission }: {
                   <div className="flex-1">
                     <p className="text-sm">
                       <span className="font-bold">
-                        {comment.profiles?.display_name || comment.profiles?.username || "Wavazo creator"}
+                        {comment.profiles?.display_name || comment.profiles?.username || "A Challenge creator"}
                       </span>{" "}
                       <span className="text-muted-foreground">{comment.content}</span>
                     </p>

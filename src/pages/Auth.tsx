@@ -11,7 +11,7 @@ import { Mail, Chrome, ArrowLeft, KeyRound, Loader2, Flag } from "lucide-react";
 import { z } from "zod";
 import { Navigate, useLocation, useSearchParams } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { WavazoLogo } from "@/components/WavazoLogo";
+import { AChallengeLogo } from "@/components/AChallengeLogo";
 
 const emailSchema = z.string().trim().email("Invalid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -103,7 +103,7 @@ const Auth = () => {
       if (error) throw error;
 
       toast.success("Password updated successfully");
-      setStatusMessage("Your password has been updated. You can now continue to Wavazo.");
+      setStatusMessage("Your password has been updated. You can now continue to A Challenge.");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
@@ -225,7 +225,7 @@ const Auth = () => {
         type: otpType,
       });
       if (error) throw error;
-      toast.success("Email confirmed. Welcome to Wavazo!");
+      toast.success("Email confirmed. Welcome to A Challenge!");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "That code could not be verified");
     } finally {
@@ -283,7 +283,7 @@ const Auth = () => {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-2">
           <div className="mb-4 flex items-center justify-center">
-            <WavazoLogo className="scale-125" />
+            <AChallengeLogo className="scale-125" />
           </div>
           <p className="text-muted-foreground">
             Join the creative challenge community
@@ -353,7 +353,7 @@ const Auth = () => {
                   Update password
                 </Button>
               </form>
-              {statusMessage && <Button className="w-full" onClick={() => window.location.assign("/")}>Continue to Wavazo</Button>}
+              {statusMessage && <Button className="w-full" onClick={() => window.location.assign("/")}>Continue to A Challenge</Button>}
             </div>
           ) : authView === "otp" ? (
             <div className="space-y-6">

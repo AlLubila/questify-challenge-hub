@@ -1,6 +1,6 @@
-# Wavazo Challenge Hub
+# A Challenge
 
-Wavazo is a responsive challenge platform where creators discover daily and weekly challenges, submit image or video entries, vote and comment, earn badges, follow other creators, and manage boosts or a Creator Pass subscription.
+A Challenge is a responsive creative platform where creators discover weekly missions, submit image or video entries, vote and comment, earn badges, follow other creators, and manage boosts or a Creator Pass subscription.
 
 ## Architecture
 
