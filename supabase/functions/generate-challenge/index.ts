@@ -6,6 +6,15 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const MONEY_REWARD_PATTERN = /(?:[$€£]\s?\d|\d[\d.,]*\s?(?:usd|eur|gbp|dollars?|euros?|pounds?)\b|\bcash\b)/i;
+
+const safeReward = (reward: unknown, points: number) => {
+  if (typeof reward !== "string" || !reward.trim() || MONEY_REWARD_PATTERN.test(reward)) {
+    return `${points} points + Weekly Spotlight badge`;
+  }
+  return reward.trim();
+};
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -58,7 +67,9 @@ serve(async (req) => {
       throw new Error("Unauthorized: Admin access required");
     }
 
-    const { type = 'daily', count = 1 } = await req.json();
+    const requestBody = await req.json();
+    const type = requestBody.type ?? "daily";
+    const count = requestBody.count ?? (type === "weekly" ? 5 : 1);
 
     // Validate input
     if (!type || !["daily", "weekly"].includes(type)) {
@@ -209,7 +220,7 @@ Each challenge should feel like a real editorial commission with genuine viral p
     const challengesToInsert = generatedChallenges.map((challenge: any) => ({
       title: challenge.title,
       description: challenge.description,
-      prize: challenge.prize,
+      prize: safeReward(challenge.prize, challenge.points),
       difficulty: challenge.difficulty,
       points: challenge.points,
       challenge_type: type,

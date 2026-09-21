@@ -78,8 +78,8 @@ export const notifySubmissionRejected = async (userId: string, challengeTitle: s
 export const notifyPrizeWon = async (userId: string, prize: string, challengeTitle: string) => {
   return sendPushNotification({
     userId,
-    title: 'You Won a Prize! 🏆',
-    body: `Congratulations! You won ${prize} in ${challengeTitle}`,
+    title: 'You Earned a Reward! 🏆',
+    body: `Congratulations! You earned a challenge reward in ${challengeTitle}`,
     type: 'prize_won',
     url: '/profile',
     data: { prize },

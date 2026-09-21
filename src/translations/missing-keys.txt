@@ -51,7 +51,7 @@
 // Challenge Detail additions
 "challenge.back": "Back",
 "challenge.joinChallenge": "Join Challenge",
-"challenge.prize": "Prize",
+"challenge.prize": "Reward",
 "challenge.difficulty": "Difficulty",
 "challenge.points": "Points",
 "challenge.timeLeft": "Time Left",

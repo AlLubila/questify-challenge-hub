@@ -181,7 +181,7 @@ export const CreateChallenge = () => {
                 id="prize"
                 value={prize}
                 onChange={(e) => setPrize(e.target.value)}
-                placeholder="$100 Cash"
+                placeholder="500 points + Spotlight badge"
                 maxLength={50}
               />
             </div>

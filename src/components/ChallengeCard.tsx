@@ -5,6 +5,7 @@ import { Trophy, Clock, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ChallengeArtwork } from "@/components/ChallengeArtwork";
+import { publicRewardLabel } from "@/lib/rewards";
 
 interface ChallengeCardProps {
   id: string;
@@ -70,7 +71,7 @@ export const ChallengeCard = ({
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Trophy className="w-4 h-4 text-accent" />
-            <span>{prize}</span>
+            <span>{publicRewardLabel(prize, points)}</span>
           </div>
           <div className="flex items-center gap-1">
             <Users className="w-4 h-4 text-primary" />

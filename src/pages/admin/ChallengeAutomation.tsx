@@ -64,11 +64,11 @@ export const ChallengeAutomation = () => {
         <Card className="border-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2"><CalendarClock className="h-5 w-5 text-primary" /> Schedule</CardTitle>
-            <CardDescription>The scheduler checks hourly and creates at most one AI weekly challenge per week.</CardDescription>
+            <CardDescription>The scheduler checks hourly and maintains a batch of five AI weekly challenges.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex items-center justify-between rounded-xl border-2 border-border p-4">
-              <div><Label htmlFor="automation-enabled">Automatic publishing</Label><p className="text-sm text-muted-foreground">Generate and publish a fresh mission every week.</p></div>
+              <div><Label htmlFor="automation-enabled">Automatic publishing</Label><p className="text-sm text-muted-foreground">Generate and publish five fresh missions every week.</p></div>
               <Switch id="automation-enabled" checked={enabled} onCheckedChange={setEnabled} />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -81,8 +81,8 @@ export const ChallengeAutomation = () => {
         </Card>
 
         <Card className="h-fit border-2 border-primary bg-primary text-primary-foreground shadow-card">
-          <CardHeader><CardTitle className="flex items-center gap-2"><Flag className="h-5 w-5" /> Generate now</CardTitle><CardDescription className="text-primary-foreground/70">Ask the editor for one publish-ready weekly mission and matching artwork.</CardDescription></CardHeader>
-          <CardContent><Button variant="secondary" className="w-full border-2 border-background" onClick={() => generate.mutate({ type: "weekly", count: 1 })} disabled={generate.isPending}>{generate.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Flag className="mr-2 h-4 w-4" />}Create weekly mission</Button></CardContent>
+          <CardHeader><CardTitle className="flex items-center gap-2"><Flag className="h-5 w-5" /> Generate now</CardTitle><CardDescription className="text-primary-foreground/70">Ask the editor for five distinct weekly missions with matching artwork.</CardDescription></CardHeader>
+          <CardContent><Button variant="secondary" className="w-full border-2 border-background" onClick={() => generate.mutate({ type: "weekly", count: 5 })} disabled={generate.isPending}>{generate.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Flag className="mr-2 h-4 w-4" />}Create five weekly missions</Button></CardContent>
         </Card>
       </div>
     </div>

@@ -87,7 +87,7 @@ const Wallet = () => {
               <CardDescription>{t("wallet.currentBalance")}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-4xl font-bold text-primary">${(balance / 100).toFixed(2)}</div>
+              <div className="text-4xl font-bold text-primary">{balance.toLocaleString()} points</div>
             </CardContent>
           </Card>
 
@@ -164,7 +164,7 @@ const Wallet = () => {
                       </div>
                     </div>
                     <div className={`font-semibold ${transaction.amount > 0 ? "text-green-500" : "text-red-500"}`}>
-                      {transaction.amount > 0 ? "+" : ""}${(Math.abs(transaction.amount) / 100).toFixed(2)}
+                      {transaction.amount > 0 ? "+" : ""}{Math.abs(transaction.amount).toLocaleString()} points
                     </div>
                   </div>
                 ))}

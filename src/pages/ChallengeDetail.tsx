@@ -17,6 +17,7 @@ import { ImageEditorAdvanced } from "@/components/ImageEditorAdvanced";
 import { useCamera } from "@/hooks/useCamera";
 import { compressImage } from "@/lib/imageCompression";
 import { Skeleton } from "@/components/ui/skeleton";
+import { publicRewardLabel } from "@/lib/rewards";
 
 const ChallengeDetail = () => {
   const { id } = useParams();
@@ -347,8 +348,8 @@ const ChallengeDetail = () => {
                   <div className="flex items-center gap-2">
                     <Trophy className="w-5 h-5 text-accent" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Prize</p>
-                      <p className="font-bold">{challenge.prize}</p>
+                      <p className="text-sm text-muted-foreground">Reward</p>
+                      <p className="font-bold">{publicRewardLabel(challenge.prize, challenge.points)}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -508,7 +509,7 @@ const ChallengeDetail = () => {
                 <Flag className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
                 <h2 className="text-2xl font-bold mb-2">Sign in to participate</h2>
                 <p className="text-muted-foreground mb-4">
-                  Create an account to submit your entry and compete for prizes!
+                  Create an account to submit your entry, earn points, and unlock badges!
                 </p>
                 <Button onClick={() => navigate("/auth")} className="bg-primary">
                   Get Started

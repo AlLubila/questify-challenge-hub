@@ -321,7 +321,7 @@ export const ChallengeModeration = () => {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="edit-challenge-prize">Prize</Label>
+                <Label htmlFor="edit-challenge-prize">Reward</Label>
                 <Input id="edit-challenge-prize" value={editForm.prize} maxLength={50} onChange={(event) => setEditForm((current) => ({ ...current, prize: event.target.value }))} />
               </div>
               <div className="space-y-2">
