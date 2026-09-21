@@ -22,6 +22,22 @@ const publicPages: Record<string, { title: string; description: string }> = {
     title: "How A Challenge Works | A Challenge",
     description: "Learn how to join A Challenge, submit original work, earn points, and participate safely.",
   },
+  "/privacy": {
+    title: "Privacy Policy | A Challenge",
+    description: "Learn how A Challenge handles account, submission, analytics, and payment-related data.",
+  },
+  "/terms": {
+    title: "Terms of Use | A Challenge",
+    description: "Read the terms that apply when using A Challenge and submitting creative work.",
+  },
+  "/cookies": {
+    title: "Cookie Policy | A Challenge",
+    description: "Learn about essential browser storage and privacy-friendly analytics on A Challenge.",
+  },
+  "/contest-rules": {
+    title: "Challenge and Contest Rules | A Challenge",
+    description: "Read the general participation, judging, originality, prize, and safety rules for A Challenge.",
+  },
 };
 
 const upsertMeta = (selector: string, attribute: "name" | "property", key: string, content: string) => {

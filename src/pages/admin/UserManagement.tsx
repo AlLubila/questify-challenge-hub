@@ -224,7 +224,7 @@ export const UserManagement = () => {
       <Card>
         <CardHeader><CardTitle>All Users</CardTitle></CardHeader>
         <CardContent className="overflow-x-auto">
-          <Table>
+          <Table className="min-w-[960px]">
             <TableHeader>
               <TableRow>
                 <TableHead>User</TableHead>

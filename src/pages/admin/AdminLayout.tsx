@@ -23,11 +23,11 @@ export const AdminLayout = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <AdminSidebar />
-        <main className="flex-1">
+        <main className="min-w-0 flex-1">
           <header className="h-14 border-b flex items-center px-4 sticky top-0 bg-background z-10">
             <SidebarTrigger />
           </header>
-          <div className="p-6">
+          <div className="p-4 md:p-6">
             <Outlet />
           </div>
         </main>

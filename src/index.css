@@ -19,7 +19,7 @@
     --primary-foreground: 216 72% 12%;
 
     --secondary: 5 100% 62%;
-    --secondary-foreground: 39 52% 97%;
+    --secondary-foreground: 216 72% 12%;
 
     --muted: 216 39% 26%;
     --muted-foreground: 34 20% 77%;
@@ -30,7 +30,7 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --success: 142 76% 36%;
+    --success: 142 76% 27%;
     --success-foreground: 0 0% 98%;
 
     --border: 216 29% 38%;

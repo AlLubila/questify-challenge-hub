@@ -169,7 +169,7 @@ const Index = () => {
             <div>
               <p className="font-mono text-xs font-bold uppercase tracking-[0.16em]">Your next mission</p>
               <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">{t("cta.title")}</h2>
-              <p className="mt-2 max-w-2xl text-secondary-foreground/80">{t("cta.description")}</p>
+              <p className="mt-2 max-w-2xl text-secondary-foreground">{t("cta.description")}</p>
             </div>
             <Button
               size="lg"

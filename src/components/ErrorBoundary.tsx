@@ -2,6 +2,7 @@ import React, { Component, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { reportClientError } from '@/lib/observability';
 
 interface Props {
   children: ReactNode;
@@ -46,15 +47,10 @@ export class ErrorBoundary extends Component<Props, State> {
       this.props.onError(error, errorInfo);
     }
 
-    // Log to error reporting service in production
-    if (import.meta.env.PROD) {
-      // TODO: Send to error tracking service (e.g., Sentry)
-      console.error('Production error:', {
-        error: error.toString(),
-        componentStack: errorInfo.componentStack,
-        timestamp: new Date().toISOString(),
-      });
-    }
+    reportClientError(error, {
+      source: 'react-error-boundary',
+      componentStack: errorInfo.componentStack,
+    });
   }
 
   handleReset = () => {

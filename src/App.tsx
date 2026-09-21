@@ -15,6 +15,9 @@ import { RoleRoute } from "@/components/RoleRoute";
 import Leaderboard from "./pages/Leaderboard";
 import Feed from "./pages/Feed";
 import { RouteMetadata } from "@/components/RouteMetadata";
+import { SiteFooter } from "@/components/SiteFooter";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const Index = lazy(() => import("./pages/Index"));
 const Auth = lazy(() => import("./pages/Auth"));
@@ -35,6 +38,7 @@ const PaymentAnalytics = lazy(() => import("@/pages/admin/PaymentAnalytics"));
 const CreateChallenge = lazy(() => import("@/pages/admin/CreateChallenge").then((module) => ({ default: module.CreateChallenge })));
 const RewardsManagement = lazy(() => import("@/pages/admin/RewardsManagement").then((module) => ({ default: module.RewardsManagement })));
 const ChallengeAutomation = lazy(() => import("@/pages/admin/ChallengeAutomation").then((module) => ({ default: module.ChallengeAutomation })));
+const Legal = lazy(() => import("@/pages/Legal"));
 
 const queryClient = new QueryClient();
 
@@ -64,6 +68,10 @@ const AppContent = () => {
         <Route path="/referrals" element={<PageErrorBoundary pageName="Referrals"><Referrals /></PageErrorBoundary>} />
       </Route>
       <Route path="/faq" element={<PageErrorBoundary pageName="FAQ"><FAQ /></PageErrorBoundary>} />
+      <Route path="/privacy" element={<PageErrorBoundary pageName="Privacy Policy"><Legal /></PageErrorBoundary>} />
+      <Route path="/terms" element={<PageErrorBoundary pageName="Terms of Use"><Legal /></PageErrorBoundary>} />
+      <Route path="/cookies" element={<PageErrorBoundary pageName="Cookie Policy"><Legal /></PageErrorBoundary>} />
+      <Route path="/contest-rules" element={<PageErrorBoundary pageName="Challenge Rules"><Legal /></PageErrorBoundary>} />
       <Route element={<RoleRoute allowedRoles={["admin", "moderator"]} />}>
         <Route path="/admin" element={<PageErrorBoundary pageName="Admin"><AdminLayout /></PageErrorBoundary>}>
           <Route index element={<AdminDashboard />} />
@@ -83,6 +91,9 @@ const AppContent = () => {
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
       </Routes>
+      <SiteFooter />
+      <VercelAnalytics />
+      <SpeedInsights />
     </Suspense>
   );
 };

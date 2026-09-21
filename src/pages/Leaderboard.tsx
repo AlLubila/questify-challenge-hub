@@ -352,7 +352,7 @@ const Leaderboard = () => {
             />
 
             <Select value={selectedChallenge} onValueChange={setSelectedChallenge}>
-              <SelectTrigger>
+              <SelectTrigger aria-label="Choose a completed challenge">
                 <SelectValue placeholder="Select a challenge" />
               </SelectTrigger>
               <SelectContent>
