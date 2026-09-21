@@ -25,7 +25,11 @@ export const SiteFooter = () => {
         </nav>
       </div>
       <div className="container mt-8 border-t border-border pt-5 text-xs text-muted-foreground">
-        © {new Date().getFullYear()} A Challenge. All rights reserved.
+        <p>© {new Date().getFullYear()} A Challenge. All rights reserved.</p>
+        <address className="mt-2 not-italic">
+          Operated by Albi Lubila Mayamwene · Aleja Zygmunta Krasińskiego 28, Kraków, Poland ·{" "}
+          <a className="font-semibold text-primary underline-offset-4 hover:underline" href="mailto:alweb003@gmail.com">alweb003@gmail.com</a>
+        </address>
       </div>
     </footer>
   );

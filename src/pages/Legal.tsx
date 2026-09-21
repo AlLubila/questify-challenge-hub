@@ -4,18 +4,24 @@ import { Link, useLocation } from "react-router-dom";
 type Section = { title: string; paragraphs: string[] };
 type LegalDocument = { title: string; introduction: string; sections: Section[] };
 
-const updated = "September 21, 2026";
+const updated = "September 22, 2026";
+const operator = {
+  name: "Albi Lubila Mayamwene",
+  address: "Aleja Zygmunta Krasińskiego 28, Kraków, Poland",
+  email: "alweb003@gmail.com",
+};
 
 const documents: Record<string, LegalDocument> = {
   "/privacy": {
     title: "Privacy Policy",
     introduction: "This policy explains what A Challenge collects, why it is used, and the choices available to you.",
     sections: [
+      { title: "Controller and contact", paragraphs: ["A Challenge is operated by Albi Lubila Mayamwene, who is the controller of personal data processed through the service. Contact details are provided above and in the site footer."] },
       { title: "Information we collect", paragraphs: ["We process account details, profile information, challenge submissions, moderation records, participation activity, and support communications that you choose to provide.", "Payment providers may process billing information. A Challenge should store only the provider identifiers and transaction records needed to operate purchases, rewards, and refunds."] },
-      { title: "How information is used", paragraphs: ["Information is used to operate accounts, publish entries you choose to share, rank eligible participation, prevent abuse, moderate content, administer prizes, improve performance, and meet legal obligations."] },
+      { title: "Purposes and legal bases", paragraphs: ["Information is used to operate accounts, publish entries you choose to share, rank eligible participation, prevent abuse, moderate content, administer prizes, improve performance, and meet legal obligations.", "Depending on the activity, processing is based on performing the service contract, compliance with legal obligations, legitimate interests in securing and improving the service, or consent where it is specifically requested. You may withdraw consent at any time without affecting earlier lawful processing."] },
       { title: "Analytics and error monitoring", paragraphs: ["A Challenge uses privacy-friendly Vercel Analytics, Speed Insights, and technical error reports. Error reports are limited, exclude email addresses when detected, and are used to diagnose failures and improve reliability."] },
-      { title: "Sharing and retention", paragraphs: ["Public profile fields and approved submissions can be visible to other visitors. Service providers such as Supabase, Vercel, payment processors, and email delivery providers process data only to provide the service.", "Data is kept only as long as needed for the service, security, accounting, dispute resolution, or legal requirements. You may request access, correction, export, or deletion where applicable."] },
-      { title: "Your choices", paragraphs: ["You can edit profile information, remove optional content where the product allows it, or request account deletion. Essential authentication storage is required to keep you signed in securely."] },
+      { title: "Sharing, transfers, and retention", paragraphs: ["Public profile fields and approved submissions can be visible to other visitors. Service providers such as Supabase, Vercel, payment processors, and email delivery providers process data only to provide the service.", "Where a provider processes data outside the European Economic Area, A Challenge relies on an applicable adequacy decision or approved safeguards such as standard contractual clauses.", "Account data is normally kept while the account is active and is then deleted or anonymised when no longer needed. Records may be retained longer where required for security, accounting, disputes, backups, or legal obligations."] },
+      { title: "Your data protection rights", paragraphs: ["Subject to applicable law, you may request access, correction, deletion, restriction, portability, or object to processing. You can edit profile information, remove optional content where the product allows it, or request account deletion.", "Requests can be sent to the email address above. You also have the right to lodge a complaint with the Polish supervisory authority, the President of the Personal Data Protection Office (UODO). Essential authentication storage is required to keep you signed in securely."] },
       { title: "Children and international use", paragraphs: ["Users who are below the age of digital consent in their country must use the service only with permission from a parent or legal guardian. Local privacy rights may vary by country."] },
     ],
   },
@@ -29,6 +35,7 @@ const documents: Record<string, LegalDocument> = {
       { title: "Moderation and enforcement", paragraphs: ["A Challenge may reject, hide, or remove entries and may restrict accounts that violate these terms, challenge rules, safety requirements, or applicable law. Material decisions may be reviewed when an appeal channel is available."] },
       { title: "Rewards and availability", paragraphs: ["Points may be promotional and have no cash value unless a challenge expressly states otherwise. Features, schedules, prizes, and availability may change, but published commitments will be handled fairly and transparently."] },
       { title: "Disclaimers", paragraphs: ["The service is provided on an as-available basis. Nothing in these terms excludes rights or liabilities that cannot legally be excluded in your jurisdiction."] },
+      { title: "Governing law", paragraphs: ["These terms are governed by Polish law. If you are a consumer, this does not remove mandatory protections granted by the law of your country of residence. Disputes may be brought before a court with jurisdiction under applicable law."] },
     ],
   },
   "/cookies": {
@@ -67,6 +74,14 @@ const Legal = () => {
           <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">{document.title}</h1>
           <p className="mt-4 text-sm text-muted-foreground">Last updated: {updated}</p>
           <p className="mt-7 text-lg leading-8 text-muted-foreground">{document.introduction}</p>
+          <aside className="mt-7 rounded-xl border-2 border-border bg-card p-5 text-sm leading-6">
+            <p className="font-bold text-foreground">Service operator and data controller</p>
+            <address className="mt-2 not-italic text-muted-foreground">
+              {operator.name}<br />
+              {operator.address}<br />
+              <a className="font-semibold text-primary underline-offset-4 hover:underline" href={`mailto:${operator.email}`}>{operator.email}</a>
+            </address>
+          </aside>
           <div className="mt-10 space-y-10">
             {document.sections.map((section) => (
               <section key={section.title} aria-labelledby={section.title.replace(/\s+/g, "-").toLowerCase()}>
@@ -78,7 +93,7 @@ const Legal = () => {
             ))}
           </div>
           <aside className="mt-12 rounded-xl border-2 border-border bg-muted/40 p-5 text-sm leading-6 text-muted-foreground">
-            Questions or rights requests can be raised through the support channel identified in A Challenge account communications. See the <Link className="font-semibold text-primary underline-offset-4 hover:underline" to="/faq">Help page</Link> for general guidance.
+            Questions, privacy requests, and legal notices can be sent to <a className="font-semibold text-primary underline-offset-4 hover:underline" href={`mailto:${operator.email}`}>{operator.email}</a>. See the <Link className="font-semibold text-primary underline-offset-4 hover:underline" to="/faq">Help page</Link> for general guidance.
           </aside>
         </article>
       </main>
