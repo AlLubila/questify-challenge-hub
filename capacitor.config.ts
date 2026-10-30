@@ -1,24 +1,17 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.d985fe2fad17429990932e6efeb7e6b6',
-  appName: 'Wavazo',
+  appId: 'com.albilubila.achallenge',
+  appName: 'A Challenge',
   webDir: 'dist',
-  server: {
-    url: 'https://d985fe2f-ad17-4299-9093-2e6efeb7e6b6.lovableproject.com?forceHideBadge=true',
-    cleartext: true
-  },
+  // Ship the reviewed bundle inside the app. Production never loads a remote
+  // development server and does not allow unencrypted HTTP.
+  backgroundColor: '#0b2852',
+  server: { androidScheme: 'https', cleartext: false },
+  ios: { contentInset: 'never' },
   plugins: {
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert']
-    },
-    Camera: {
-      ios: {
-        photoLibraryAccess: 'all'
-      },
-      android: {
-        permissions: ['camera', 'photos']
-      }
     }
   }
 };

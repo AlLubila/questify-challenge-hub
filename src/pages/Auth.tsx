@@ -13,6 +13,8 @@ import { Navigate, useLocation, useNavigate, useSearchParams } from "react-route
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AChallengeLogo } from "@/components/AChallengeLogo";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { Browser } from '@capacitor/browser';
+import { authRedirectUrl, isNativeApp } from '@/lib/mobile';
 
 const emailSchema = z.string().trim().email("Invalid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -37,6 +39,7 @@ const Auth = () => {
   const isPasswordSetupLink = isInvitationLink || isRecoveryLink;
   const [authView, setAuthView] = useState<AuthView>(isPasswordSetupLink ? "reset" : "login");
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  useEffect(() => { if (isPasswordSetupLink) setAuthView("reset"); }, [isPasswordSetupLink]);
   const { t } = useLanguage();
 
   // Login form state
@@ -81,7 +84,7 @@ const Auth = () => {
     try {
       const email = emailSchema.parse(recoveryEmail);
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth?mode=reset`,
+        redirectTo: authRedirectUrl('/auth?mode=reset'),
       });
       if (error) throw error;
       setStatusMessage("If an account exists for this email, a secure reset link is on its way.");
@@ -144,7 +147,7 @@ const Auth = () => {
           const { error: resendError } = await supabase.auth.resend({
             type: "signup",
             email: loginEmail,
-            options: { emailRedirectTo: `${window.location.origin}/` },
+            options: { emailRedirectTo: authRedirectUrl() },
           });
           if (resendError) throw resendError;
           setPendingEmail(loginEmail);
@@ -210,7 +213,7 @@ const Auth = () => {
       passwordSchema.parse(signupPassword);
       usernameSchema.parse(signupUsername);
 
-      const redirectUrl = `${window.location.origin}/`;
+      const redirectUrl = authRedirectUrl();
 
       const { error } = await supabase.auth.signUp({
         email: signupEmail,
@@ -299,15 +302,18 @@ const Auth = () => {
   const handleGoogleLogin = async () => {
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/`,
+          redirectTo: authRedirectUrl(),
+          skipBrowserRedirect: isNativeApp(),
         },
       });
 
       if (error) {
         toast.error(t(error.message));
+      } else if (isNativeApp() && data.url) {
+        await Browser.open({ url: data.url });
       }
     } catch (error) {
       toast.error(t("Failed to sign in with Google"));
@@ -494,6 +500,7 @@ const Auth = () => {
                 {t("Forgot your password?")}
               </Button>
 
+              {!isNativeApp() && <>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t" />
@@ -513,6 +520,7 @@ const Auth = () => {
                 <Chrome className="w-4 h-4 mr-2" />
                 Google
               </Button>
+              </>}
             </TabsContent>
 
             <TabsContent value="signup" className="space-y-4">
@@ -580,6 +588,7 @@ const Auth = () => {
                 </Button>
               </form>
 
+              {!isNativeApp() && <>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t" />
@@ -599,6 +608,7 @@ const Auth = () => {
                 <Chrome className="w-4 h-4 mr-2" />
                 Google
               </Button>
+              </>}
             </TabsContent>
           </Tabs>
           )}

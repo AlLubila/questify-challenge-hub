@@ -18,6 +18,7 @@ import { RouteMetadata } from "@/components/RouteMetadata";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { NativeAppLifecycle } from "@/components/NativeAppLifecycle";
 
 const Index = lazy(() => import("./pages/Index"));
 const Auth = lazy(() => import("./pages/Auth"));
@@ -107,6 +108,7 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <LanguageProvider>
+              <NativeAppLifecycle />
               <RouteMetadata />
               <AppContent />
             </LanguageProvider>

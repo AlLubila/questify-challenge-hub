@@ -2,6 +2,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 import { brokeredPreviewStorage } from './previewAuthStorage';
+import { isNativeApp } from '@/lib/mobile';
 
 // These are public browser credentials, not server secrets. Keep production
 // usable if a hosting environment is rebuilt before its VITE variables are set.
@@ -18,5 +19,6 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     storage: brokeredPreviewStorage(),
     persistSession: true,
     autoRefreshToken: true,
+    ...(isNativeApp() ? { flowType: 'pkce' as const, detectSessionInUrl: false } : {}),
   }
 });

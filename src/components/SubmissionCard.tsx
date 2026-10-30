@@ -1,4 +1,5 @@
 import { localizeChallenge } from "@/lib/localizedContent";
+import { isNativeApp } from '@/lib/mobile';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -323,7 +324,7 @@ const SubmissionCardContent = ({ submission }: {
           <MessageCircle className="w-5 h-5" />
           <span className="font-bold">{comments?.length || 0}</span>
         </Button>
-        {user && user.id === submission.user_id && (
+        {user && user.id === submission.user_id && !isNativeApp() && (
           <BoostSubmissionDialog submissionId={submission.id}>
             <Button
               variant="ghost"

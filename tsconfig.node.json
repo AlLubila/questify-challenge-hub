@@ -18,5 +18,5 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["vite.config.ts", "vitest.config.ts", "playwright.config.ts", "api/**/*.ts", "e2e/**/*.ts"]
+  "include": ["capacitor.config.ts", "vite.config.ts", "vitest.config.ts", "playwright.config.ts", "api/**/*.ts", "e2e/**/*.ts"]
 }

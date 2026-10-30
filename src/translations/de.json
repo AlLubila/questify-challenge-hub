@@ -656,6 +656,7 @@
   "Boost Applied Successfully! ⚡": "Boost angewendet! ⚡",
   "Creator Pass Activated! 🎉": "Creator Pass aktiviert! 🎉",
   "Referral link copied to clipboard!": "Empfehlungslink kopiert!",
+  "mobile.authFailed": "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuche es erneut.",
   "Home": "Startseite",
   "Challenges": "Challenges",
   "Feed": "Community",
@@ -1046,5 +1047,6 @@
   "Deleted preset: {name}": "Vorgabe gelöscht: {name}",
   "Clear search": "Suche löschen",
   "Video submission for {title}": "Videobeitrag für {title}",
-  "Submission for {title}": "Beitrag für {title}"
+  "Submission for {title}": "Beitrag für {title}",
+  "Sign-in could not be completed. Please try again.": "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuche es erneut."
 }

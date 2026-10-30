@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { isNativeApp } from '@/lib/mobile';
 
 export type BoostType = "small" | "medium" | "large";
 
@@ -9,6 +10,7 @@ export const useBoostTicket = () => {
 
   const purchaseBoost = useMutation({
     mutationFn: async ({ boostType, submissionId }: { boostType: BoostType; submissionId: string }) => {
+      if (isNativeApp()) throw new Error('Purchases are not available in the free mobile edition.');
       const { data, error } = await supabase.functions.invoke("create-boost-checkout", {
         body: { boostType, submissionId, requestId: crypto.randomUUID() },
       });
