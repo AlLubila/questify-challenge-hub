@@ -83,15 +83,7 @@ const Feed = () => {
             display_name,
             avatar_url
           ),
-          challenges (
-            id,
-            title,
-            description,
-            translations,
-            source_language,
-            difficulty,
-            points
-          )
+          challenges (*)
         `, { count: 'exact' })
         .eq("status", "approved")
         .order("submitted_at", { ascending: false });
@@ -164,15 +156,7 @@ const Feed = () => {
             display_name,
             avatar_url
           ),
-          challenges (
-            id,
-            title,
-            description,
-            translations,
-            source_language,
-            difficulty,
-            points
-          )
+          challenges (*)
         `, { count: 'exact' })
         .eq("status", "approved")
         .in("user_id", followingIds)
