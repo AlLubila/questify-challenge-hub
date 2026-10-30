@@ -1,3 +1,4 @@
+import { dateLocales } from "@/lib/dateLocales";
 import { Header } from "@/components/Header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useWallet } from "@/hooks/useWallet";
@@ -10,7 +11,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Wallet = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { balance, transactions, isLoading } = useWallet();
   const { subscriptionData, createCheckout, isCreatingCheckout } = useSubscription();
 
@@ -87,7 +88,7 @@ const Wallet = () => {
               <CardDescription>{t("wallet.currentBalance")}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-4xl font-bold text-primary">{balance.toLocaleString()} points</div>
+              <div className="text-4xl font-bold text-primary">{balance.toLocaleString(language)} {t("points")}</div>
             </CardContent>
           </Card>
 
@@ -103,7 +104,7 @@ const Wallet = () => {
                   <Badge variant="default">{t("wallet.active")}</Badge>
                   {subscriptionData.subscription_end && (
                     <p className="text-sm text-muted-foreground">
-                      {t("profile.renewsOn")} {format(new Date(subscriptionData.subscription_end), "PPP")}
+                      {t("profile.renewsOn")} {format(new Date(subscriptionData.subscription_end), "PPP", { locale: dateLocales[language] })}
                     </p>
                   )}
                 </>
@@ -159,12 +160,12 @@ const Wallet = () => {
                           <p className="text-sm text-muted-foreground">{transaction.description}</p>
                         )}
                         <p className="text-xs text-muted-foreground">
-                          {format(new Date(transaction.created_at), "PPp")}
+                          {format(new Date(transaction.created_at), "PPp", { locale: dateLocales[language] })}
                         </p>
                       </div>
                     </div>
                     <div className={`font-semibold ${transaction.amount > 0 ? "text-green-500" : "text-red-500"}`}>
-                      {transaction.amount > 0 ? "+" : ""}{Math.abs(transaction.amount).toLocaleString()} points
+                      {transaction.amount > 0 ? "+" : ""}{Math.abs(transaction.amount).toLocaleString(language)} {t("points")}
                     </div>
                   </div>
                 ))}

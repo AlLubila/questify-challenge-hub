@@ -18,8 +18,12 @@ import { useCamera } from "@/hooks/useCamera";
 import { compressImage } from "@/lib/imageCompression";
 import { Skeleton } from "@/components/ui/skeleton";
 import { publicRewardLabel } from "@/lib/rewards";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { localizeChallenge } from "@/lib/localizedContent";
+import { ChallengeArtwork } from "@/components/ChallengeArtwork";
 
 const ChallengeDetail = () => {
+  const { language, t } = useLanguage();
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -44,6 +48,7 @@ const ChallengeDetail = () => {
       return data;
     },
     enabled: !!id,
+    select: (challenge) => localizeChallenge(challenge, language),
   });
 
   const { data: existingSubmission } = useQuery({
@@ -116,7 +121,7 @@ const ChallengeDetail = () => {
 
       // Verify image authenticity for image submissions
       if (contentFile.type.startsWith('image/')) {
-        toast.loading("Verifying image authenticity...", { id: "verify" });
+        toast.loading(t("Verifying image authenticity..."), { id: "verify" });
         
         try {
           const { data: verifyResult, error: verifyError } = await supabase.functions.invoke(
@@ -131,32 +136,32 @@ const ChallengeDetail = () => {
 
           if (verifyError) {
             console.error("Verification error:", verifyError);
-            toast.error("Automatic verification is unavailable. Your entry remains queued for review.", { id: "verify" });
+            toast.error(t("Automatic verification is unavailable. Your entry remains queued for review."), { id: "verify" });
           } else if (verifyResult?.analysis && !verifyResult.analysis.isAuthentic) {
             toast.warning(
-              `Automatic checks flagged this entry for review: ${verifyResult.analysis.reason || "additional verification is needed"}`,
+              t(`Automatic checks flagged this entry for review: ${verifyResult.analysis.reason || "additional verification is needed"}`),
               { id: "verify", duration: 5000 }
             );
           } else {
-            toast.success("Automatic checks completed. Your entry remains queued for staff review.", { id: "verify" });
+            toast.success(t("Automatic checks completed. Your entry remains queued for staff review."), { id: "verify" });
           }
         } catch (verifyErr: unknown) {
           console.error("Verification failed:", verifyErr);
           const message = verifyErr instanceof Error ? verifyErr.message : "Image verification failed";
-          toast.error(`${message}. Your entry remains queued for review.`, { id: "verify" });
+          toast.error(t(`${message}. Your entry remains queued for review.`), { id: "verify" });
         }
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["submission"] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      toast.success("Submission received and queued for moderation.");
+      toast.success(t("Submission received and queued for moderation."));
       setContentFile(null);
       setCaption("");
       setPreview("");
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to submit entry");
+      toast.error(t(error.message || "Failed to submit entry"));
     },
   });
 
@@ -164,7 +169,7 @@ const ChallengeDetail = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 100 * 1024 * 1024) {
-        toast.error("File must be less than 100MB");
+        toast.error(t("File must be less than 100MB"));
         return;
       }
 
@@ -203,7 +208,7 @@ const ChallengeDetail = () => {
     };
     reader.readAsDataURL(editedFile);
     setIsEditing(false);
-    toast.success("Image edited successfully!");
+    toast.success(t("Image edited successfully!"));
   };
 
   const handleCameraCapture = async () => {
@@ -316,60 +321,51 @@ const ChallengeDetail = () => {
       <div className="container py-8 space-y-8">
         <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
           <ArrowLeft className="w-4 h-4" />
-          Back
+          {t("Back")}
         </Button>
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Challenge Info */}
           <div className="space-y-6">
             <Card className="overflow-hidden">
-              {challenge.image_url ? (
-                <img
-                  src={challenge.image_url}
-                  alt={challenge.title}
-                  className="h-64 w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-64 items-center justify-center bg-muted" role="img" aria-label={`${challenge.title} has no cover image`}>
-                  <Camera className="h-10 w-10 text-muted-foreground" />
-                </div>
-              )}
+              <div className="h-64"><ChallengeArtwork src={challenge.image_url} alt={challenge.title} /></div>
               <div className="p-6 space-y-4">
                 <div className="flex items-start justify-between gap-4">
                   <h1 className="text-3xl font-bold">{challenge.title}</h1>
                   <Badge className={difficultyColors[challenge.difficulty as keyof typeof difficultyColors]}>
-                    {challenge.difficulty}
+                    {t(`challenges.${challenge.difficulty}`)}
                   </Badge>
                 </div>
 
                 <p className="text-muted-foreground text-lg">{challenge.description}</p>
+                {challenge.translationMissing && <p className="text-xs text-muted-foreground">{t("content.original")}</p>}
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">
                     <Trophy className="w-5 h-5 text-accent" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Reward</p>
-                      <p className="font-bold">{publicRewardLabel(challenge.prize, challenge.points)}</p>
+                      <p className="text-sm text-muted-foreground">{t("Reward")}</p>
+                      <p className="font-bold">{publicRewardLabel(challenge.prize, challenge.points, language)}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Flag className="w-5 h-5 text-primary" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Points</p>
-                      <p className="font-bold">{challenge.points} pts</p>
+                      <p className="text-sm text-muted-foreground">{t("Points")}</p>
+                      <p className="font-bold">{challenge.points} {t("pts")}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-5 h-5 text-secondary" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Time Left</p>
-                      <p className="font-bold">{calculateTimeLeft(challenge.end_date)}</p>
+                      <p className="text-sm text-muted-foreground">{t("Time Left")}</p>
+                      <p className="font-bold">{calculateTimeLeft(challenge.end_date, language)}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Users className="w-5 h-5 text-primary" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Participants</p>
+                      <p className="text-sm text-muted-foreground">{t("Participants")}</p>
                       <p className="font-bold">{challenge.participants_count}</p>
                     </div>
                   </div>
@@ -383,12 +379,12 @@ const ChallengeDetail = () => {
             {user ? (
               existingSubmission ? (
                 <Card className="p-6">
-                  <h2 className="text-2xl font-bold mb-4">Your Submission</h2>
+                  <h2 className="text-2xl font-bold mb-4">{t("Your Submission")}</h2>
                   <div className="space-y-4">
                     <div className="aspect-video bg-muted rounded-lg overflow-hidden">
                       <img
                         src={existingSubmission.content_url}
-                        alt="Your submission"
+                        alt={t("Your submission")}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -397,18 +393,18 @@ const ChallengeDetail = () => {
                     )}
                     <Badge>{existingSubmission.status}</Badge>
                     <p className="text-sm text-muted-foreground">
-                      Submitted {new Date(existingSubmission.submitted_at).toLocaleDateString()}
+                      {t("Submitted")} {new Date(existingSubmission.submitted_at).toLocaleDateString(language)}
                     </p>
                   </div>
                 </Card>
               ) : (
                 <Card className="p-6">
-                  <h2 className="text-2xl font-bold mb-4">Submit Your Entry</h2>
+                  <h2 className="text-2xl font-bold mb-4">{t("Submit Your Entry")}</h2>
                   <div className="space-y-4">
                     {!isEditing ? (
                       <>
                         <div className="space-y-3">
-                          <Label>Capture or Upload Photo/Video</Label>
+                          <Label>{t("Capture or Upload Photo/Video")}</Label>
                           
                           {isNativePlatform && (
                             <div className="grid grid-cols-2 gap-3">
@@ -420,7 +416,7 @@ const ChallengeDetail = () => {
                                 className="w-full"
                               >
                                 <Camera className="w-4 h-4 mr-2" />
-                                Take Photo
+                                {t("Take Photo")}
                               </Button>
                               <Button
                                 type="button"
@@ -430,14 +426,14 @@ const ChallengeDetail = () => {
                                 className="w-full"
                               >
                                 <ImageIcon className="w-4 h-4 mr-2" />
-                                Choose from Gallery
+                                {t("Choose from Gallery")}
                               </Button>
                             </div>
                           )}
                           
                           <div>
                             <Label htmlFor="content" className="text-sm text-muted-foreground">
-                              {isNativePlatform ? 'Or select a file' : 'Select Photo/Video'}
+                              {isNativePlatform ? t("Or select a file") : t("Select Photo/Video")}
                             </Label>
                             <Input
                               id="content"
@@ -455,7 +451,7 @@ const ChallengeDetail = () => {
                                 {contentFile?.type.startsWith("video") ? (
                                   <video src={preview} controls className="w-full h-full" />
                                 ) : (
-                                  <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                                  <img src={preview} alt={t("Preview")} className="w-full h-full object-cover" />
                                 )}
                               </div>
                               {contentFile?.type.startsWith("image") && (
@@ -465,7 +461,7 @@ const ChallengeDetail = () => {
                                   className="w-full"
                                 >
                                   <Wand2 className="w-4 h-4 mr-2" />
-                                  Edit Image
+                                  {t("Edit Image")}
                                 </Button>
                               )}
                             </div>
@@ -473,12 +469,12 @@ const ChallengeDetail = () => {
                         </div>
 
                         <div>
-                          <Label htmlFor="caption">Caption (Optional)</Label>
+                          <Label htmlFor="caption">{t("Caption (Optional)")}</Label>
                           <Textarea
                             id="caption"
                             value={caption}
                             onChange={(e) => setCaption(e.target.value)}
-                            placeholder="Tell us about your submission..."
+                            placeholder={t("Tell us about your submission...")}
                             rows={4}
                           />
                         </div>
@@ -489,7 +485,7 @@ const ChallengeDetail = () => {
                           className="w-full bg-primary"
                         >
                           <Upload className="w-4 h-4 mr-2" />
-                          {submitMutation.isPending ? "Submitting..." : "Submit Entry"}
+                          {submitMutation.isPending ? t("Submitting...") : t("Submit Entry")}
                         </Button>
                       </>
                     ) : (
@@ -507,12 +503,12 @@ const ChallengeDetail = () => {
             ) : (
               <Card className="p-6 text-center">
                 <Flag className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                <h2 className="text-2xl font-bold mb-2">Sign in to participate</h2>
+                <h2 className="text-2xl font-bold mb-2">{t("Sign in to participate")}</h2>
                 <p className="text-muted-foreground mb-4">
-                  Create an account to submit your entry, earn points, and unlock badges!
+                  {t("Create an account to submit your entry, earn points, and unlock badges!")}
                 </p>
                 <Button onClick={() => navigate("/auth")} className="bg-primary">
-                  Get Started
+                  {t("Get Started")}
                 </Button>
               </Card>
             )}

@@ -1,3 +1,5 @@
+import { useLanguage } from "@/contexts/LanguageContext";
+import { localizeChallenge } from "@/lib/localizedContent";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
@@ -10,12 +12,14 @@ interface Challenge {
   title: string;
   difficulty: string;
   participants_count: number;
+  translations?: unknown;
+  source_language?: string;
 }
 
 const fetchTrendingChallenges = async (): Promise<Challenge[]> => {
   const url = `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/challenges`;
   const params = new URLSearchParams({
-    select: "id,title,difficulty,participants_count",
+    select: "*",
     publish_status: "eq.published",
     end_date: `gte.${new Date().toISOString()}`,
     order: "participants_count.desc",
@@ -35,10 +39,12 @@ const fetchTrendingChallenges = async (): Promise<Challenge[]> => {
 
 export const TrendingChallenges = () => {
   const navigate = useNavigate();
+  const { t, language } = useLanguage();
 
   const { data: trendingChallenges, isLoading } = useQuery({
     queryKey: ["trending-challenges"],
     queryFn: fetchTrendingChallenges,
+    select: (challenges) => challenges.map((challenge) => localizeChallenge(challenge, language)),
   });
 
   if (isLoading) {
@@ -46,7 +52,7 @@ export const TrendingChallenges = () => {
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-4">
           <Flame className="h-5 w-5 text-orange-500" />
-          <h3 className="font-semibold">Trending Challenges</h3>
+          <h3 className="font-semibold">{t("trending.title")}</h3>
         </div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
@@ -71,7 +77,7 @@ export const TrendingChallenges = () => {
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-4">
         <Flame className="h-5 w-5 text-orange-500" />
-        <h3 className="font-semibold">Trending Challenges</h3>
+        <h3 className="font-semibold">{t("trending.title")}</h3>
       </div>
       <div className="space-y-3">
         {trendingChallenges.map((challenge, index) => (
@@ -94,7 +100,7 @@ export const TrendingChallenges = () => {
                     <span>{challenge.participants_count || 0}</span>
                   </div>
                   <Badge variant="secondary" className="text-xs px-1.5 py-0">
-                    {challenge.difficulty}
+                    {t(`challenges.${challenge.difficulty}`)}
                   </Badge>
                 </div>
               </div>

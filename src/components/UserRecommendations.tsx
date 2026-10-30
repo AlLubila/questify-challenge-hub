@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FollowButton } from "@/components/FollowButton";
@@ -7,6 +8,7 @@ import { Users, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export const UserRecommendations = () => {
+  const { t, language } = useLanguage();
   const { data: recommendations, isLoading } = useRecommendations(5);
   const navigate = useNavigate();
 
@@ -15,7 +17,7 @@ export const UserRecommendations = () => {
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-4">
           <Users className="h-5 w-5 text-primary" />
-          <h3 className="font-semibold">Suggested for you</h3>
+          <h3 className="font-semibold">{t("Suggested for you")}</h3>
         </div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
@@ -41,7 +43,7 @@ export const UserRecommendations = () => {
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-4">
         <Users className="h-5 w-5 text-primary" />
-        <h3 className="font-semibold">Suggested for you</h3>
+        <h3 className="font-semibold">{t("Suggested for you")}</h3>
       </div>
       <div className="space-y-3">
         {recommendations.map((user) => (
@@ -64,7 +66,7 @@ export const UserRecommendations = () => {
               </p>
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 <TrendingUp className="h-3 w-3" />
-                <span>Level {user.level}</span>
+                <span>{t("Level")} {user.level}</span>
               </div>
             </div>
             <FollowButton userId={user.id} size="sm" variant="outline" />

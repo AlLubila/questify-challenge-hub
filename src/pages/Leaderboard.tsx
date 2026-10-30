@@ -1,3 +1,4 @@
+import { localizeChallenge } from "@/lib/localizedContent";
 import { Header } from "@/components/Header";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -28,7 +29,7 @@ interface ChallengeLeaderEntry {
 }
 
 const Leaderboard = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,7 +42,7 @@ const Leaderboard = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("challenges")
-        .select("id, title, end_date")
+        .select("*")
         .lt("end_date", new Date().toISOString())
         .order("end_date", { ascending: false })
         .limit(20);
@@ -200,11 +201,11 @@ const Leaderboard = () => {
       return (
         <Card className="p-10 text-center" role="alert">
           <Trophy className="mx-auto mb-4 h-12 w-12 text-primary" />
-          <h3 className="mb-2 text-xl font-bold">Leaderboard could not load</h3>
+          <h3 className="mb-2 text-xl font-bold">{t("Leaderboard could not load")}</h3>
           <p className="mb-5 text-muted-foreground">
             {typeof errorMessage === "string" ? errorMessage : "Please try again."}
           </p>
-          <Button onClick={() => refetch()}>Try again</Button>
+          <Button onClick={() => refetch()}>{t("Try again")}</Button>
         </Card>
       );
     }
@@ -216,7 +217,7 @@ const Leaderboard = () => {
         <Card className="p-12 text-center">
           <Trophy className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
           <h3 className="text-xl font-bold mb-2">
-            {debouncedSearch ? "No results found" : "No rankings yet"}
+            {debouncedSearch ? "No results found" : t("No rankings yet")}
           </h3>
           <p className="text-muted-foreground">
             {debouncedSearch 
@@ -233,7 +234,7 @@ const Leaderboard = () => {
         {user && currentUserEntry && currentUserRank !== undefined && currentUserRank >= 10 && (
           <Card className="p-4 bg-primary/10 border-primary/30 mb-6">
             <div className="text-center mb-3">
-              <Badge variant="secondary" className="mb-2">Your Ranking</Badge>
+              <Badge variant="secondary" className="mb-2">{t("Your Ranking")}</Badge>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-12 flex items-center justify-center">
@@ -259,7 +260,7 @@ const Leaderboard = () => {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  on {totalParticipants} participants
+                  {t("on")} {totalParticipants} {t("participants")}
                 </p>
               </div>
             </div>
@@ -269,10 +270,10 @@ const Leaderboard = () => {
         {/* Top 10 header */}
         <div className="flex items-center gap-2 mb-4">
           <Trophy className="w-5 h-5 text-primary" />
-          <h3 className="font-bold text-lg">Top 10</h3>
+          <h3 className="font-bold text-lg">{t("Top 10")}</h3>
           <Badge variant="outline" className="ml-auto">
             <Users className="w-3 h-3 mr-1" />
-            {totalParticipants} participants
+            {totalParticipants} {t("participants")}
           </Badge>
         </div>
 
@@ -303,7 +304,7 @@ const Leaderboard = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold text-lg">{entry.display_name || entry.username}</h3>
-                    {isCurrentUser && <Badge variant="secondary" className="text-xs">You</Badge>}
+                    {isCurrentUser && <Badge variant="secondary" className="text-xs">{t("You")}</Badge>}
                   </div>
                   <p className="text-sm text-muted-foreground">@{entry.username}</p>
                 </div>
@@ -320,7 +321,7 @@ const Leaderboard = () => {
                     </div>
                   </div>
                   <Badge variant="outline" className="text-xs">
-                    Score: {entry.score}
+                    {t("Score:")} {entry.score}
                   </Badge>
                 </div>
               </div>
@@ -338,9 +339,9 @@ const Leaderboard = () => {
 
         <div className="container py-8 space-y-8">
           <div className="text-center space-y-2">
-            <h1 className="text-4xl font-bold">Challenge Leaderboard</h1>
+            <h1 className="text-4xl font-bold">{t("Challenge Leaderboard")}</h1>
             <p className="text-muted-foreground text-lg">
-              Top performers based on votes and engagement
+              {t("Top performers based on votes and engagement")}
             </p>
           </div>
 
@@ -348,18 +349,18 @@ const Leaderboard = () => {
             <SearchBar
               value={searchQuery}
               onChange={setSearchQuery}
-              placeholder="Search by username..."
+              placeholder={t("Search by username...")}
             />
 
             <Select value={selectedChallenge} onValueChange={setSelectedChallenge}>
-              <SelectTrigger aria-label="Choose a completed challenge">
-                <SelectValue placeholder="Select a challenge" />
+              <SelectTrigger aria-label={t("Choose a completed challenge")}>
+                <SelectValue placeholder={t("Select a challenge")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Completed Challenges</SelectItem>
+                <SelectItem value="all">{t("All Completed Challenges")}</SelectItem>
                 {completedChallenges?.map((challenge) => (
                   <SelectItem key={challenge.id} value={challenge.id}>
-                    {challenge.title}
+                    {localizeChallenge(challenge, language).title}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -374,13 +375,13 @@ const Leaderboard = () => {
           <Card className="max-w-2xl mx-auto p-6 bg-muted/50">
             <h4 className="font-bold mb-2 flex items-center gap-2">
               <Trophy className="w-5 h-5 text-primary" />
-              How the Leaderboard Works
+              {t("How the Leaderboard Works")}
             </h4>
             <ul className="text-sm text-muted-foreground space-y-1">
-              <li>• Rankings are based on completed challenges only</li>
-              <li>• Score = (Likes × 2) + Comments</li>
-              <li>• Only the Top 10 are displayed publicly</li>
-              <li>• Your personal rank shows your position among all participants</li>
+              <li>{t("• Rankings are based on completed challenges only")}</li>
+              <li>{t("• Score = (Likes × 2) + Comments")}</li>
+              <li>{t("• Only the Top 10 are displayed publicly")}</li>
+              <li>{t("• Your personal rank shows your position among all participants")}</li>
             </ul>
           </Card>
         </div>

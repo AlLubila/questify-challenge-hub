@@ -1,3 +1,4 @@
+import { localizeChallenge } from "@/lib/localizedContent";
 import { Header } from "@/components/Header";
 import { SubmissionCard } from "@/components/SubmissionCard";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
@@ -22,14 +23,14 @@ import { AchievementsShowcase } from "@/components/AchievementsShowcase";
 const ITEMS_PER_PAGE = 10;
 
 const Feed = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearch = useDebounce(searchQuery, 300);
-  
+
   const boostSuccess = searchParams.get("boost_success");
   const sessionId = searchParams.get("session_id");
 
@@ -40,10 +41,10 @@ const Feed = () => {
           const { error } = await supabase.functions.invoke("process-payment-success", {
             body: { sessionId },
           });
-          
+
           if (error) throw error;
-          
-          toast.success("Boost Applied Successfully! ⚡", {
+
+          toast.success(t("Boost Applied Successfully! ⚡"), {
             description: "Your submission visibility has been increased!",
           });
         } catch (error) {
@@ -59,7 +60,7 @@ const Feed = () => {
 
     processPaymentSuccess();
   }, [boostSuccess, sessionId, searchParams, setSearchParams]);
-  
+
   // All submissions infinite query
   const {
     data: submissionsData,
@@ -69,7 +70,7 @@ const Feed = () => {
     isFetchingNextPage: isFetchingMoreSubmissions,
     refetch: refetchSubmissions,
   } = useInfiniteQuery({
-    queryKey: ["feed-submissions", debouncedSearch],
+    queryKey: ["feed-submissions", debouncedSearch, language],
     queryFn: async ({ pageParam = 0 }) => {
       // First fetch all approved submissions (we'll filter client-side for flexible search)
       const query = supabase
@@ -85,6 +86,9 @@ const Feed = () => {
           challenges (
             id,
             title,
+            description,
+            translations,
+            source_language,
             difficulty,
             points
           )
@@ -95,26 +99,26 @@ const Feed = () => {
       const { data, error, count } = await query;
 
       if (error) throw error;
-      
+
       // Client-side flexible filtering for username/challenge title/caption
-      let filteredData = data || [];
+      let filteredData = (data || []).map((item) => ({ ...item, challenges: item.challenges ? localizeChallenge(item.challenges, language) : null }));
       if (debouncedSearch) {
         const searchLower = debouncedSearch.toLowerCase().trim();
-        filteredData = filteredData.filter((item: any) => 
+        filteredData = filteredData.filter((item: any) =>
           item.caption?.toLowerCase().includes(searchLower) ||
           item.profiles?.username?.toLowerCase().includes(searchLower) ||
           item.profiles?.display_name?.toLowerCase().includes(searchLower) ||
           item.challenges?.title?.toLowerCase().includes(searchLower)
         );
       }
-      
+
       // Apply pagination on filtered results
       const paginatedData = filteredData.slice(pageParam, pageParam + ITEMS_PER_PAGE);
-      
-      return { 
-        data: paginatedData, 
-        count: filteredData.length, 
-        nextPage: pageParam + ITEMS_PER_PAGE 
+
+      return {
+        data: paginatedData,
+        count: filteredData.length,
+        nextPage: pageParam + ITEMS_PER_PAGE
       };
     },
     getNextPageParam: (lastPage, allPages) => {
@@ -133,22 +137,22 @@ const Feed = () => {
     isFetchingNextPage: isFetchingMoreFollowing,
     refetch: refetchFollowing,
   } = useInfiniteQuery({
-    queryKey: ["following-submissions", user?.id, debouncedSearch],
+    queryKey: ["following-submissions", user?.id, debouncedSearch, language],
     queryFn: async ({ pageParam = 0 }) => {
       if (!user) return { data: [], count: 0, nextPage: 0 };
-      
+
       // First, get the list of users the current user follows
       const { data: follows, error: followsError } = await supabase
         .from("follows")
         .select("following_id")
         .eq("follower_id", user.id);
-      
+
       if (followsError) throw followsError;
-      
+
       if (!follows || follows.length === 0) return { data: [], count: 0, nextPage: 0 };
-      
+
       const followingIds = follows.map((f) => f.following_id);
-      
+
       // Then get submissions from those users
       const query = supabase
         .from("submissions")
@@ -163,6 +167,9 @@ const Feed = () => {
           challenges (
             id,
             title,
+            description,
+            translations,
+            source_language,
             difficulty,
             points
           )
@@ -175,19 +182,19 @@ const Feed = () => {
       const { data, error, count } = await query;
 
       if (error) throw error;
-      
+
       // Client-side filtering for search
-      let filteredData = data;
+      let filteredData = (data || []).map((item) => ({ ...item, challenges: item.challenges ? localizeChallenge(item.challenges, language) : null }));
       if (debouncedSearch && data) {
         const searchLower = debouncedSearch.toLowerCase();
-        filteredData = data.filter((item: any) => 
+        filteredData = filteredData.filter((item: any) =>
           item.caption?.toLowerCase().includes(searchLower) ||
           item.profiles?.username?.toLowerCase().includes(searchLower) ||
           item.profiles?.display_name?.toLowerCase().includes(searchLower) ||
           item.challenges?.title?.toLowerCase().includes(searchLower)
         );
       }
-      
+
       return { data: filteredData || [], count, nextPage: pageParam + ITEMS_PER_PAGE };
     },
     getNextPageParam: (lastPage, allPages) => {
@@ -227,16 +234,16 @@ const Feed = () => {
 
         <div className="container py-8 space-y-8">
           <div className="text-center space-y-2">
-            <h1 className="text-4xl font-bold">Community Feed</h1>
+            <h1 className="text-4xl font-bold">{t("Community Feed")}</h1>
             <p className="text-muted-foreground text-lg">
-              Browse recent submissions from the A Challenge community.
+              {t("Browse recent submissions from the A Challenge community.")}
             </p>
           </div>
 
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search by username, challenge, or caption..."
+            placeholder={t("Search by username, challenge, or caption...")}
             className="max-w-2xl mx-auto"
           />
 
@@ -244,9 +251,9 @@ const Feed = () => {
             <div>
               <Tabs defaultValue="discover" className="w-full">
                 <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
-                  <TabsTrigger value="discover">Discover</TabsTrigger>
+                  <TabsTrigger value="discover">{t("Discover")}</TabsTrigger>
                   <TabsTrigger value="following" disabled={!user}>
-                    Following
+                    {t("Following")}
                   </TabsTrigger>
                 </TabsList>
 
@@ -262,7 +269,7 @@ const Feed = () => {
                   {submissions.map((submission: any) => (
                     <SubmissionCard key={submission.id} submission={submission} />
                   ))}
-                  
+
                   {/* Infinite scroll trigger */}
                   <div ref={loadMoreRefDiscover} className="py-4">
                     {isFetchingMoreSubmissions && (
@@ -279,7 +286,7 @@ const Feed = () => {
                       <Flag className="w-10 h-10 text-primary" />
                     </div>
                     <h3 className="text-2xl font-bold mb-3">
-                      {debouncedSearch ? "No results found" : "No submissions yet"}
+                      {debouncedSearch ? "No results found" : t("No submissions yet")}
                     </h3>
                     <p className="text-muted-foreground max-w-md mb-6">
                       {debouncedSearch
@@ -289,7 +296,7 @@ const Feed = () => {
                     {!debouncedSearch && (
                       <Button onClick={() => navigate('/')}>
                         <Flag className="w-4 h-4 mr-2" />
-                        Explore Challenges
+                        {t("Explore Challenges")}
                       </Button>
                     )}
                   </div>
@@ -309,7 +316,7 @@ const Feed = () => {
                   {followingSubmissions.map((submission: any) => (
                     <SubmissionCard key={submission.id} submission={submission} />
                   ))}
-                  
+
                   {/* Infinite scroll trigger */}
                   <div ref={loadMoreRefFollowing} className="py-4">
                     {isFetchingMoreFollowing && (

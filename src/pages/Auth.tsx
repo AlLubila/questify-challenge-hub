@@ -12,6 +12,7 @@ import { z } from "zod";
 import { Navigate, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AChallengeLogo } from "@/components/AChallengeLogo";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 const emailSchema = z.string().trim().email("Invalid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
@@ -59,9 +60,9 @@ const Auth = () => {
     const refCode = searchParams.get("ref");
     if (refCode) {
       setReferralCode(refCode);
-      toast.success("Referral code applied! Sign up to get your bonus.");
+      toast.success(t("Referral code applied! Sign up to get your bonus."));
     }
-  }, [searchParams]);
+  }, [searchParams, t]);
 
   // Redirect if already logged in
   if (user && !isLoading && !isSubmitting && authView !== "reset" && authView !== "otp") {
@@ -86,9 +87,9 @@ const Auth = () => {
       setStatusMessage("If an account exists for this email, a secure reset link is on its way.");
     } catch (error) {
       if (error instanceof z.ZodError) {
-        toast.error(error.errors[0].message);
+        toast.error(t(error.errors[0].message));
       } else {
-        toast.error(error instanceof Error ? error.message : "Unable to send the reset email");
+        toast.error(t(error instanceof Error ? error.message : "Unable to send the reset email"));
       }
     } finally {
       setIsSubmitting(false);
@@ -109,15 +110,15 @@ const Auth = () => {
       const { error } = await supabase.auth.updateUser({ password: newPassword });
       if (error) throw error;
 
-      toast.success("Password updated successfully");
+      toast.success(t("Password updated successfully"));
       setStatusMessage("Your password has been updated. You can now continue to A Challenge.");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
       if (error instanceof z.ZodError) {
-        toast.error(error.errors[0].message);
+        toast.error(t(error.errors[0].message));
       } else {
-        toast.error(error instanceof Error ? error.message : "Unable to update your password");
+        toast.error(t(error instanceof Error ? error.message : "Unable to update your password"));
       }
     } finally {
       setIsSubmitting(false);
@@ -154,9 +155,9 @@ const Auth = () => {
           return;
         }
         if (error.message.includes("Invalid login credentials")) {
-          toast.error("Invalid email or password");
+          toast.error(t("Invalid email or password"));
         } else {
-          toast.error(error.message);
+          toast.error(t(error.message));
         }
         return;
       }
@@ -173,7 +174,7 @@ const Auth = () => {
       const { error: signOutError } = await supabase.auth.signOut({ scope: "local" });
       if (signOutError) {
         setStatusMessage("We could not start email verification. Return to sign in and try again.");
-        toast.error(signOutError.message);
+        toast.error(t(signOutError.message));
         return;
       }
 
@@ -183,16 +184,16 @@ const Auth = () => {
       });
       if (otpError) {
         setStatusMessage("If you already received a code, enter it below. Otherwise, use Resend code.");
-        toast.error(otpError.message);
+        toast.error(t(otpError.message));
         return;
       }
 
       setStatusMessage("We sent a confirmation code to your email.");
     } catch (error) {
       if (error instanceof z.ZodError) {
-        toast.error(error.errors[0].message);
+        toast.error(t(error.errors[0].message));
       } else {
-        toast.error(error instanceof Error ? error.message : "Unable to start email verification");
+        toast.error(t(error instanceof Error ? error.message : "Unable to start email verification"));
       }
     } finally {
       setIsSubmitting(false);
@@ -228,9 +229,9 @@ const Auth = () => {
 
       if (error) {
         if (error.message.includes("User already registered")) {
-          toast.error("This email is already registered. Please sign in instead.");
+          toast.error(t("This email is already registered. Please sign in instead."));
         } else {
-          toast.error(error.message);
+          toast.error(t(error.message));
         }
         return;
       }
@@ -242,9 +243,9 @@ const Auth = () => {
       setAuthView("otp");
     } catch (error) {
       if (error instanceof z.ZodError) {
-        toast.error(error.errors[0].message);
+        toast.error(t(error.errors[0].message));
       } else {
-        toast.error("An error occurred during signup");
+        toast.error(t("An error occurred during signup"));
       }
     } finally {
       setIsSubmitting(false);
@@ -254,7 +255,7 @@ const Auth = () => {
   const handleOtpVerification = async (event: React.FormEvent) => {
     event.preventDefault();
     if (otpCode.length < MIN_OTP_LENGTH || otpCode.length > MAX_OTP_LENGTH) {
-      toast.error("Enter the complete confirmation code from your email");
+      toast.error(t("Enter the complete confirmation code from your email"));
       return;
     }
     setIsSubmitting(true);
@@ -265,14 +266,14 @@ const Auth = () => {
         type: otpType,
       });
       if (error) throw error;
-      toast.success("Email confirmed. Welcome to A Challenge!");
+      toast.success(t("Email confirmed. Welcome to A Challenge!"));
       const requestedPath = (location.state as { from?: { pathname?: string; search?: string } } | null)?.from;
       const destination = requestedPath?.pathname
         ? `${requestedPath.pathname}${requestedPath.search ?? ""}`
         : "/";
       navigate(destination, { replace: true });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "That code could not be verified");
+      toast.error(t(error instanceof Error ? error.message : "That code could not be verified"));
     } finally {
       setIsSubmitting(false);
     }
@@ -289,7 +290,7 @@ const Auth = () => {
       setOtpType("email");
       setStatusMessage("A new confirmation code is on its way.");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not resend the code");
+      toast.error(t(error instanceof Error ? error.message : "Could not resend the code"));
     } finally {
       setIsSubmitting(false);
     }
@@ -306,10 +307,10 @@ const Auth = () => {
       });
 
       if (error) {
-        toast.error(error.message);
+        toast.error(t(error.message));
       }
     } catch (error) {
-      toast.error("Failed to sign in with Google");
+      toast.error(t("Failed to sign in with Google"));
     } finally {
       setIsSubmitting(false);
     }
@@ -318,20 +319,22 @@ const Auth = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-10 w-10 animate-spin text-primary" role="status" aria-label="Loading your session" />
+
+        <Loader2 className="h-10 w-10 animate-spin text-primary" role="status" aria-label={t("Loading your session")} />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <div className="absolute right-4 top-4"><LanguageSelector /></div>
       <div className="w-full max-w-md space-y-8">
         <div className="text-center space-y-2">
           <div className="mb-4 flex items-center justify-center">
             <AChallengeLogo className="scale-125" />
           </div>
           <p className="text-muted-foreground">
-            Join the creative challenge community
+            {t("Join the creative challenge community")}
           </p>
         </div>
 
@@ -340,19 +343,19 @@ const Auth = () => {
             <div className="space-y-6">
               <div className="space-y-2 text-center">
                 <KeyRound className="mx-auto h-10 w-10 text-primary" aria-hidden="true" />
-                <h2 className="text-2xl font-bold">Reset your password</h2>
+                <h2 className="text-2xl font-bold">{t("Reset your password")}</h2>
                 <p className="text-sm text-muted-foreground">
-                  Enter your email and we’ll send you a secure reset link.
+                  {t("Enter your email and we’ll send you a secure reset link.")}
                 </p>
               </div>
               {statusMessage && (
                 <p className="rounded-lg border border-success/30 bg-success/10 p-3 text-sm" role="status">
-                  {statusMessage}
+                  {t(statusMessage)}
                 </p>
               )}
               <form onSubmit={handleRecoveryRequest} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="recovery-email">Email</Label>
+                  <Label htmlFor="recovery-email">{t("Email")}</Label>
                   <Input
                     id="recovery-email"
                     type="email"
@@ -364,12 +367,12 @@ const Auth = () => {
                 </div>
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
-                  Send reset link
+                  {t("Send reset link")}
                 </Button>
               </form>
               <Button variant="ghost" className="w-full" onClick={() => { setAuthView("login"); setStatusMessage(null); }}>
                 <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
-                Back to sign in
+                {t("Back to sign in")}
               </Button>
             </div>
           ) : authView === "reset" ? (
@@ -377,53 +380,53 @@ const Auth = () => {
               <div className="space-y-2 text-center">
                 <KeyRound className="mx-auto h-10 w-10 text-primary" aria-hidden="true" />
                 <h2 className="text-2xl font-bold">
-                  {isInvitationLink ? "Create your password" : "Choose a new password"}
+                  {isInvitationLink ? t("Create your password") : t("Choose a new password")}
                 </h2>
                 <p className="text-sm text-muted-foreground">
                   {isInvitationLink
-                    ? "Your invitation is confirmed. Create a password to finish setting up your account."
-                    : "Use at least 6 characters for your new password."}
+                    ? t("Your invitation is confirmed. Create a password to finish setting up your account.")
+                    : t("Use at least 6 characters for your new password.")}
                 </p>
               </div>
               {statusMessage && (
                 <p className="rounded-lg border border-success/30 bg-success/10 p-3 text-sm" role="status">
-                  {statusMessage}
+                  {t(statusMessage)}
                 </p>
               )}
               <form onSubmit={handlePasswordUpdate} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="new-password">New password</Label>
+                  <Label htmlFor="new-password">{t("New password")}</Label>
                   <Input id="new-password" type="password" autoComplete="new-password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm new password</Label>
+                  <Label htmlFor="confirm-password">{t("Confirm new password")}</Label>
                   <Input id="confirm-password" type="password" autoComplete="new-password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} required />
                 </div>
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
-                  Update password
+                  {t("Update password")}
                 </Button>
               </form>
-              {statusMessage && <Button className="w-full" onClick={() => window.location.assign("/")}>Continue to A Challenge</Button>}
+              {statusMessage && <Button className="w-full" onClick={() => window.location.assign("/")}>{t("Continue to A Challenge")}</Button>}
             </div>
           ) : authView === "otp" ? (
             <div className="space-y-6">
               <div className="space-y-2 text-center">
                 <KeyRound className="mx-auto h-10 w-10 text-primary" aria-hidden="true" />
-                <h2 className="text-2xl font-bold">Confirm your email</h2>
-                <p className="text-sm text-muted-foreground">Enter the complete code sent to {pendingEmail}.</p>
+                <h2 className="text-2xl font-bold">{t("Confirm your email")}</h2>
+                <p className="text-sm text-muted-foreground">{t("Enter the complete code sent to")} {pendingEmail}.</p>
               </div>
-              {statusMessage && <p className="rounded-lg border border-primary/30 bg-primary/10 p-3 text-sm" role="status">{statusMessage}</p>}
+              {statusMessage && <p className="rounded-lg border border-primary/30 bg-primary/10 p-3 text-sm" role="status">{t(statusMessage)}</p>}
               <form onSubmit={handleOtpVerification} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email-code">Confirmation code</Label>
+                  <Label htmlFor="email-code">{t("Confirmation code")}</Label>
                   <Input
                     id="email-code"
                     value={otpCode}
                     onChange={(event) => setOtpCode(event.target.value.replace(/\D/g, "").slice(0, MAX_OTP_LENGTH))}
                     inputMode="numeric"
                     autoComplete="one-time-code"
-                    placeholder="Enter your code"
+                    placeholder={t("Enter your code")}
                     className="text-center text-2xl font-black tracking-[0.2em]"
                     minLength={MIN_OTP_LENGTH}
                     maxLength={MAX_OTP_LENGTH}
@@ -436,12 +439,12 @@ const Auth = () => {
                   disabled={isSubmitting || otpCode.length < MIN_OTP_LENGTH || otpCode.length > MAX_OTP_LENGTH}
                 >
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
-                  Confirm and enter
+                  {t("Confirm and enter")}
                 </Button>
               </form>
               <div className="flex gap-2">
-                <Button variant="outline" className="flex-1" onClick={handleOtpResend} disabled={isSubmitting}>Resend code</Button>
-                <Button variant="ghost" className="flex-1" onClick={() => { setAuthView("login"); setStatusMessage(null); }}>Back</Button>
+                <Button variant="outline" className="flex-1" onClick={handleOtpResend} disabled={isSubmitting}>{t("Resend code")}</Button>
+                <Button variant="ghost" className="flex-1" onClick={() => { setAuthView("login"); setStatusMessage(null); }}>{t("Back")}</Button>
               </div>
             </div>
           ) : (
@@ -488,7 +491,7 @@ const Auth = () => {
               </form>
 
               <Button type="button" variant="link" className="h-auto w-full p-0 text-sm" onClick={() => { setAuthView("forgot"); setStatusMessage(null); }}>
-                Forgot your password?
+                {t("Forgot your password?")}
               </Button>
 
               <div className="relative">
@@ -516,7 +519,7 @@ const Auth = () => {
               {referralCode && (
                 <div className="p-3 bg-primary/10 rounded-lg border border-primary/20">
                   <p className="text-sm text-foreground">
-                    🎉 Referral code applied! You'll get <span className="font-bold">25 coins</span> when you sign up.
+                    {t("🎉 Referral code applied! You'll get")} <span className="font-bold">{t("25 coins")}</span> {t("when you sign up.")}
                   </p>
                 </div>
               )}
@@ -582,7 +585,7 @@ const Auth = () => {
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                  <span className="bg-card px-2 text-muted-foreground">{t("Or continue with")}</span>
                 </div>
               </div>
 

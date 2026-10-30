@@ -1,3 +1,4 @@
+import { dateLocales } from "@/lib/dateLocales";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useReferrals } from "@/hooks/useReferrals";
@@ -11,13 +12,13 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Referrals() {
   const { data, isLoading } = useReferrals();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const copyReferralLink = () => {
     if (data?.referralCode) {
       const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
       navigator.clipboard.writeText(link);
-      toast.success("Referral link copied to clipboard!");
+      toast.success(t("Referral link copied to clipboard!"));
     }
   };
 
@@ -174,7 +175,7 @@ export default function Referrals() {
                       {referral.referred?.display_name || referral.referred?.username}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {t("referrals.joined")} {format(new Date(referral.created_at), "MMM d, yyyy")}
+                      {t("referrals.joined")} {format(new Date(referral.created_at), "MMM d, yyyy", { locale: dateLocales[language] })}
                     </p>
                   </div>
                 </div>

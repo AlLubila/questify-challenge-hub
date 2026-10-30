@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +26,7 @@ export const FollowersModal = ({
   onClose,
   defaultTab = "followers",
 }: FollowersModalProps) => {
+  const { t, language } = useLanguage();
   const { data: followers, isLoading: followersLoading } = useFollowers(userId);
   const { data: following, isLoading: followingLoading } = useFollowing(userId);
 
@@ -54,17 +56,17 @@ export const FollowersModal = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Connections</DialogTitle>
-          <DialogDescription>View followers and following</DialogDescription>
+          <DialogTitle>{t("Connections")}</DialogTitle>
+          <DialogDescription>{t("View followers and following")}</DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue={defaultTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="followers">
-              Followers ({followers?.length || 0})
+              {t("Followers (")}{followers?.length || 0})
             </TabsTrigger>
             <TabsTrigger value="following">
-              Following ({following?.length || 0})
+              {t("Following (")}{following?.length || 0})
             </TabsTrigger>
           </TabsList>
 
@@ -91,7 +93,7 @@ export const FollowersModal = ({
               ))
             ) : (
               <p className="text-center text-muted-foreground py-8">
-                No followers yet
+                {t("No followers yet")}
               </p>
             )}
           </TabsContent>
@@ -119,7 +121,7 @@ export const FollowersModal = ({
               ))
             ) : (
               <p className="text-center text-muted-foreground py-8">
-                Not following anyone yet
+                {t("Not following anyone yet")}
               </p>
             )}
           </TabsContent>

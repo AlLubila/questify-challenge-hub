@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Dialog,
   DialogContent,
@@ -44,6 +45,7 @@ const BOOST_OPTIONS = [
 ];
 
 export const BoostSubmissionDialog = ({ submissionId, children }: BoostSubmissionDialogProps) => {
+  const { t, language } = useLanguage();
   const { purchaseBoost, isPurchasing } = useBoostTicket();
 
   const handleBoostSelect = (boostType: BoostType) => {
@@ -59,10 +61,10 @@ export const BoostSubmissionDialog = ({ submissionId, children }: BoostSubmissio
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-primary" />
-            Boost Your Submission
+            {t("Boost Your Submission")}
           </DialogTitle>
           <DialogDescription>
-            Increase your submission's visibility and get more votes!
+            {t("Increase your submission's visibility and get more votes!")}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
@@ -82,8 +84,8 @@ export const BoostSubmissionDialog = ({ submissionId, children }: BoostSubmissio
                   <TrendingUp className="h-5 w-5" />
                 </div>
                 <div className="text-left">
-                  <p className="font-semibold">{option.name}</p>
-                  <p className="text-sm text-muted-foreground">{option.description}</p>
+                  <p className="font-semibold">{t(option.name)}</p>
+                  <p className="text-sm text-muted-foreground">{t(option.description)}</p>
                 </div>
               </div>
               <div className="flex flex-col items-end">
@@ -96,7 +98,7 @@ export const BoostSubmissionDialog = ({ submissionId, children }: BoostSubmissio
           ))}
         </div>
         <p className="text-xs text-muted-foreground text-center">
-          Boosted submissions appear more frequently in the feed
+          {t("Boosted submissions appear more frequently in the feed")}
         </p>
       </DialogContent>
     </Dialog>

@@ -12,11 +12,17 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Upload, Loader2, Eye } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ChallengeCard } from "@/components/ChallengeCard";
+import { ChallengeTranslationEditor } from "@/components/ChallengeTranslationEditor";
+import { ChallengeTranslations, prepareTranslations } from "@/lib/localizedContent";
+import { Language } from "@/lib/i18n";
+import type { Json } from "@/integrations/supabase/types";
 
 export const CreateChallenge = () => {
   const { t } = useLanguage();
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [translations, setTranslations] = useState<ChallengeTranslations>({});
+  const [sourceLanguage, setSourceLanguage] = useState<Language>("en");
   
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -55,6 +61,7 @@ export const CreateChallenge = () => {
       }
 
       let imageUrl = null;
+      const localized = prepareTranslations(translations, sourceLanguage);
 
       // Upload image if provided
       if (imageFile) {
@@ -96,6 +103,8 @@ export const CreateChallenge = () => {
 
       const { error } = await supabase.from("challenges").insert({
         title,
+        source_language: sourceLanguage,
+        translations: localized as Json,
         description,
         prize,
         difficulty,
@@ -123,6 +132,7 @@ export const CreateChallenge = () => {
       
       // Reset form
       setTitle("");
+      setTranslations({});
       setDescription("");
       setPrize("");
       setDifficulty("medium");
@@ -136,7 +146,7 @@ export const CreateChallenge = () => {
       setScheduledTime("");
     },
     onError: (error: Error) => {
-      toast.error(error.message || t("admin.challengeCreateFailed"));
+      toast.error(t(error.message) || t("admin.challengeCreateFailed"));
     },
   });
 
@@ -151,6 +161,7 @@ export const CreateChallenge = () => {
             <CardTitle>{t("admin.challengeDetails")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+          <ChallengeTranslationEditor value={translations} sourceLanguage={sourceLanguage} onSourceLanguageChange={setSourceLanguage} onChange={setTranslations} />
           <div className="space-y-2">
             <Label htmlFor="title">{t("admin.challengeTitle")} *</Label>
             <Input

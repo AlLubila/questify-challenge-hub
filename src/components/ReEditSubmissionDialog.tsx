@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ interface ReEditSubmissionDialogProps {
 }
 
 export const ReEditSubmissionDialog = ({ submission, children }: ReEditSubmissionDialogProps) => {
+  const { t, language } = useLanguage();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -63,13 +65,13 @@ export const ReEditSubmissionDialog = ({ submission, children }: ReEditSubmissio
       queryClient.invalidateQueries({ queryKey: ["submission"] });
       queryClient.invalidateQueries({ queryKey: ["feed-submissions"] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      toast.success("Submission updated!");
+      toast.success(t("Submission updated!"));
       setOpen(false);
       setIsEditing(false);
       setContentFile(null);
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to update submission");
+      toast.error(t(error.message || "Failed to update submission"));
     },
   });
 
@@ -90,7 +92,7 @@ export const ReEditSubmissionDialog = ({ submission, children }: ReEditSubmissio
     };
     reader.readAsDataURL(editedFile);
     setIsEditing(false);
-    toast.success("Image edited successfully!");
+    toast.success(t("Image edited successfully!"));
   };
 
   return (
@@ -98,18 +100,18 @@ export const ReEditSubmissionDialog = ({ submission, children }: ReEditSubmissio
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Re-Edit Submission</DialogTitle>
+          <DialogTitle>{t("Re-Edit Submission")}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
           {!isEditing ? (
             <>
               <div>
-                <Label>Current Image</Label>
+                <Label>{t("Current Image")}</Label>
                 <div className="aspect-video bg-muted rounded-lg overflow-hidden mt-2">
                   <img
                     src={preview}
-                    alt="Submission"
+                    alt={t("Submission")}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -119,17 +121,17 @@ export const ReEditSubmissionDialog = ({ submission, children }: ReEditSubmissio
                   className="w-full mt-2"
                 >
                   <Pencil className="w-4 h-4 mr-2" />
-                  Edit Image
+                  {t("Edit Image")}
                 </Button>
               </div>
 
               <div>
-                <Label htmlFor="caption">Caption</Label>
+                <Label htmlFor="caption">{t("Caption")}</Label>
                 <Textarea
                   id="caption"
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  placeholder="Tell us about your submission..."
+                  placeholder={t("Tell us about your submission...")}
                   rows={4}
                 />
               </div>

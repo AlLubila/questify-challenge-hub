@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ interface Filters {
 }
 
 export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) => {
+  const { t, language } = useLanguage();
   const [filters, setFilters] = useState<Filters>({
     brightness: 100,
     contrast: 100,
@@ -88,19 +90,19 @@ export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) =
   return (
     <Card className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-bold">Edit Image</h3>
+        <h3 className="text-xl font-bold">{t("Edit Image")}</h3>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={resetFilters}>
             <RotateCw className="w-4 h-4 mr-2" />
-            Reset
+            {t("Reset")}
           </Button>
           <Button variant="outline" size="sm" onClick={onCancel}>
             <X className="w-4 h-4 mr-2" />
-            Cancel
+            {t("Cancel")}
           </Button>
           <Button size="sm" onClick={handleSave} className="bg-primary">
             <Check className="w-4 h-4 mr-2" />
-            Apply
+            {t("Apply")}
           </Button>
         </div>
       </div>
@@ -112,7 +114,7 @@ export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) =
             <img
               ref={imgRef}
               src={preview}
-              alt="Preview"
+              alt={t("Preview")}
               className="w-full h-full object-cover"
               style={{ filter: getFilterString() }}
             />
@@ -124,7 +126,7 @@ export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) =
       {/* Filter Controls */}
       <div className="space-y-4">
         <div>
-          <Label>Brightness: {filters.brightness}%</Label>
+          <Label>{t("Brightness:")} {filters.brightness}%</Label>
           <Slider
             value={[filters.brightness]}
             onValueChange={([value]) => setFilters({ ...filters, brightness: value })}
@@ -135,7 +137,7 @@ export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) =
         </div>
 
         <div>
-          <Label>Contrast: {filters.contrast}%</Label>
+          <Label>{t("Contrast:")} {filters.contrast}%</Label>
           <Slider
             value={[filters.contrast]}
             onValueChange={([value]) => setFilters({ ...filters, contrast: value })}
@@ -146,7 +148,7 @@ export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) =
         </div>
 
         <div>
-          <Label>Saturation: {filters.saturation}%</Label>
+          <Label>{t("Saturation:")} {filters.saturation}%</Label>
           <Slider
             value={[filters.saturation]}
             onValueChange={([value]) => setFilters({ ...filters, saturation: value })}
@@ -157,7 +159,7 @@ export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) =
         </div>
 
         <div>
-          <Label>Blur: {filters.blur}px</Label>
+          <Label>{t("Blur:")} {filters.blur}px</Label>
           <Slider
             value={[filters.blur]}
             onValueChange={([value]) => setFilters({ ...filters, blur: value })}
@@ -168,7 +170,7 @@ export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) =
         </div>
 
         <div>
-          <Label>Grayscale: {filters.grayscale}%</Label>
+          <Label>{t("Grayscale:")} {filters.grayscale}%</Label>
           <Slider
             value={[filters.grayscale]}
             onValueChange={([value]) => setFilters({ ...filters, grayscale: value })}
@@ -179,7 +181,7 @@ export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) =
         </div>
 
         <div>
-          <Label>Sepia: {filters.sepia}%</Label>
+          <Label>{t("Sepia:")} {filters.sepia}%</Label>
           <Slider
             value={[filters.sepia]}
             onValueChange={([value]) => setFilters({ ...filters, sepia: value })}
@@ -190,7 +192,7 @@ export const ImageEditor = ({ imageFile, onSave, onCancel }: ImageEditorProps) =
         </div>
 
         <div>
-          <Label>Hue Rotate: {filters.hueRotate}°</Label>
+          <Label>{t("Hue Rotate:")} {filters.hueRotate}°</Label>
           <Slider
             value={[filters.hueRotate]}
             onValueChange={([value]) => setFilters({ ...filters, hueRotate: value })}

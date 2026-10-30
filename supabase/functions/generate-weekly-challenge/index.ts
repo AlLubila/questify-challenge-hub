@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { challengeTranslationSchema, getEditorialTranslations, localizationInstructions, EditorialTranslations } from "../_shared/challengeLocalization.ts";
 
 const WEEKLY_BATCH_SIZE = 5;
 
@@ -9,6 +10,7 @@ type ChallengeDraft = {
   prize: string;
   difficulty: "easy" | "medium" | "hard";
   points: number;
+  translations?: EditorialTranslations;
 };
 
 const EDITORIAL_FALLBACKS: ChallengeDraft[] = [
@@ -32,6 +34,7 @@ const sanitizeChallenge = (draft: ChallengeDraft): ChallengeDraft => {
   const points = Number.isFinite(draft.points) ? Math.max(200, Math.min(1000, Math.round(draft.points))) : 400;
   return {
     ...draft,
+    translations: getEditorialTranslations(draft),
     points,
     prize: !draft.prize || MONEY_REWARD_PATTERN.test(draft.prize)
       ? `${points} points + Weekly Spotlight badge`
@@ -86,10 +89,10 @@ serve(async (req) => {
         body: JSON.stringify({
           model: "google/gemini-2.5-flash",
           messages: [
-            { role: "system", content: `You are A Challenge's senior Gen Z challenge editor. Create exceptional, safe, phone-first weekly creator missions with surprising visual mechanics and genuine TikTok remix potential. Every mission must be instantly understandable, inexpensive, inclusive, and avoid stunts, harassment, strangers, copyrighted characters, engagement bait, and generic photo prompts. Rewards must be strictly non-cash points, badges, profile recognition, or clearly identified partner rewards—never money, currency, cash, gift cards, or withdrawals. Standing editor brief: ${settings.creative_brief}. Do not repeat these recent ideas:\n${(recent ?? []).map((x) => `${x.title}: ${x.description}`).join("\n")}` },
+            { role: "system", content: `${localizationInstructions} You are A Challenge's senior Gen Z challenge editor. Create exceptional, safe, phone-first weekly creator missions with surprising visual mechanics and genuine TikTok remix potential. Every mission must be instantly understandable, inexpensive, inclusive, and avoid stunts, harassment, strangers, copyrighted characters, engagement bait, and generic photo prompts. Rewards must be strictly non-cash points, badges, profile recognition, or clearly identified partner rewards—never money, currency, cash, gift cards, or withdrawals. Standing editor brief: ${settings.creative_brief}. Do not repeat these recent ideas:\n${(recent ?? []).map((x) => `${x.title}: ${x.description}`).join("\n")}` },
             { role: "user", content: `Return exactly ${missingCount} distinct publish-ready weekly missions after internally comparing multiple concepts for each slot.` },
           ],
-          tools: [{ type: "function", function: { name: "create_challenges", parameters: { type: "object", properties: { challenges: { type: "array", minItems: missingCount, maxItems: missingCount, items: { type: "object", properties: { title: { type: "string" }, description: { type: "string" }, prize: { type: "string", description: "A non-cash reward made of points, a badge, profile recognition, or a clearly identified partner reward" }, difficulty: { type: "string", enum: ["easy", "medium", "hard"] }, points: { type: "number" } }, required: ["title", "description", "prize", "difficulty", "points"], additionalProperties: false } } }, required: ["challenges"], additionalProperties: false } } }],
+          tools: [{ type: "function", function: { name: "create_challenges", parameters: { type: "object", properties: { challenges: { type: "array", minItems: missingCount, maxItems: missingCount, items: { type: "object", properties: { translations: challengeTranslationSchema, title: { type: "string" }, description: { type: "string" }, prize: { type: "string", description: "A non-cash reward made of points, a badge, profile recognition, or a clearly identified partner reward" }, difficulty: { type: "string", enum: ["easy", "medium", "hard"] }, points: { type: "number" } }, required: ["title", "description", "prize", "difficulty", "points", "translations"], additionalProperties: false } } }, required: ["challenges"], additionalProperties: false } } }],
           tool_choice: { type: "function", function: { name: "create_challenges" } },
         }),
       });
@@ -107,6 +110,7 @@ serve(async (req) => {
     const end = new Date(start.getTime() + 7 * 86400000);
     const rows = challenges.map((challenge) => ({
       ...sanitizeChallenge(challenge),
+      source_language: "en",
       challenge_type: "weekly",
       is_ai_generated: true,
       start_date: start.toISOString(),

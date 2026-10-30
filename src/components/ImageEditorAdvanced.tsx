@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -99,6 +100,7 @@ interface EditorState {
 }
 
 export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditorAdvancedProps) => {
+  const { t, language } = useLanguage();
   const [filters, setFilters] = useState<Filters>(FILTER_PRESETS.none);
   const [rotation, setRotation] = useState(0);
   const [cropArea, setCropArea] = useState({ x: 0, y: 0, width: 100, height: 100 });
@@ -170,7 +172,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
       setStickers(state.stickers);
       setDrawingPaths(state.drawingPaths);
       setHistoryIndex(newIndex);
-      toast.success("Undo");
+      toast.success(t("Undo"));
     }
   };
 
@@ -184,7 +186,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
       setStickers(state.stickers);
       setDrawingPaths(state.drawingPaths);
       setHistoryIndex(newIndex);
-      toast.success("Redo");
+      toast.success(t("Redo"));
     }
   };
 
@@ -431,17 +433,17 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
     if (presetFilters) {
       setFilters(presetFilters);
       saveToHistory();
-      toast.success(`Applied ${preset} preset`);
+      toast.success(t("editor.applied", { name: preset in FILTER_PRESETS ? t(`editor.preset.${preset}`) : preset }));
     }
   };
 
   const saveCustomPreset = () => {
     if (!presetName.trim()) {
-      toast.error("Please enter a preset name");
+      toast.error(t("Please enter a preset name"));
       return;
     }
     setCustomPresets({ ...customPresets, [presetName]: { ...filters } });
-    toast.success(`Saved preset: ${presetName}`);
+    toast.success(t("editor.saved", { name: presetName }));
     setPresetName("");
   };
 
@@ -449,7 +451,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
     const newPresets = { ...customPresets };
     delete newPresets[name];
     setCustomPresets(newPresets);
-    toast.success(`Deleted preset: ${name}`);
+    toast.success(t("editor.deleted", { name }));
   };
 
   const addText = () => {
@@ -569,7 +571,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
       setDrawingPaths(drawingPaths.filter(item => item.id !== id));
     }
     saveToHistory();
-    toast.success("Layer deleted");
+    toast.success(t("Layer deleted"));
   };
 
   const moveLayer = (type: 'text' | 'sticker' | 'draw', id: string, direction: 'up' | 'down') => {
@@ -647,7 +649,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
   return (
     <Card className="p-6 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-bold">Edit Image</h3>
+        <h3 className="text-xl font-bold">{t("Edit Image")}</h3>
         <div className="flex gap-2">
           <Button 
             variant="outline" 
@@ -667,11 +669,11 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           </Button>
           <Button variant="outline" size="sm" onClick={onCancel}>
             <X className="w-4 h-4 mr-2" />
-            Cancel
+            {t("Cancel")}
           </Button>
           <Button size="sm" onClick={handleSave} className="bg-primary">
             <Check className="w-4 h-4 mr-2" />
-            Apply
+            {t("Apply")}
           </Button>
         </div>
       </div>
@@ -687,7 +689,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
       >
         {preview && (
           <>
-            <img ref={imgRef} src={preview} alt="Original" className="hidden" />
+            <img ref={imgRef} src={preview} alt={t("Original")} className="hidden" />
             <canvas
               ref={previewCanvasRef}
               className="w-full h-full object-contain absolute top-0 left-0 pointer-events-none"
@@ -757,29 +759,29 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="filters">
             <Sparkles className="w-4 h-4 mr-1" />
-            Filters
+            {t("Filters")}
           </TabsTrigger>
           <TabsTrigger value="adjust">
             <Scissors className="w-4 h-4 mr-1" />
-            Adjust
+            {t("Adjust")}
           </TabsTrigger>
           <TabsTrigger value="grading">
             <Palette className="w-4 h-4 mr-1" />
-            Grade
+            {t("Grade")}
           </TabsTrigger>
           <TabsTrigger value="text">
             <Type className="w-4 h-4 mr-1" />
-            Text
+            {t("Text")}
           </TabsTrigger>
           <TabsTrigger value="stickers">
             <Smile className="w-4 h-4 mr-1" />
-            Stickers
+            {t("Stickers")}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="filters" className="space-y-4">
           <div>
-            <Label>Built-in Presets</Label>
+            <Label>{t("Built-in Presets")}</Label>
             <div className="grid grid-cols-3 gap-2 mt-2">
               {Object.keys(FILTER_PRESETS).map((preset) => (
                 <Button
@@ -788,7 +790,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
                   onClick={() => applyPreset(preset)}
                   className="capitalize"
                 >
-                  {preset}
+                  {t(`editor.preset.${preset}`)}
                 </Button>
               ))}
             </div>
@@ -796,7 +798,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
 
           {Object.keys(customPresets).length > 0 && (
             <div>
-              <Label>Custom Presets</Label>
+              <Label>{t("Custom Presets")}</Label>
               <div className="grid grid-cols-2 gap-2 mt-2">
                 {Object.keys(customPresets).map((preset) => (
                   <div key={preset} className="flex gap-1">
@@ -821,12 +823,12 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           )}
 
           <div>
-            <Label>Save Current as Preset</Label>
+            <Label>{t("Save Current as Preset")}</Label>
             <div className="flex gap-2 mt-2">
               <Input
                 value={presetName}
                 onChange={(e) => setPresetName(e.target.value)}
-                placeholder="Preset name..."
+                placeholder={t("Preset name...")}
               />
               <Button onClick={saveCustomPreset}>
                 <Save className="w-4 h-4" />
@@ -836,7 +838,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
 
           <div className="space-y-3">
             <div>
-              <Label>Vignette: {filters.vignette}%</Label>
+              <Label>{t("Vignette:")} {filters.vignette}%</Label>
               <Slider
                 value={[filters.vignette]}
                 onValueChange={([value]) => setFilters({ ...filters, vignette: value })}
@@ -847,7 +849,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
             </div>
 
             <div>
-              <Label>Sharpen: {filters.sharpen}</Label>
+              <Label>{t("Sharpen:")} {filters.sharpen}</Label>
               <Slider
                 value={[filters.sharpen]}
                 onValueChange={([value]) => setFilters({ ...filters, sharpen: value })}
@@ -858,7 +860,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
             </div>
 
             <div>
-              <Label>Blur Edges: {filters.blur}px</Label>
+              <Label>{t("Blur Edges:")} {filters.blur}px</Label>
               <Slider
                 value={[filters.blur]}
                 onValueChange={([value]) => setFilters({ ...filters, blur: value })}
@@ -872,7 +874,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
 
         <TabsContent value="grading" className="space-y-4">
           <div>
-            <Label>Exposure: {filters.exposure}</Label>
+            <Label>{t("Exposure:")} {filters.exposure}</Label>
             <Slider
               value={[filters.exposure]}
               onValueChange={([value]) => { setFilters({ ...filters, exposure: value }); saveToHistory(); }}
@@ -883,7 +885,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           </div>
 
           <div>
-            <Label>Highlights: {filters.highlights}</Label>
+            <Label>{t("Highlights:")} {filters.highlights}</Label>
             <Slider
               value={[filters.highlights]}
               onValueChange={([value]) => { setFilters({ ...filters, highlights: value }); saveToHistory(); }}
@@ -894,7 +896,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           </div>
 
           <div>
-            <Label>Shadows: {filters.shadows}</Label>
+            <Label>{t("Shadows:")} {filters.shadows}</Label>
             <Slider
               value={[filters.shadows]}
               onValueChange={([value]) => { setFilters({ ...filters, shadows: value }); saveToHistory(); }}
@@ -905,7 +907,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           </div>
 
           <div>
-            <Label>Temperature: {filters.temperature}°</Label>
+            <Label>{t("Temperature:")} {filters.temperature}°</Label>
             <Slider
               value={[filters.temperature]}
               onValueChange={([value]) => { setFilters({ ...filters, temperature: value }); saveToHistory(); }}
@@ -918,7 +920,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
 
         <TabsContent value="adjust" className="space-y-4">
           <div>
-            <Label>Aspect Ratio</Label>
+            <Label>{t("Aspect Ratio")}</Label>
             <Select value={aspectRatio} onValueChange={setAspectRatio}>
               <SelectTrigger>
                 <SelectValue />
@@ -926,7 +928,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
               <SelectContent>
                 {ASPECT_RATIOS.map((ratio) => (
                   <SelectItem key={ratio.value} value={ratio.value}>
-                    {ratio.label}
+                    {t(ratio.label)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -934,7 +936,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           </div>
 
           <div>
-            <Label>Rotate: {rotation}°</Label>
+            <Label>{t("Rotate:")} {rotation}°</Label>
             <Slider
               value={[rotation]}
               onValueChange={([value]) => setRotation(value)}
@@ -945,7 +947,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           </div>
 
           <div>
-            <Label>Brightness: {filters.brightness}%</Label>
+            <Label>{t("Brightness:")} {filters.brightness}%</Label>
             <Slider
               value={[filters.brightness]}
               onValueChange={([value]) => { setFilters({ ...filters, brightness: value }); saveToHistory(); }}
@@ -956,7 +958,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           </div>
 
           <div>
-            <Label>Contrast: {filters.contrast}%</Label>
+            <Label>{t("Contrast:")} {filters.contrast}%</Label>
             <Slider
               value={[filters.contrast]}
               onValueChange={([value]) => { setFilters({ ...filters, contrast: value }); saveToHistory(); }}
@@ -967,7 +969,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           </div>
 
           <div>
-            <Label>Saturation: {filters.saturation}%</Label>
+            <Label>{t("Saturation:")} {filters.saturation}%</Label>
             <Slider
               value={[filters.saturation]}
               onValueChange={([value]) => { setFilters({ ...filters, saturation: value }); saveToHistory(); }}
@@ -980,18 +982,18 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
 
         <TabsContent value="text" className="space-y-4">
           <div className="space-y-2">
-            <Label>Text</Label>
+            <Label>{t("Text")}</Label>
             <Input
               value={currentText}
               onChange={(e) => setCurrentText(e.target.value)}
-              placeholder="Enter text..."
+              placeholder={t("Enter text...")}
               onKeyPress={(e) => e.key === "Enter" && addText()}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Size: {textSize}px</Label>
+              <Label>{t("Size:")} {textSize}px</Label>
               <Slider
                 value={[textSize]}
                 onValueChange={([value]) => setTextSize(value)}
@@ -1001,7 +1003,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
               />
             </div>
             <div>
-              <Label>Color</Label>
+              <Label>{t("Color")}</Label>
               <Input
                 type="color"
                 value={textColor}
@@ -1011,12 +1013,12 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           </div>
 
           <Button onClick={addText} className="w-full">
-            Add Text
+            {t("Add Text")}
           </Button>
 
           {textOverlays.length > 0 && (
             <div className="space-y-2">
-              <Label>Added Text (drag to reposition):</Label>
+              <Label>{t("Added Text (drag to reposition):")}</Label>
               {textOverlays.map((overlay, idx) => (
                 <div key={idx} className="flex items-center justify-between p-2 bg-muted rounded">
                   <div className="flex items-center gap-2">
@@ -1033,7 +1035,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
                 </div>
               ))}
               <p className="text-xs text-muted-foreground">
-                Drag text directly on the image to reposition
+                {t("Drag text directly on the image to reposition")}
               </p>
             </div>
           )}
@@ -1092,7 +1094,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
 
           {stickers.length > 0 && (
             <div className="space-y-2">
-              <Label>Added Stickers:</Label>
+              <Label>{t("Added Stickers:")}</Label>
               <div className="flex flex-wrap gap-2">
                 {stickers.map((sticker, idx) => (
                   <Button
@@ -1113,7 +1115,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
           <div className="space-y-2">
             {textOverlays.length === 0 && stickers.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-8">
-                No layers yet. Add text or stickers to see them here.
+                {t("No layers yet. Add text or stickers to see them here.")}
               </p>
             ) : (
               <>
@@ -1165,7 +1167,7 @@ export const ImageEditorAdvanced = ({ imageFile, onSave, onCancel }: ImageEditor
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 flex-1">
                         <Smile className="w-4 h-4" />
-                        <span className="text-sm">Sticker: {sticker.emoji}</span>
+                        <span className="text-sm">{t("Sticker:")} {sticker.emoji}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Button
