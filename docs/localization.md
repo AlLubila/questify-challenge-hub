@@ -20,10 +20,10 @@ Editorial illustrations contain no text and can be shared across languages. A tr
 
 ## Rollout
 
-1. Apply `supabase/migrations/20261030191009_challenge_localizations.sql` before deploying the updated frontend. It adds two columns to the existing table and preserves its access policies.
+1. Apply `supabase/migrations/20261030193736_challenge_localizations.sql` before deploying the updated frontend. It adds two columns to the existing table and preserves its access policies.
 2. Deploy the updated `generate-challenge` and `generate-weekly-challenge` functions with their shared files.
 3. Publish the frontend through the existing deployment flow.
 
-The migration and function changes are prepared in the repository. Development and browser checks use test data; they do not publish to the production site or modify live challenge records.
+The additive migration and both generation functions were deployed to the production questify Supabase project on October 30, 2026. The migration filename matches the version recorded by Supabase. Development and browser checks use test data; switching languages does not modify original challenge records.
 
 Validation: `npm run check`, `npx playwright test`, and Deno checks/tests for the modified functions and `challengeLocalization_test.ts`.
