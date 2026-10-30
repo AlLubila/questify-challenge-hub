@@ -1,9 +1,6 @@
 import { localizeChallenge } from "@/lib/localizedContent";
-import { dateLocales } from "@/lib/dateLocales";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { useProfile } from "@/hooks/useProfile";
-import { useSubscription } from "@/hooks/useSubscription";
 import { Navigate, useSearchParams, useParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -14,12 +11,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Flag, Trophy, Zap, Upload, Save, Award, Crown, Users, Pencil } from "lucide-react";
+import { Flag, Trophy, Zap, Upload, Save, Award, Users, Pencil } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
 import { FollowButton } from "@/components/FollowButton";
 import { FollowersModal } from "@/pages/FollowersModal";
 import { ReEditSubmissionDialog } from "@/components/ReEditSubmissionDialog";
@@ -69,7 +65,6 @@ const Profile = () => {
     enabled: !!viewedUserId,
   });
   
-  const { subscriptionData, createCheckout, isCreatingCheckout, openCustomerPortal, isOpeningPortal } = useSubscription(isOwnProfile);
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
   const [followersModalTab, setFollowersModalTab] = useState<"followers" | "following">("followers");
 
@@ -404,12 +399,11 @@ const Profile = () => {
           </div>
         </Card>
 
-        {/* Tabs for Badges, Submissions, and Subscription */}
+        {/* Profile activity */}
         <Tabs defaultValue="badges" className="w-full">
-            <TabsList className={`grid w-full ${isOwnProfile ? "grid-cols-3" : "grid-cols-2"}`}>
+            <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="badges">{t("Badges (")}{userBadges?.length || 0})</TabsTrigger>
               <TabsTrigger value="submissions">{t("Submissions (")}{submissions?.length || 0})</TabsTrigger>
-              {isOwnProfile && <TabsTrigger value="subscription">{t("Subscription")}</TabsTrigger>}
           </TabsList>
 
           <TabsContent value="badges" className="space-y-4">
@@ -512,84 +506,7 @@ const Profile = () => {
             )}
           </TabsContent>
 
-          {isOwnProfile && <TabsContent value="subscription" className="space-y-4">
-            <Card className="p-8">
-              <div className="flex items-start gap-4 mb-6">
-                <div className="p-3 rounded-full bg-primary">
-                  <Crown className="h-6 w-6 text-primary-foreground" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold mb-2">{t("Creator Pass")}</h2>
-                  <p className="text-muted-foreground">
-                    {t("Get exclusive perks, extra rewards, and premium features for $5/month")}
-                  </p>
-                </div>
-              </div>
 
-              {subscriptionData?.subscribed ? (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="default" className="text-lg px-4 py-1">{t("Active")}</Badge>
-                    {subscriptionData.subscription_end && (
-                      <span className="text-sm text-muted-foreground">
-                        {t("Renews on")} {format(new Date(subscriptionData.subscription_end), "PPP", { locale: dateLocales[language] })}
-                      </span>
-                    )}
-                  </div>
-                  
-                  <div className="bg-muted rounded-lg p-6 space-y-3">
-                    <h3 className="font-semibold mb-3">{t("Your Benefits:")}</h3>
-                    <div className="flex items-center gap-2">
-                      <Zap className="h-4 w-4 text-primary" />
-                      <span className="text-sm">{t("2x Challenge Rewards")}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Trophy className="h-4 w-4 text-primary" />
-                      <span className="text-sm">{t("Exclusive Creator Badge")}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Flag className="h-4 w-4 text-primary" />
-                      <span className="text-sm">{t("Access to Premium Stats")}</span>
-                    </div>
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    onClick={() => openCustomerPortal()}
-                    disabled={isOpeningPortal}
-                  >
-                    {t("Manage Subscription")}
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  <div className="bg-muted rounded-lg p-6 space-y-3">
-                    <h3 className="font-semibold mb-3">{t("What You'll Get:")}</h3>
-                    <div className="flex items-center gap-2">
-                      <Zap className="h-4 w-4 text-primary" />
-                      <span className="text-sm">{t("2x Challenge Rewards")}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Trophy className="h-4 w-4 text-primary" />
-                      <span className="text-sm">{t("Exclusive Creator Badge")}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Flag className="h-4 w-4 text-primary" />
-                      <span className="text-sm">{t("Access to Premium Stats")}</span>
-                    </div>
-                  </div>
-
-                  <Button
-                    className="bg-primary"
-                    onClick={() => createCheckout()}
-                    disabled={isCreatingCheckout}
-                  >
-                    {t("Subscribe for $5/month")}
-                  </Button>
-                </div>
-              )}
-            </Card>
-          </TabsContent>}
         </Tabs>
       </div>
       
