@@ -1,0 +1,658 @@
+# key	fr	pl	de	es
+nav.home	Accueil	Strona główna	Startseite	Inicio
+nav.challenges	Défis	Wyzwania	Challenges	Retos
+nav.feed	Communauté	Społeczność	Community	Comunidad
+nav.leaderboard	Classement	Ranking	Rangliste	Clasificación
+nav.profile	Profil	Profil	Profil	Perfil
+nav.wallet	Récompenses	Nagrody	Belohnungen	Recompensas
+nav.referrals	Parrainage	Polecenia	Empfehlungen	Invitaciones
+nav.admin	Administration	Administracja	Verwaltung	Administración
+nav.signOut	Se déconnecter	Wyloguj się	Abmelden	Cerrar sesión
+nav.signIn	Se connecter	Zaloguj się	Anmelden	Iniciar sesión
+nav.getStarted	Commencer	Zacznij	Loslegen	Empezar
+language.choose	Choisir la langue	Wybierz język	Sprache wählen	Elegir idioma
+hero.badge	Défis photo et vidéo ouverts	Otwarte wyzwania foto i wideo	Offene Foto- und Video-Challenges	Retos de foto y vídeo abiertos
+hero.title1	Choisissez un défi.	Wybierz wyzwanie.	Wähle eine Challenge.	Elige un reto.
+hero.title2	Créez une œuvre originale.	Stwórz autorską pracę.	Erstelle eigene Werke.	Crea una obra original.
+hero.title3	Faites-vous connaître.	Zdobądź uznanie.	Erhalte Anerkennung.	Gana reconocimiento.
+hero.description	Participez à des défis aux règles claires, avec des échéances et des récompenses annoncées. Construisez votre portfolio au fil de vos créations.	Bierz udział w wyzwaniach z jasnymi zasadami, terminami i nagrodami. Buduj publiczne portfolio swoich prac.	Nimm an Challenges mit klaren Regeln, festen Fristen und ausgeschriebenen Belohnungen teil. Baue dabei dein öffentliches Portfolio auf.	Participa en retos con reglas claras, plazos definidos y recompensas anunciadas. Construye tu portfolio con cada creación.
+hero.cta	Découvrir les défis	Przeglądaj wyzwania	Challenges entdecken	Explorar retos
+hero.howItWorks	Comment ça marche	Jak to działa	So funktioniert es	Cómo funciona
+hero.prizesWon	Badges obtenus	Zdobyte odznaki	Erhaltene Abzeichen	Insignias obtenidas
+hero.activeUsers	Membres actifs	Aktywni użytkownicy	Aktive Mitglieder	Miembros activos
+hero.challenges	Défis	Wyzwania	Challenges	Retos
+stats.totalPrizes	Badges obtenus	Zdobyte odznaki	Erhaltene Abzeichen	Insignias obtenidas
+stats.awardedToCreators	Décernés aux créateurs	Przyznane twórcom	An Kreative vergeben	Otorgadas a creadores
+stats.activeCreators	Créateurs actifs	Aktywni twórcy	Aktive Kreative	Creadores activos
+stats.creatingDaily	Créations quotidiennes	Tworzą codziennie	Täglich kreativ	Creando cada día
+stats.dailyChallenges	Défis quotidiens	Codzienne wyzwania	Tägliche Challenges	Retos diarios
+stats.newEveryDay	Du nouveau chaque jour	Nowości każdego dnia	Jeden Tag neu	Novedades cada día
+stats.avgEarnings	Points moyens	Średnia punktów	Durchschnittliche Punkte	Puntos medios
+stats.perMonth	Par mois	Miesięcznie	Pro Monat	Al mes
+challenges.featured	Défis ouverts	Otwarte wyzwania	Offene Challenges	Retos abiertos
+challenges.trending	Choisissez un défi ouvert et envoyez votre création avant la date limite.	Wybierz otwarte wyzwanie i prześlij pracę przed terminem.	Wähle eine offene Challenge und reiche deinen Beitrag rechtzeitig ein.	Elige un reto abierto y envía tu creación antes del cierre.
+challenges.joinChallenge	Participer	Weź udział	Teilnehmen	Participar
+challenges.participants	Participants	Uczestnicy	Teilnehmende	Participantes
+challenges.timeLeft	Temps restant	Pozostały czas	Verbleibende Zeit	Tiempo restante
+challenges.prize	Récompense	Nagroda	Belohnung	Recompensa
+challenges.points	Points	Punkty	Punkte	Puntos
+challenges.difficulty	Difficulté	Trudność	Schwierigkeit	Dificultad
+challenges.easy	Facile	Łatwe	Einfach	Fácil
+challenges.medium	Intermédiaire	Średnie	Mittel	Intermedio
+challenges.hard	Difficile	Trudne	Schwer	Difícil
+cta.title	Prêt à participer ?	Chcesz wziąć udział?	Bereit mitzumachen?	¿Listo para participar?
+cta.description	Choisissez un défi, lisez les consignes et envoyez votre création originale avant la date limite.	Wybierz wyzwanie, przeczytaj zasady i prześlij autorską pracę przed terminem.	Wähle eine Challenge, lies die Vorgaben und reiche dein eigenes Werk rechtzeitig ein.	Elige un reto, lee las instrucciones y envía tu obra original antes del cierre.
+cta.button	Voir les défis ouverts	Zobacz otwarte wyzwania	Offene Challenges ansehen	Ver retos abiertos
+auth.login	Connexion	Logowanie	Anmelden	Iniciar sesión
+auth.signup	Inscription	Rejestracja	Registrieren	Registrarse
+auth.email	Adresse e-mail	Adres e-mail	E-Mail-Adresse	Correo electrónico
+auth.password	Mot de passe	Hasło	Passwort	Contraseña
+auth.username	Nom d’utilisateur	Nazwa użytkownika	Benutzername	Nombre de usuario
+auth.displayName	Nom affiché (facultatif)	Nazwa wyświetlana (opcjonalnie)	Anzeigename (optional)	Nombre visible (opcional)
+auth.signIn	Se connecter	Zaloguj się	Anmelden	Iniciar sesión
+auth.signInWith	Ou continuer avec	Lub kontynuuj przez	Oder fortfahren mit	O continuar con
+auth.createAccount	Créer un compte	Utwórz konto	Konto erstellen	Crear cuenta
+auth.signingIn	Connexion…	Logowanie…	Anmeldung läuft…	Iniciando sesión…
+auth.creatingAccount	Création du compte…	Tworzenie konta…	Konto wird erstellt…	Creando cuenta…
+referrals.title	Programme de parrainage	Program poleceń	Empfehlungsprogramm	Programa de invitaciones
+referrals.description	Invitez vos amis : gagnez 50 points pour chaque inscription et offrez-leur 25 points.	Zaproś znajomych: zdobądź 50 punktów za każdą rejestrację, a oni otrzymają 25 punktów.	Lade Freunde ein: Du erhältst 50 Punkte pro Anmeldung und sie erhalten 25 Punkte.	Invita a tus amigos: gana 50 puntos por cada registro y ellos reciben 25 puntos.
+referrals.totalReferrals	Invitations acceptées	Skuteczne polecenia	Erfolgreiche Empfehlungen	Invitaciones aceptadas
+referrals.totalEarnings	Total des gains	Łączne nagrody	Gesamte Belohnungen	Total ganado
+referrals.rewardPerReferral	Points par invitation	Punkty za polecenie	Punkte pro Empfehlung	Puntos por invitación
+referrals.yourCode	Votre code de parrainage	Twój kod polecający	Dein Empfehlungscode	Tu código de invitación
+referrals.shareCode	Partagez ce code pour gagner des récompenses	Udostępnij kod znajomym, aby zdobywać nagrody	Teile diesen Code, um Belohnungen zu erhalten	Comparte este código para ganar recompensas
+referrals.copyLink	Copier le lien	Kopiuj link	Link kopieren	Copiar enlace
+referrals.share	Partager	Udostępnij	Teilen	Compartir
+referrals.shareOnSocial	Partager sur les réseaux sociaux	Udostępnij w mediach społecznościowych	In sozialen Netzwerken teilen	Compartir en redes sociales
+referrals.howItWorks	Comment ça marche :	Jak to działa:	So funktioniert es:	Cómo funciona:
+referrals.step1	Partagez votre code ou votre lien avec vos amis	Udostępnij znajomym swój kod lub link	Teile deinen Code oder Link mit Freunden	Comparte tu código o enlace con tus amigos
+referrals.step2	Ils s’inscrivent avec votre code et reçoivent 25 points	Rejestrują się z Twoim kodem i otrzymują 25 punktów	Sie melden sich mit deinem Code an und erhalten 25 Punkte	Se registran con tu código y reciben 25 puntos
+referrals.step3	Vous recevez 50 points pour chaque inscription réussie	Otrzymujesz 50 punktów za każdą udaną rejestrację	Du erhältst 50 Punkte pro erfolgreicher Anmeldung	Recibes 50 puntos por cada registro completado
+referrals.history	Historique des invitations	Historia poleceń	Empfehlungsverlauf	Historial de invitaciones
+referrals.noReferrals	Aucune invitation pour le moment	Brak poleceń	Noch keine Empfehlungen	Aún no hay invitaciones
+referrals.startSharing	Partagez votre code pour gagner des récompenses !	Udostępnij kod, aby zdobywać nagrody!	Teile deinen Code und sammle Belohnungen!	¡Comparte tu código para ganar recompensas!
+referrals.joined	Inscription	Dołączył(a)	Beigetreten	Registro
+common.loading	Chargement…	Ładowanie…	Wird geladen…	Cargando…
+common.back	Retour	Wstecz	Zurück	Volver
+common.save	Enregistrer	Zapisz	Speichern	Guardar
+common.cancel	Annuler	Anuluj	Abbrechen	Cancelar
+common.submit	Envoyer	Wyślij	Absenden	Enviar
+common.edit	Modifier	Edytuj	Bearbeiten	Editar
+common.delete	Supprimer	Usuń	Löschen	Eliminar
+common.search	Rechercher	Szukaj	Suchen	Buscar
+common.filter	Filtrer	Filtruj	Filtern	Filtrar
+common.sort	Trier	Sortuj	Sortieren	Ordenar
+common.error	Erreur	Błąd	Fehler	Error
+common.success	Réussi	Sukces	Erfolgreich	Completado
+common.confirm	Confirmer	Potwierdź	Bestätigen	Confirmar
+common.close	Fermer	Zamknij	Schließen	Cerrar
+common.viewMore	Voir plus	Zobacz więcej	Mehr anzeigen	Ver más
+common.showLess	Voir moins	Pokaż mniej	Weniger anzeigen	Ver menos
+common.signIn	Se connecter	Zaloguj się	Anmelden	Iniciar sesión
+common.signUp	S’inscrire	Zarejestruj się	Registrieren	Registrarse
+common.signOut	Se déconnecter	Wyloguj się	Abmelden	Cerrar sesión
+profile.myProfile	Mon profil	Mój profil	Mein Profil	Mi perfil
+profile.level	Niveau	Poziom	Level	Nivel
+profile.followers	Abonnés	Obserwujący	Follower	Seguidores
+profile.following	Abonnements	Obserwowani	Gefolgt	Siguiendo
+profile.submissions	Participations	Zgłoszenia	Beiträge	Participaciones
+profile.achievements	Succès	Osiągnięcia	Erfolge	Logros
+profile.editProfile	Modifier le profil	Edytuj profil	Profil bearbeiten	Editar perfil
+profile.settings	Paramètres	Ustawienia	Einstellungen	Ajustes
+profile.follow	Suivre	Obserwuj	Folgen	Seguir
+profile.unfollow	Ne plus suivre	Przestań obserwować	Entfolgen	Dejar de seguir
+profile.stats	Statistiques	Statystyki	Statistiken	Estadísticas
+profile.badges	Badges	Odznaki	Abzeichen	Insignias
+profile.saveChanges	Enregistrer les modifications	Zapisz zmiany	Änderungen speichern	Guardar cambios
+profile.displayName	Nom affiché	Nazwa wyświetlana	Anzeigename	Nombre visible
+profile.bio	Biographie	Biogram	Biografie	Biografía
+profile.changeAvatar	Changer l’avatar	Zmień awatar	Profilbild ändern	Cambiar avatar
+profile.subscribe	S’abonner	Subskrybuj	Abonnieren	Suscribirse
+profile.manageSubscription	Gérer l’abonnement	Zarządzaj subskrypcją	Abo verwalten	Gestionar suscripción
+profile.creatorPassActive	Creator Pass actif	Creator Pass aktywny	Creator Pass aktiv	Creator Pass activo
+profile.renewsOn	Renouvellement le	Odnowienie	Verlängerung am	Renovación el
+profile.noBadges	Aucun badge pour le moment	Brak zdobytych odznak	Noch keine Abzeichen	Aún no tienes insignias
+profile.earnBadges	Relevez des défis pour obtenir des badges !	Ukończ wyzwania, aby zdobywać odznaki!	Schließe Challenges ab und sammle Abzeichen!	¡Completa retos para ganar insignias!
+profile.noSubmissions	Aucune participation pour le moment	Brak zgłoszeń	Noch keine Beiträge	Aún no hay participaciones
+profile.startCreating	Commencez à créer pour voir vos participations ici !	Zacznij tworzyć, aby zobaczyć tu swoje zgłoszenia!	Werde kreativ und sieh hier deine Beiträge!	¡Empieza a crear para ver aquí tus participaciones!
+profile.uploading	Envoi en cours…	Przesyłanie…	Wird hochgeladen…	Subiendo…
+profile.saving	Enregistrement…	Zapisywanie…	Wird gespeichert…	Guardando…
+profile.avatarTooLarge	L’avatar doit faire moins de 5 Mo	Awatar musi mieć mniej niż 5 MB	Das Profilbild muss kleiner als 5 MB sein	El avatar debe pesar menos de 5 MB
+profile.profileUpdated	Profil mis à jour !	Profil zaktualizowany!	Profil aktualisiert!	¡Perfil actualizado!
+profile.updateFailed	Impossible de mettre à jour le profil	Nie udało się zaktualizować profilu	Profil konnte nicht aktualisiert werden	No se pudo actualizar el perfil
+profile.subscribeDesc	Abonnez-vous pour 5 $/mois pour des avantages exclusifs	Subskrybuj za 5 USD miesięcznie, aby uzyskać dodatkowe korzyści	Abonniere für 5 $/Monat für exklusive Vorteile	Suscríbete por 5 $/mes y disfruta de ventajas exclusivas
+profile.manageDesc	Gérez votre abonnement	Zarządzaj subskrypcją	Verwalte dein Abo	Gestiona tu suscripción
+profile.managing	Chargement…	Ładowanie…	Wird geladen…	Cargando…
+leaderboard.title	Classement	Ranking	Rangliste	Clasificación
+leaderboard.subtitle	Les meilleurs créateurs du monde entier	Najlepsi twórcy z całego świata	Die besten Kreativen weltweit	Los mejores creadores del mundo
+leaderboard.topCreators	Meilleurs créateurs	Najlepsi twórcy	Beste Kreative	Mejores creadores
+leaderboard.rank	Rang	Miejsce	Rang	Posición
+leaderboard.creator	Créateur	Twórca	Kreative	Creador
+leaderboard.thisWeek	Cette semaine	W tym tygodniu	Diese Woche	Esta semana
+leaderboard.allTime	Depuis le début	Cały okres	Gesamt	Histórico
+leaderboard.daily	Quotidien	Dzienny	Täglich	Diario
+leaderboard.weekly	Hebdomadaire	Tygodniowy	Wöchentlich	Semanal
+leaderboard.comingSoon	Bientôt disponible	Wkrótce	Demnächst	Próximamente
+leaderboard.dailyComingSoon	Le classement quotidien sera bientôt disponible !	Dzienny ranking będzie wkrótce dostępny!	Die tägliche Rangliste ist bald verfügbar!	¡La clasificación diaria estará disponible pronto!
+leaderboard.weeklyComingSoon	Le classement hebdomadaire sera bientôt disponible !	Tygodniowy ranking będzie wkrótce dostępny!	Die wöchentliche Rangliste ist bald verfügbar!	¡La clasificación semanal estará disponible pronto!
+leaderboard.noRankings	Aucun classement pour le moment	Brak wyników w rankingu	Noch keine Platzierungen	Aún no hay clasificación
+leaderboard.beFirstToEarn	Soyez le premier à gagner des points !	Zdobądź punkty jako pierwszy!	Sammle als Erstes Punkte!	¡Sé el primero en ganar puntos!
+leaderboard.pts	pts	pkt	Pkt.	pts
+leaderboard.points	Points	Punkty	Punkte	Puntos
+feed.title	Communauté	Społeczność	Community	Comunidad
+feed.subtitle	Découvrez la communauté des créateurs	Poznaj społeczność twórców	Entdecke die kreative Community	Descubre la comunidad de creadores
+feed.recent	Récent	Najnowsze	Neueste	Reciente
+feed.popular	Populaire	Popularne	Beliebt	Popular
+feed.following	Abonnements	Obserwowani	Gefolgt	Siguiendo
+feed.allSubmissions	Toutes les participations	Wszystkie zgłoszenia	Alle Beiträge	Todas las participaciones
+feed.noSubmissions	Aucune participation pour le moment	Brak zgłoszeń	Noch keine Beiträge	Aún no hay participaciones
+feed.beFirstToSubmit	Soyez le premier à participer à un défi !	Zgłoś się do wyzwania jako pierwszy!	Reiche den ersten Beitrag ein!	¡Sé el primero en participar en un reto!
+feed.followCreatorsToSee	Suivez des créateurs pour voir leurs participations ici !	Obserwuj twórców, aby widzieć tutaj ich zgłoszenia!	Folge Kreativen, um hier ihre Beiträge zu sehen!	¡Sigue a creadores para ver aquí sus participaciones!
+feed.signInToFollow	Connectez-vous pour suivre des créateurs !	Zaloguj się, aby obserwować twórców!	Melde dich an, um Kreativen zu folgen!	¡Inicia sesión para seguir a creadores!
+wallet.title	Récompenses	Nagrody	Belohnungen	Recompensas
+wallet.subtitle	Suivez vos points, badges et Creator Pass	Śledź punkty, odznaki i Creator Pass	Deine Punkte, Abzeichen und dein Creator Pass	Consulta tus puntos, insignias y Creator Pass
+wallet.balance	Points	Punkty	Punkte	Puntos
+wallet.currentBalance	Votre solde de points actuel	Twój aktualny stan punktów	Dein aktueller Punktestand	Tu saldo actual de puntos
+wallet.creatorPass	Creator Pass	Creator Pass	Creator Pass	Creator Pass
+wallet.premiumSubscription	Abonnement premium avec avantages supplémentaires	Subskrypcja premium z dodatkowymi korzyściami	Premium-Abo mit zusätzlichen Vorteilen	Suscripción premium con ventajas adicionales
+wallet.subscriptionDesc	Abonnez-vous pour 5 $/mois : récompenses supplémentaires, statistiques exclusives et fonctionnalités premium	Subskrybuj za 5 USD miesięcznie: dodatkowe nagrody, statystyki i funkcje premium	Für 5 $/Monat: zusätzliche Belohnungen, exklusive Statistiken und Premium-Funktionen	Suscríbete por 5 $/mes: más recompensas, estadísticas exclusivas y funciones premium
+wallet.subscribeNow	S’abonner	Subskrybuj teraz	Jetzt abonnieren	Suscribirse ahora
+wallet.active	Actif	Aktywny	Aktiv	Activo
+wallet.transactions	Historique des transactions	Historia transakcji	Transaktionsverlauf	Historial de transacciones
+wallet.recentActivity	Activité récente de vos récompenses	Ostatnia aktywność nagród	Deine letzten Belohnungsaktivitäten	Actividad reciente de recompensas
+wallet.history	Historique	Historia	Verlauf	Historial
+wallet.topUp	Recharger	Doładuj	Aufladen	Recargar
+wallet.withdraw	Échanger	Wymień	Einlösen	Canjear
+wallet.noTransactions	Aucune transaction pour le moment	Brak transakcji	Noch keine Transaktionen	Aún no hay transacciones
+wallet.transactionType	Type	Typ	Typ	Tipo
+wallet.amount	Montant	Kwota	Betrag	Cantidad
+wallet.date	Date	Data	Datum	Fecha
+challenge.back	Retour	Wstecz	Zurück	Volver
+challenge.joinChallenge	Participer	Weź udział	Teilnehmen	Participar
+challenge.submit	Envoyer ma participation	Wyślij zgłoszenie	Beitrag einreichen	Enviar participación
+challenge.uploadPhoto	Importer une photo/vidéo	Prześlij zdjęcie lub wideo	Foto/Video hochladen	Subir foto o vídeo
+challenge.caption	Légende (facultative)	Opis (opcjonalnie)	Bildunterschrift (optional)	Descripción (opcional)
+challenge.yourSubmission	Votre participation	Twoje zgłoszenie	Dein Beitrag	Tu participación
+challenge.signInToParticipate	Connectez-vous pour participer	Zaloguj się, aby wziąć udział	Zum Teilnehmen anmelden	Inicia sesión para participar
+challenge.submitting	Envoi en cours…	Wysyłanie…	Wird eingereicht…	Enviando…
+challenge.submitted	Envoyé	Wysłano	Eingereicht	Enviado
+challenge.editImage	Modifier l’image	Edytuj obraz	Bild bearbeiten	Editar imagen
+challenge.boost	Booster	Promuj	Boosten	Impulsar
+challenge.reEdit	Retoucher	Edytuj ponownie	Erneut bearbeiten	Volver a editar
+challenge.selectFile	Choisir une photo/vidéo	Wybierz zdjęcie lub wideo	Foto/Video auswählen	Elegir foto o vídeo
+challenge.signInRequired	Connectez-vous pour participer aux défis	Zaloguj się, aby brać udział w wyzwaniach	Melde dich an, um an Challenges teilzunehmen	Inicia sesión para participar en retos
+challenge.fillRequired	Veuillez importer une photo ou une vidéo	Prześlij zdjęcie lub wideo	Bitte lade ein Foto oder Video hoch	Sube una foto o un vídeo
+challenge.submittedSuccess	Participation envoyée ! +{points} points	Zgłoszenie wysłane! +{points} punktów	Beitrag eingereicht! +{points} Punkte	¡Participación enviada! +{points} puntos
+challenge.submissionFailed	Impossible d’envoyer la participation	Nie udało się wysłać zgłoszenia	Beitrag konnte nicht eingereicht werden	No se pudo enviar la participación
+challenge.imageEdited	Image modifiée !	Obraz zapisany!	Bild bearbeitet!	¡Imagen editada!
+challenge.pts	pts	pkt	Pkt.	pts
+submission.likedBy	Aimé par	Polubione przez	Gefällt	Me gusta de
+submission.people	personnes	osób	Personen	personas
+submission.comment	Commenter	Komentuj	Kommentieren	Comentar
+submission.comments	Commentaires	Komentarze	Kommentare	Comentarios
+submission.addComment	Ajouter un commentaire…	Dodaj komentarz…	Kommentar hinzufügen…	Añadir un comentario…
+submission.postComment	Publier	Opublikuj	Posten	Publicar
+submission.commentAdded	Commentaire ajouté !	Komentarz dodany!	Kommentar hinzugefügt!	¡Comentario añadido!
+submission.commentFailed	Impossible d’ajouter le commentaire	Nie udało się dodać komentarza	Kommentar konnte nicht hinzugefügt werden	No se pudo añadir el comentario
+submission.signInToVote	Connectez-vous pour voter	Zaloguj się, aby głosować	Melde dich an, um abzustimmen	Inicia sesión para votar
+submission.voteFailed	Impossible de voter	Nie udało się zagłosować	Abstimmung fehlgeschlagen	No se pudo votar
+submission.boost	Booster	Promuj	Boosten	Impulsar
+submission.reEdit	Retoucher	Edytuj ponownie	Erneut bearbeiten	Volver a editar
+submission.viewProfile	Voir le profil	Zobacz profil	Profil ansehen	Ver perfil
+submission.boosted	Boosté	Promowane	Geboostet	Impulsado
+admin.panel	Administration	Administracja	Verwaltung	Administración
+admin.dashboard	Tableau de bord	Panel główny	Dashboard	Panel de control
+admin.users	Utilisateurs	Użytkownicy	Nutzer	Usuarios
+admin.submissions	Participations	Zgłoszenia	Beiträge	Participaciones
+admin.challenges	Défis	Wyzwania	Challenges	Retos
+admin.createChallenge	Créer un défi	Utwórz wyzwanie	Challenge erstellen	Crear reto
+admin.rewards	Récompenses	Nagrody	Belohnungen	Recompensas
+admin.analytics	Statistiques	Statystyki	Statistiken	Estadísticas
+admin.payments	Paiements	Płatności	Zahlungen	Pagos
+admin.activityLogs	Journal d’activité	Dziennik aktywności	Aktivitätsprotokoll	Registro de actividad
+admin.totalUsers	Total des utilisateurs	Łączna liczba użytkowników	Nutzer insgesamt	Total de usuarios
+admin.totalChallenges	Total des défis	Łączna liczba wyzwań	Challenges insgesamt	Total de retos
+admin.totalSubmissions	Total des participations	Łączna liczba zgłoszeń	Beiträge insgesamt	Total de participaciones
+admin.pendingSubmissions	Participations en attente	Oczekujące zgłoszenia	Ausstehende Beiträge	Participaciones pendientes
+admin.challengeModeration	Modération des défis	Moderacja wyzwań	Challenge-Moderation	Moderación de retos
+admin.deleteSelected	Supprimer la sélection	Usuń wybrane	Auswahl löschen	Eliminar selección
+admin.selectAll	Tout sélectionner	Zaznacz wszystko	Alle auswählen	Seleccionar todo
+admin.challengeTitle	Titre du défi	Tytuł wyzwania	Challenge-Titel	Título del reto
+admin.creator	Créateur	Twórca	Kreative	Creador
+admin.type	Type	Typ	Typ	Tipo
+admin.status	Statut	Status	Status	Estado
+admin.actions	Actions	Działania	Aktionen	Acciones
+admin.noChallenges	Aucun défi trouvé	Nie znaleziono wyzwań	Keine Challenges gefunden	No se encontraron retos
+admin.challengeDeleted	Défis supprimés	Usunięto wyzwania	Challenges gelöscht	Retos eliminados
+admin.deleteFailed	Impossible de supprimer le défi	Nie udało się usunąć wyzwania	Challenge konnte nicht gelöscht werden	No se pudo eliminar el reto
+admin.challengeDetails	Détails du défi	Szczegóły wyzwania	Challenge-Details	Detalles del reto
+admin.challengeTitlePlaceholder	Donnez un titre accrocheur au défi…	Wpisz ciekawy tytuł wyzwania…	Gib einen ansprechenden Titel ein…	Escribe un título atractivo…
+admin.challengeDescription	Description	Opis	Beschreibung	Descripción
+admin.challengeDescriptionPlaceholder	Décrivez ce que les participants doivent faire…	Opisz zadanie dla uczestników…	Beschreibe die Aufgabe für die Teilnehmenden…	Describe lo que deben hacer los participantes…
+admin.prize	Récompense	Nagroda	Belohnung	Recompensa
+admin.points	Points	Punkty	Punkte	Puntos
+admin.difficulty	Difficulté	Trudność	Schwierigkeit	Dificultad
+admin.challengeType	Type de défi	Typ wyzwania	Challenge-Typ	Tipo de reto
+admin.daily	Quotidien	Codzienne	Täglich	Diario
+admin.weekly	Hebdomadaire	Tygodniowe	Wöchentlich	Semanal
+admin.duration	Durée	Czas trwania	Dauer	Duración
+admin.durationDaysHint	Durée du défi en jours	Czas trwania wyzwania w dniach	Dauer der Challenge in Tagen	Duración del reto en días
+admin.durationWeeksHint	Durée du défi en semaines	Czas trwania wyzwania w tygodniach	Dauer der Challenge in Wochen	Duración del reto en semanas
+admin.challengeImage	Image du défi (facultative)	Obraz wyzwania (opcjonalnie)	Challenge-Bild (optional)	Imagen del reto (opcional)
+admin.creating	Création…	Tworzenie…	Wird erstellt…	Creando…
+admin.createChallengeButton	Créer un défi	Utwórz wyzwanie	Challenge erstellen	Crear reto
+admin.challengeCreated	Défi créé !	Wyzwanie utworzone!	Challenge erstellt!	¡Reto creado!
+admin.challengeCreateFailed	Impossible de créer le défi	Nie udało się utworzyć wyzwania	Challenge konnte nicht erstellt werden	No se pudo crear el reto
+admin.submissionModeration	Modération des participations	Moderacja zgłoszeń	Beitragsmoderation	Moderación de participaciones
+admin.approve	Approuver	Zatwierdź	Genehmigen	Aprobar
+admin.reject	Refuser	Odrzuć	Ablehnen	Rechazar
+admin.flag	Signaler	Oznacz	Melden	Marcar
+admin.approveSelected	Approuver la sélection	Zatwierdź wybrane	Auswahl genehmigen	Aprobar selección
+admin.rejectSelected	Refuser la sélection	Odrzuć wybrane	Auswahl ablehnen	Rechazar selección
+admin.username	Nom d’utilisateur	Nazwa użytkownika	Benutzername	Nombre de usuario
+admin.challenge	Défi	Wyzwanie	Challenge	Reto
+admin.submittedAt	Envoyé le	Przesłano	Eingereicht	Enviado
+admin.noSubmissions	Aucune participation trouvée	Nie znaleziono zgłoszeń	Keine Beiträge gefunden	No se encontraron participaciones
+admin.approved	Participations approuvées	Zgłoszenia zatwierdzone	Beiträge genehmigt	Participaciones aprobadas
+admin.rejected	Participations refusées	Zgłoszenia odrzucone	Beiträge abgelehnt	Participaciones rechazadas
+admin.moderationFailed	La modération a échoué	Moderacja nie powiodła się	Moderation fehlgeschlagen	Error de moderación
+admin.userManagement	Gestion des utilisateurs	Zarządzanie użytkownikami	Nutzerverwaltung	Gestión de usuarios
+admin.email	Adresse e-mail	Adres e-mail	E-Mail-Adresse	Correo electrónico
+admin.role	Rôle	Rola	Rolle	Rol
+admin.joinedDate	Inscription	Data dołączenia	Beigetreten	Registro
+admin.assignRole	Attribuer un rôle	Przypisz rolę	Rolle zuweisen	Asignar rol
+admin.removeRole	Retirer le rôle	Usuń rolę	Rolle entfernen	Quitar rol
+admin.noUsers	Aucun utilisateur trouvé	Nie znaleziono użytkowników	Keine Nutzer gefunden	No se encontraron usuarios
+admin.roleAssigned	Rôle attribué	Rola przypisana	Rolle zugewiesen	Rol asignado
+admin.roleRemoved	Rôle retiré	Rola usunięta	Rolle entfernt	Rol eliminado
+admin.roleFailed	Impossible de modifier le rôle	Nie udało się zmienić roli	Rolle konnte nicht geändert werden	No se pudo cambiar el rol
+home.route	Parcours du défi / 01	Przebieg wyzwania / 01	Challenge-Ablauf / 01	Recorrido del reto / 01
+home.step1Title	Choisissez un défi ouvert	Wybierz otwarte wyzwanie	Wähle eine offene Challenge	Elige un reto abierto
+home.step1Description	Consultez les règles, la date limite, la récompense et les critères du jury.	Sprawdź zasady, termin, nagrodę i kryteria oceny.	Prüfe Regeln, Frist, Belohnung und Bewertungskriterien.	Consulta las reglas, el plazo, la recompensa y los criterios de evaluación.
+home.step2Title	Envoyez votre création originale	Prześlij autorską pracę	Reiche dein eigenes Werk ein	Envía tu obra original
+home.step2Description	Importez votre photo ou vidéo avant la clôture du défi.	Prześlij swoje zdjęcie lub wideo przed końcem wyzwania.	Lade dein Foto oder Video vor Ende der Challenge hoch.	Sube tu foto o vídeo antes del cierre del reto.
+home.step3Title	Recevez une évaluation	Poczekaj na ocenę	Erhalte eine Bewertung	Recibe una evaluación
+home.step3Description	Les créations approuvées rapportent des points et apparaissent dans la communauté.	Zatwierdzone prace zdobywają punkty i pojawiają się w społeczności.	Genehmigte Beiträge erhalten Punkte und erscheinen in der Community.	Las obras aprobadas ganan puntos y aparecen en la comunidad.
+home.board	Tableau des défis	Tablica wyzwań	Challenge-Übersicht	Tablón de retos
+home.recent	Défis récents	Ostatnie wyzwania	Letzte Challenges	Retos recientes
+home.archive	De nouveaux défis arrivent bientôt. Découvrez en attendant les défis récemment terminés.	Nowe wyzwania już wkrótce. Tymczasem zobacz ostatnio zakończone wyzwania.	Neue Challenges sind unterwegs. Entdecke in der Zwischenzeit kürzlich beendete Challenges.	Pronto llegarán nuevos retos. Mientras tanto, explora los que han terminado recientemente.
+home.loadError	Impossible de charger les défis	Nie udało się załadować wyzwań	Challenges konnten nicht geladen werden	No se pudieron cargar los retos
+home.connection	Vérifiez votre connexion et réessayez.	Sprawdź połączenie i spróbuj ponownie.	Prüfe deine Verbindung und versuche es erneut.	Comprueba tu conexión e inténtalo de nuevo.
+home.retry	Réessayer	Spróbuj ponownie	Erneut versuchen	Reintentar
+home.empty	Aucun défi ouvert pour le moment	Obecnie brak otwartych wyzwań	Derzeit keine offenen Challenges	No hay retos abiertos ahora
+home.checkBack	Revenez bientôt pour un nouveau défi créatif.	Wróć wkrótce po nowe kreatywne wyzwanie.	Schau bald wieder nach einer neuen kreativen Challenge.	Vuelve pronto para descubrir un nuevo reto creativo.
+home.next	Votre prochain défi	Twoje następne wyzwanie	Deine nächste Challenge	Tu próximo reto
+challenge.mission	DÉFI	WYZWANIE	CHALLENGE	RETO
+challenge.ended	Défi terminé	Wyzwanie zakończone	Challenge beendet	Reto finalizado
+time.ended	Terminé	Zakończone	Beendet	Finalizado
+time.days	{days} j {hours} h restantes	Pozostało: {days} dni {hours} godz.	Noch {days} T. {hours} Std.	Quedan {days} d {hours} h
+time.hours	{hours} h restantes	Pozostało: {hours} godz.	Noch {hours} Std.	Quedan {hours} h
+header.home	Accueil A Challenge	Strona główna A Challenge	A Challenge Startseite	Inicio de A Challenge
+header.account	Ouvrir le menu du compte	Otwórz menu konta	Kontomenü öffnen	Abrir menú de cuenta
+header.menu	Ouvrir ou fermer le menu	Otwórz lub zamknij menu	Menü öffnen oder schließen	Abrir o cerrar menú
+artwork.cover	{title} — couverture illustrée A Challenge	{title} — ilustracja A Challenge	{title} — illustriertes A Challenge Titelbild	{title} — portada ilustrada de A Challenge
+footer.description	Des défis photo et vidéo originaux pour les créateurs. Partagez vos œuvres, respectez les règles et amusez-vous.	Autorskie wyzwania foto i wideo dla twórców. Przesyłaj własne prace, przestrzegaj zasad i baw się dobrze.	Originelle Foto- und Video-Challenges für Kreative. Reiche eigene Werke ein, beachte die Regeln und hab Spaß.	Retos originales de foto y vídeo para creadores. Comparte tus obras, respeta las reglas y diviértete.
+footer.legal	Informations légales	Informacje prawne	Rechtliches	Información legal
+footer.privacy	Confidentialité	Prywatność	Datenschutz	Privacidad
+footer.terms	Conditions d’utilisation	Warunki korzystania	Nutzungsbedingungen	Condiciones de uso
+footer.cookies	Cookies	Pliki cookie	Cookies	Cookies
+footer.rules	Règles des défis	Zasady wyzwań	Challenge-Regeln	Reglas de los retos
+footer.help	Aide	Pomoc	Hilfe	Ayuda
+footer.rights	Tous droits réservés.	Wszelkie prawa zastrzeżone.	Alle Rechte vorbehalten.	Todos los derechos reservados.
+footer.operator	Exploité par	Operator	Betrieben von	Gestionado por
+trending.title	Défis populaires	Popularne wyzwania	Beliebte Challenges	Retos populares
+weekly.title	Les meilleurs de la semaine	Najlepsi w tym tygodniu	Beste der Woche	Los mejores de la semana
+reward.default	{points} points + badge À la une de la semaine	{points} punktów + odznaka Wyróżnienie tygodnia	{points} Punkte + Abzeichen Wochen-Highlight	{points} puntos + insignia Destacado de la semana
+content.original	Traduction indisponible : contenu affiché dans sa langue d’origine.	Tłumaczenie niedostępne: treść w oryginalnym języku.	Übersetzung nicht verfügbar: Inhalt in der Originalsprache.	Traducción no disponible: contenido en su idioma original.
+content.translations	Traductions du défi	Tłumaczenia wyzwania	Challenge-Übersetzungen	Traducciones del reto
+content.translationHint	Ajoutez un titre et une description pour chaque langue. Une couverture différente est facultative.	Dodaj tytuł i opis w każdym języku. Osobna okładka jest opcjonalna.	Füge Titel und Beschreibung je Sprache hinzu. Ein eigenes Titelbild ist optional.	Añade título y descripción en cada idioma. Una portada diferente es opcional.
+content.coverUrl	URL de la couverture traduite (facultative)	Adres URL przetłumaczonej okładki (opcjonalnie)	URL des übersetzten Titelbilds (optional)	URL de la portada traducida (opcional)
+content.incomplete	Complétez le titre et la description de chaque traduction commencée.	Uzupełnij tytuł i opis każdego rozpoczętego tłumaczenia.	Vervollständige Titel und Beschreibung jeder begonnenen Übersetzung.	Completa el título y la descripción de cada traducción iniciada.
+content.source	Langue du contenu principal	Język treści głównej	Sprache des Hauptinhalts	Idioma del contenido principal
+content.invalidCover	La couverture doit utiliser une adresse HTTPS.	Okładka musi używać adresu HTTPS.	Das Titelbild muss eine HTTPS-Adresse verwenden.	La portada debe usar una dirección HTTPS.
+Loading your session	Chargement de votre session	Ładowanie sesji	Sitzung wird geladen	Cargando tu sesión
+Join the creative challenge community	Rejoignez la communauté des défis créatifs	Dołącz do społeczności kreatywnych wyzwań	Werde Teil der kreativen Challenge-Community	Únete a la comunidad de retos creativos
+Reset your password	Réinitialiser votre mot de passe	Zresetuj hasło	Passwort zurücksetzen	Restablece tu contraseña
+Enter your email and we’ll send you a secure reset link.	Indiquez votre e-mail pour recevoir un lien sécurisé de réinitialisation.	Podaj e-mail, a wyślemy bezpieczny link do resetowania hasła.	Gib deine E-Mail-Adresse ein. Wir senden dir einen sicheren Link zum Zurücksetzen.	Introduce tu correo y te enviaremos un enlace seguro para restablecer tu contraseña.
+Send reset link	Envoyer le lien	Wyślij link resetujący	Link senden	Enviar enlace
+Back to sign in	Retour à la connexion	Wróć do logowania	Zurück zur Anmeldung	Volver a iniciar sesión
+New password	Nouveau mot de passe	Nowe hasło	Neues Passwort	Nueva contraseña
+Confirm new password	Confirmer le nouveau mot de passe	Potwierdź nowe hasło	Neues Passwort bestätigen	Confirmar nueva contraseña
+Update password	Mettre à jour le mot de passe	Zmień hasło	Passwort ändern	Actualizar contraseña
+Continue to A Challenge	Continuer vers A Challenge	Przejdź do A Challenge	Weiter zu A Challenge	Continuar a A Challenge
+Confirm your email	Confirmer votre e-mail	Potwierdź adres e-mail	E-Mail bestätigen	Confirma tu correo
+Enter the complete code sent to	Saisissez le code complet envoyé à	Wpisz pełny kod wysłany na	Gib den vollständigen Code ein, gesendet an	Introduce el código completo enviado a
+Confirmation code	Code de confirmation	Kod potwierdzający	Bestätigungscode	Código de confirmación
+Enter your code	Saisissez votre code	Wpisz kod	Code eingeben	Introduce tu código
+Confirm and enter	Confirmer et continuer	Potwierdź i przejdź dalej	Bestätigen und fortfahren	Confirmar y continuar
+Resend code	Renvoyer le code	Wyślij kod ponownie	Code erneut senden	Reenviar código
+Forgot your password?	Mot de passe oublié ?	Nie pamiętasz hasła?	Passwort vergessen?	¿Olvidaste tu contraseña?
+🎉 Referral code applied! You'll get	🎉 Code de parrainage appliqué ! Vous recevrez	🎉 Kod polecający zastosowany! Otrzymasz	🎉 Empfehlungscode angewendet! Du erhältst	🎉 ¡Código de invitación aplicado! Recibirás
+25 coins	25 points	25 punktów	25 Punkte	25 puntos
+when you sign up.	à votre inscription.	po rejestracji.	bei der Anmeldung.	al registrarte.
+Your submission	Votre participation	Twoje zgłoszenie	Dein Beitrag	Tu participación
+Submit Your Entry	Envoyez votre participation	Wyślij swoje zgłoszenie	Reiche deinen Beitrag ein	Envía tu participación
+Capture or Upload Photo/Video	Prenez ou importez une photo/vidéo	Zrób lub prześlij zdjęcie albo wideo	Foto/Video aufnehmen oder hochladen	Capturar o subir foto o vídeo
+Take Photo	Prendre une photo	Zrób zdjęcie	Foto aufnehmen	Hacer foto
+Choose from Gallery	Choisir dans la galerie	Wybierz z galerii	Aus Galerie auswählen	Elegir de la galería
+Preview	Aperçu	Podgląd	Vorschau	Vista previa
+Tell us about your submission...	Décrivez votre participation…	Opisz swoje zgłoszenie…	Beschreibe deinen Beitrag…	Describe tu participación…
+Create an account to submit your entry, earn points, and unlock badges!	Créez un compte pour participer, gagner des points et débloquer des badges !	Utwórz konto, aby wysyłać zgłoszenia, zdobywać punkty i odznaki!	Erstelle ein Konto, reiche Beiträge ein und sammle Punkte und Abzeichen!	¡Crea una cuenta para participar, ganar puntos y desbloquear insignias!
+Browse recent submissions from the A Challenge community.	Découvrez les dernières créations de la communauté A Challenge.	Przeglądaj najnowsze prace społeczności A Challenge.	Entdecke die neuesten Beiträge der A Challenge Community.	Descubre las últimas obras de la comunidad A Challenge.
+Search by username, challenge, or caption...	Rechercher par créateur, défi ou légende…	Szukaj po użytkowniku, wyzwaniu lub opisie…	Nach Nutzername, Challenge oder Bildunterschrift suchen…	Buscar por usuario, reto o descripción…
+Discover	Découvrir	Odkrywaj	Entdecken	Descubrir
+Explore Challenges	Explorer les défis	Przeglądaj wyzwania	Challenges entdecken	Explorar retos
+Leaderboard could not load	Impossible de charger le classement	Nie udało się załadować rankingu	Rangliste konnte nicht geladen werden	No se pudo cargar la clasificación
+Your Ranking	Votre classement	Twoja pozycja	Deine Platzierung	Tu posición
+on	sur	z	von	de
+participants	participants	uczestników	Teilnehmende	participantes
+Top 10	Top 10	Top 10	Top 10	Top 10
+You	Vous	Ty	Du	Tú
+Score:	Score :	Wynik:	Punktzahl:	Puntuación:
+Challenge Leaderboard	Classement du défi	Ranking wyzwania	Challenge-Rangliste	Clasificación del reto
+Top performers based on votes and engagement	Les meilleurs selon les votes et les interactions	Najlepsi według głosów i aktywności	Beste Teilnehmende nach Stimmen und Interaktionen	Los mejores según votos e interacciones
+Search by username...	Rechercher un utilisateur…	Szukaj po nazwie użytkownika…	Nach Nutzername suchen…	Buscar por nombre de usuario…
+Choose a completed challenge	Choisir un défi terminé	Wybierz zakończone wyzwanie	Beendete Challenge auswählen	Elegir un reto finalizado
+Select a challenge	Sélectionner un défi	Wybierz wyzwanie	Challenge auswählen	Seleccionar un reto
+All Completed Challenges	Tous les défis terminés	Wszystkie zakończone wyzwania	Alle beendeten Challenges	Todos los retos finalizados
+How the Leaderboard Works	Comment fonctionne le classement	Jak działa ranking	So funktioniert die Rangliste	Cómo funciona la clasificación
+• Rankings are based on completed challenges only	• Seuls les défis terminés sont pris en compte	• Ranking obejmuje tylko zakończone wyzwania	• Nur beendete Challenges zählen für die Rangliste	• Solo cuentan los retos finalizados
+• Score = (Likes × 2) + Comments	• Score = (J’aime × 2) + Commentaires	• Wynik = (Polubienia × 2) + Komentarze	• Punktzahl = (Likes × 2) + Kommentare	• Puntuación = (Me gusta × 2) + Comentarios
+• Only the Top 10 are displayed publicly	• Seul le top 10 est affiché publiquement	• Publicznie wyświetlana jest tylko pierwsza dziesiątka	• Nur die Top 10 werden öffentlich angezeigt	• Solo los 10 primeros se muestran públicamente
+• Your personal rank shows your position among all participants	• Votre rang indique votre position parmi tous les participants	• Twoja pozycja pokazuje miejsce wśród wszystkich uczestników	• Dein persönlicher Rang zeigt deine Position unter allen Teilnehmenden	• Tu posición personal indica tu lugar entre todos los participantes
+Profile not found	Profil introuvable	Nie znaleziono profilu	Profil nicht gefunden	Perfil no encontrado
+Upload Avatar	Importer un avatar	Prześlij awatar	Profilbild hochladen	Subir avatar
+Tell us about yourself...	Parlez-nous de vous…	Napisz coś o sobie…	Erzähle etwas über dich…	Cuéntanos sobre ti…
+Badges (	Badges (	Odznaki (	Abzeichen (	Insignias (
+Submissions (	Participations (	Zgłoszenia (	Beiträge (	Participaciones (
+Subscription	Abonnement	Subskrypcja	Abonnement	Suscripción
+Earned	Obtenu	Zdobyto	Erhalten	Obtenido
+No badges yet	Aucun badge pour le moment	Brak odznak	Noch keine Abzeichen	Aún no hay insignias
+votes	votes	głosów	Stimmen	votos
+Join a challenge and submit your first entry!	Rejoignez un défi et envoyez votre première création !	Dołącz do wyzwania i prześlij swoją pierwszą pracę!	Nimm an einer Challenge teil und reiche deinen ersten Beitrag ein!	¡Únete a un reto y envía tu primera obra!
+Get exclusive perks, extra rewards, and premium features for $5/month	Profitez d’avantages exclusifs, de récompenses supplémentaires et de fonctionnalités premium pour 5 $/mois	Uzyskaj dodatkowe korzyści, nagrody i funkcje premium za 5 USD miesięcznie	Erhalte exklusive Vorteile, zusätzliche Belohnungen und Premium-Funktionen für 5 $/Monat	Obtén ventajas exclusivas, más recompensas y funciones premium por 5 $/mes
+Your Benefits:	Vos avantages :	Twoje korzyści:	Deine Vorteile:	Tus ventajas:
+2x Challenge Rewards	Récompenses des défis doublées	Podwójne nagrody za wyzwania	Doppelte Challenge-Belohnungen	Recompensas de retos duplicadas
+Exclusive Creator Badge	Badge créateur exclusif	Ekskluzywna odznaka twórcy	Exklusives Kreativ-Abzeichen	Insignia de creador exclusiva
+Access to Premium Stats	Accès aux statistiques premium	Dostęp do statystyk premium	Zugang zu Premium-Statistiken	Acceso a estadísticas premium
+What You'll Get:	Ce que vous obtiendrez :	Co otrzymasz:	Das bekommst du:	Lo que obtendrás:
+Subscribe for $5/month	S’abonner pour 5 $/mois	Subskrybuj za 5 USD miesięcznie	Für 5 $/Monat abonnieren	Suscribirse por 5 $/mes
+points	points	punktów	Punkte	puntos
+50 pts	50 pts	50 pkt	50 Pkt.	50 pts
+Frequently Asked Questions	Questions fréquentes	Najczęściej zadawane pytania	Häufig gestellte Fragen	Preguntas frecuentes
+Everything you need to know to become an A Challenge pro!	Tout savoir pour maîtriser A Challenge !	Wszystko, co musisz wiedzieć o A Challenge!	Alles, was du über A Challenge wissen musst!	¡Todo lo que necesitas saber sobre A Challenge!
+Still have questions?	Encore des questions ?	Masz jeszcze pytania?	Noch Fragen?	¿Tienes más preguntas?
+Our team is here to help! Contact us by email.	Notre équipe est là pour vous aider. Contactez-nous par e-mail.	Nasz zespół chętnie pomoże. Napisz do nas e-mail.	Unser Team hilft dir gerne. Schreib uns eine E-Mail.	Nuestro equipo está aquí para ayudarte. Escríbenos por correo.
+Contact Us	Nous contacter	Skontaktuj się z nami	Kontakt aufnehmen	Contactar
+Oops! Page not found	Cette page est introuvable	Nie znaleziono strony	Seite nicht gefunden	Página no encontrada
+Return to Home	Revenir à l’accueil	Wróć na stronę główną	Zur Startseite	Volver al inicio
+Notifications	Notifications	Powiadomienia	Benachrichtigungen	Notificaciones
+Mark all read	Tout marquer comme lu	Oznacz wszystkie jako przeczytane	Alle als gelesen markieren	Marcar todo como leído
+All	Tout	Wszystkie	Alle	Todo
+Boosts	Boosts	Promowania	Boosts	Impulsos
+Subs	Abonnements	Subskrypcje	Abos	Suscripciones
+No notifications yet	Aucune notification pour le moment	Brak powiadomień	Noch keine Benachrichtigungen	Aún no hay notificaciones
+Submission	Participation	Zgłoszenie	Beitrag	Participación
+Click to view full	Voir en entier	Zobacz całość	Vollständig ansehen	Ver completo
+No comments yet. Be the first to comment!	Aucun commentaire. Soyez le premier !	Brak komentarzy. Dodaj pierwszy!	Noch keine Kommentare. Schreibe den ersten!	¡Aún no hay comentarios! Sé el primero.
+Sign in to comment	Connectez-vous pour commenter	Zaloguj się, aby komentować	Zum Kommentieren anmelden	Inicia sesión para comentar
+Invalid email address	Adresse e-mail invalide	Nieprawidłowy adres e-mail	Ungültige E-Mail-Adresse	Correo electrónico no válido
+Password must be at least 6 characters	Le mot de passe doit contenir au moins 6 caractères	Hasło musi mieć co najmniej 6 znaków	Das Passwort muss mindestens 6 Zeichen enthalten	La contraseña debe tener al menos 6 caracteres
+Username must be at least 3 characters	Le nom d’utilisateur doit contenir au moins 3 caractères	Nazwa użytkownika musi mieć co najmniej 3 znaki	Der Benutzername muss mindestens 3 Zeichen enthalten	El nombre de usuario debe tener al menos 3 caracteres
+Username must be less than 20 characters	Le nom d’utilisateur ne doit pas dépasser 20 caractères	Nazwa użytkownika może mieć maksymalnie 20 znaków	Der Benutzername darf höchstens 20 Zeichen enthalten	El nombre de usuario debe tener como máximo 20 caracteres
+Referral code applied! Sign up to get your bonus.	Code de parrainage appliqué ! Inscrivez-vous pour recevoir votre bonus.	Kod polecający zastosowany! Zarejestruj się, aby otrzymać bonus.	Empfehlungscode angewendet! Registriere dich für deinen Bonus.	¡Código de invitación aplicado! Regístrate para recibir tu bono.
+If an account exists for this email, a secure reset link is on its way.	Si un compte utilise cette adresse, un lien sécurisé de réinitialisation vous sera envoyé.	Jeśli istnieje konto z tym adresem, otrzymasz bezpieczny link do resetowania hasła.	Falls ein Konto mit dieser Adresse existiert, erhältst du einen sicheren Link zum Zurücksetzen.	Si existe una cuenta con este correo, recibirás un enlace seguro para restablecer la contraseña.
+Unable to send the reset email	Impossible d’envoyer l’e-mail de réinitialisation	Nie udało się wysłać wiadomości resetującej	E-Mail zum Zurücksetzen konnte nicht gesendet werden	No se pudo enviar el correo de restablecimiento
+Passwords do not match	Les mots de passe ne correspondent pas	Hasła nie są takie same	Die Passwörter stimmen nicht überein	Las contraseñas no coinciden
+Password updated successfully	Mot de passe mis à jour	Hasło zmienione	Passwort geändert	Contraseña actualizada
+Your password has been updated. You can now continue to A Challenge.	Votre mot de passe a été mis à jour. Vous pouvez continuer vers A Challenge.	Hasło zostało zmienione. Możesz przejść do A Challenge.	Dein Passwort wurde geändert. Du kannst jetzt zu A Challenge fortfahren.	Tu contraseña se ha actualizado. Ya puedes continuar a A Challenge.
+Unable to update your password	Impossible de mettre à jour le mot de passe	Nie udało się zmienić hasła	Passwort konnte nicht geändert werden	No se pudo actualizar tu contraseña
+Your account still needs confirmation. We sent you a new code.	Votre compte doit encore être confirmé. Nous vous avons envoyé un nouveau code.	Twoje konto wymaga potwierdzenia. Wysłaliśmy nowy kod.	Dein Konto muss noch bestätigt werden. Wir haben dir einen neuen Code gesendet.	Tu cuenta necesita confirmación. Te hemos enviado un código nuevo.
+Invalid email or password	E-mail ou mot de passe incorrect	Nieprawidłowy e-mail lub hasło	E-Mail oder Passwort falsch	Correo o contraseña incorrectos
+Requesting a confirmation code...	Demande d’un code de confirmation…	Wysyłanie prośby o kod…	Bestätigungscode wird angefordert…	Solicitando código de confirmación…
+We could not start email verification. Return to sign in and try again.	Impossible de lancer la vérification. Revenez à la connexion et réessayez.	Nie udało się rozpocząć weryfikacji. Wróć do logowania i spróbuj ponownie.	Die E-Mail-Bestätigung konnte nicht gestartet werden. Kehre zur Anmeldung zurück und versuche es erneut.	No se pudo iniciar la verificación. Vuelve al inicio de sesión e inténtalo de nuevo.
+If you already received a code, enter it below. Otherwise, use Resend code.	Si vous avez reçu un code, saisissez-le ci-dessous. Sinon, utilisez « Renvoyer le code ».	Jeśli masz już kod, wpisz go poniżej. W przeciwnym razie użyj opcji ponownego wysłania.	Falls du bereits einen Code erhalten hast, gib ihn unten ein. Andernfalls sende den Code erneut.	Si ya recibiste un código, introdúcelo abajo. Si no, usa «Reenviar código».
+We sent a confirmation code to your email.	Nous avons envoyé un code de confirmation à votre adresse e-mail.	Wysłaliśmy kod potwierdzający na Twój adres e-mail.	Wir haben einen Bestätigungscode an deine E-Mail-Adresse gesendet.	Hemos enviado un código de confirmación a tu correo.
+Unable to start email verification	Impossible de lancer la vérification de l’e-mail	Nie udało się rozpocząć weryfikacji e-maila	E-Mail-Bestätigung konnte nicht gestartet werden	No se pudo iniciar la verificación del correo
+This email is already registered. Please sign in instead.	Cette adresse est déjà inscrite. Veuillez vous connecter.	Ten adres jest już zarejestrowany. Zaloguj się.	Diese E-Mail-Adresse ist bereits registriert. Bitte melde dich an.	Este correo ya está registrado. Inicia sesión.
+Account created. Enter the confirmation code sent to your email.	Compte créé. Saisissez le code de confirmation envoyé par e-mail.	Konto utworzone. Wpisz kod potwierdzający wysłany e-mailem.	Konto erstellt. Gib den Bestätigungscode aus deiner E-Mail ein.	Cuenta creada. Introduce el código enviado a tu correo.
+An error occurred during signup	Une erreur est survenue lors de l’inscription	Wystąpił błąd podczas rejestracji	Bei der Registrierung ist ein Fehler aufgetreten	Se produjo un error al registrarte
+Enter the complete confirmation code from your email	Saisissez le code de confirmation complet reçu par e-mail	Wpisz pełny kod potwierdzający z wiadomości e-mail	Gib den vollständigen Bestätigungscode aus deiner E-Mail ein	Introduce el código de confirmación completo de tu correo
+Email confirmed. Welcome to A Challenge!	E-mail confirmé. Bienvenue sur A Challenge !	E-mail potwierdzony. Witaj w A Challenge!	E-Mail bestätigt. Willkommen bei A Challenge!	Correo confirmado. ¡Bienvenido a A Challenge!
+That code could not be verified	Impossible de vérifier ce code	Nie udało się zweryfikować kodu	Dieser Code konnte nicht bestätigt werden	No se pudo verificar ese código
+A new confirmation code is on its way.	Un nouveau code de confirmation vous a été envoyé.	Nowy kod potwierdzający został wysłany.	Ein neuer Bestätigungscode ist unterwegs.	Se ha enviado un código de confirmación nuevo.
+Could not resend the code	Impossible de renvoyer le code	Nie udało się ponownie wysłać kodu	Code konnte nicht erneut gesendet werden	No se pudo reenviar el código
+Failed to sign in with Google	Connexion avec Google impossible	Nie udało się zalogować przez Google	Anmeldung mit Google fehlgeschlagen	No se pudo iniciar sesión con Google
+Create your password	Créez votre mot de passe	Utwórz hasło	Erstelle dein Passwort	Crea tu contraseña
+Choose a new password	Choisissez un nouveau mot de passe	Wybierz nowe hasło	Wähle ein neues Passwort	Elige una contraseña nueva
+Your invitation is confirmed. Create a password to finish setting up your account.	Votre invitation est confirmée. Créez un mot de passe pour terminer la configuration du compte.	Zaproszenie potwierdzone. Utwórz hasło, aby dokończyć konfigurację konta.	Deine Einladung ist bestätigt. Erstelle ein Passwort, um dein Konto fertig einzurichten.	Tu invitación está confirmada. Crea una contraseña para terminar de configurar tu cuenta.
+Use at least 6 characters for your new password.	Utilisez au moins 6 caractères pour votre nouveau mot de passe.	Nowe hasło musi mieć co najmniej 6 znaków.	Verwende mindestens 6 Zeichen für dein neues Passwort.	Usa al menos 6 caracteres para tu nueva contraseña.
+Missing required data	Données obligatoires manquantes	Brak wymaganych danych	Erforderliche Angaben fehlen	Faltan datos obligatorios
+Challenge not found	Défi introuvable	Nie znaleziono wyzwania	Challenge nicht gefunden	Reto no encontrado
+This challenge is not accepting submissions	Ce défi n’accepte pas de participations	To wyzwanie nie przyjmuje zgłoszeń	Diese Challenge nimmt keine Beiträge an	Este reto no acepta participaciones
+Verifying image authenticity...	Vérification de l’authenticité de l’image…	Weryfikacja autentyczności obrazu…	Bildauthentizität wird geprüft…	Verificando la autenticidad de la imagen…
+Automatic verification is unavailable. Your entry remains queued for review.	La vérification automatique est indisponible. Votre participation reste en attente de modération.	Automatyczna weryfikacja jest niedostępna. Zgłoszenie nadal oczekuje na ocenę.	Die automatische Prüfung ist nicht verfügbar. Dein Beitrag wartet weiterhin auf Prüfung.	La verificación automática no está disponible. Tu participación sigue pendiente de revisión.
+Automatic checks completed. Your entry remains queued for staff review.	Vérifications automatiques terminées. Votre participation reste en attente de modération par l’équipe.	Automatyczne kontrole zakończone. Zgłoszenie nadal oczekuje na ocenę zespołu.	Automatische Prüfung abgeschlossen. Dein Beitrag wartet weiterhin auf Prüfung durch das Team.	Comprobaciones automáticas completadas. Tu participación sigue pendiente de revisión del equipo.
+Submission received and queued for moderation.	Participation reçue et en attente de modération.	Zgłoszenie odebrane i oczekuje na moderację.	Beitrag eingegangen und zur Moderation vorgemerkt.	Participación recibida y pendiente de moderación.
+Failed to submit entry	Impossible d’envoyer la participation	Nie udało się wysłać zgłoszenia	Beitrag konnte nicht eingereicht werden	No se pudo enviar la participación
+File must be less than 100MB	Le fichier doit faire moins de 100 Mo	Plik musi mieć mniej niż 100 MB	Die Datei muss kleiner als 100 MB sein	El archivo debe pesar menos de 100 MB
+Or select a file	Ou choisissez un fichier	Lub wybierz plik	Oder wähle eine Datei	O selecciona un archivo
+faq.c0	Fonctionnement	Jak to działa	So funktioniert es	Cómo funciona
+faq.q0	Qu’est-ce qu’A Challenge ?	Czym jest A Challenge?	Was ist A Challenge?	¿Qué es A Challenge?
+faq.a0	A Challenge est une communauté créative où vous relevez des défis photo et vidéo originaux, partagez vos œuvres et concourez pour les récompenses annoncées. Un nouveau défi est publié chaque semaine.	A Challenge to społeczność, w której bierzesz udział w autorskich wyzwaniach foto i wideo, dzielisz się pracami i rywalizujesz o podane nagrody. Co tydzień pojawia się nowe wyzwanie.	A Challenge ist eine kreative Community für originelle Foto- und Video-Challenges. Teile deine Werke und tritt um die ausgeschriebenen Belohnungen an. Jede Woche erscheint eine neue Challenge.	A Challenge es una comunidad creativa con retos originales de foto y vídeo. Comparte tus obras y compite por las recompensas anunciadas. Cada semana se publica un reto nuevo.
+faq.q1	Comment participer à un défi ?	Jak wziąć udział w wyzwaniu?	Wie nehme ich an einer Challenge teil?	¿Cómo participo en un reto?
+faq.a1	Choisissez un défi, prenez une photo ou une vidéo originale sur le thème, ajoutez une légende si vous le souhaitez et envoyez-la. Vous pouvez retoucher votre image avec des filtres et des autocollants avant l’envoi.	Wybierz wyzwanie, zrób autorskie zdjęcie lub wideo zgodne z tematem, dodaj opcjonalny opis i prześlij je. Przed publikacją możesz użyć filtrów i naklejek.	Wähle eine Challenge, erstelle ein eigenes Foto oder Video zum Thema, füge bei Bedarf eine Beschreibung hinzu und reiche es ein. Vorher kannst du dein Bild mit Filtern und Stickern bearbeiten.	Elige un reto, crea una foto o vídeo original sobre el tema, añade una descripción si quieres y envíalo. Antes puedes editar la imagen con filtros y pegatinas.
+faq.q2	Qui crée les défis ?	Kto tworzy wyzwania?	Wer erstellt die Challenges?	¿Quién crea los retos?
+faq.a2	Notre éditeur IA prépare chaque semaine cinq défis. Les administrateurs vérifient le programme et peuvent aussi créer des défis spéciaux ou sponsorisés.	Nasz edytor AI przygotowuje co tydzień pięć wyzwań. Administratorzy sprawdzają program i mogą tworzyć wyzwania specjalne lub sponsorowane.	Unser KI-Editor bereitet jede Woche fünf Challenges vor. Das Admin-Team prüft das Programm und kann auch besondere oder gesponserte Challenges erstellen.	Nuestro editor de IA prepara cinco retos por semana. Los administradores revisan el programa y también pueden crear retos especiales o patrocinados.
+faq.c1	Classement et récompenses	Ranking i nagrody	Rangliste und Belohnungen	Clasificación y recompensas
+faq.q3	Comment gagner un défi ?	Jak wygrać wyzwanie?	Wie gewinne ich eine Challenge?	¿Cómo gano un reto?
+faq.a3	À la fin du défi, les participants sont classés selon les critères publiés, notamment les réactions de la communauté et le respect des règles. Les meilleurs gagnent reconnaissance, points et badges.	Po zakończeniu wyzwania uczestnicy są oceniani według opublikowanych kryteriów, w tym reakcji społeczności i zgodności z zasadami. Najlepsi zdobywają uznanie, punkty i odznaki.	Am Ende werden die Teilnehmenden nach den veröffentlichten Kriterien bewertet, darunter Community-Reaktionen und Regeleinhaltung. Die Besten erhalten Anerkennung, Punkte und Abzeichen.	Al terminar el reto, los participantes se clasifican según los criterios publicados, incluidas las reacciones de la comunidad y el cumplimiento de las reglas. Los mejores ganan reconocimiento, puntos e insignias.
+faq.q4	Quelles récompenses puis-je gagner ?	Jakie nagrody mogę zdobyć?	Welche Belohnungen kann ich erhalten?	¿Qué recompensas puedo ganar?
+faq.a4	Les récompenses actuelles ne sont pas monétaires : points, badges, reconnaissance du profil et parfois des récompenses partenaires décrites sur la page du défi. Les points et badges n’ont aucune valeur monétaire.	Obecne nagrody nie są pieniężne: punkty, odznaki, wyróżnienia profilu i czasem nagrody partnerów opisane na stronie wyzwania. Punkty i odznaki nie mają wartości pieniężnej.	Aktuelle Belohnungen sind nicht monetär: Punkte, Abzeichen, Profilanerkennung und gelegentliche Partnerbelohnungen, die auf der Challenge-Seite beschrieben sind. Punkte und Abzeichen haben keinen Geldwert.	Las recompensas actuales no son monetarias: puntos, insignias, reconocimiento del perfil y, a veces, premios de socios descritos en el reto. Los puntos e insignias no tienen valor monetario.
+faq.q5	À quoi servent les points ?	Do czego służą punkty?	Wozu dienen Punkte?	¿Para qué sirven los puntos?
+faq.a5	Les points gagnés dans les défis augmentent votre niveau et débloquent des badges. Plus vous participez, plus votre niveau augmente !	Punkty zdobywane w wyzwaniach podnoszą Twój poziom i odblokowują odznaki. Im częściej uczestniczysz, tym wyższy poziom!	Punkte aus Challenges erhöhen dein Level und schalten Abzeichen frei. Je mehr du mitmachst, desto höher dein Level!	Los puntos de los retos suben tu nivel y desbloquean insignias. ¡Cuanto más participas, más subes!
+faq.c2	Participations	Zgłoszenia	Beiträge	Participaciones
+faq.q6	Quels types de contenu puis-je envoyer ?	Jakie treści mogę zgłaszać?	Welche Inhalte kann ich einreichen?	¿Qué contenido puedo enviar?
+faq.a6	Vous pouvez envoyer des photos ou des vidéos selon le type de défi. Le contenu doit être original et correspondre au thème.	Możesz przesyłać zdjęcia lub wideo zależnie od rodzaju wyzwania. Treść musi być autorska i zgodna z tematem.	Je nach Challenge kannst du Fotos oder Videos einreichen. Dein Inhalt muss selbst erstellt sein und zum Thema passen.	Puedes enviar fotos o vídeos según el tipo de reto. El contenido debe ser original y coincidir con el tema.
+faq.q7	Pourquoi ma participation a-t-elle été refusée ?	Dlaczego odrzucono moje zgłoszenie?	Warum wurde mein Beitrag abgelehnt?	¿Por qué se rechazó mi participación?
+faq.a7	Les participations sont vérifiées automatiquement. Une image qui semble générée par IA ou reprise sur Internet peut être refusée. Seules vos propres photos et vidéos originales sont acceptées.	Zgłoszenia są weryfikowane automatycznie. Obraz wyglądający na wygenerowany przez AI lub pobrany z internetu może zostać odrzucony. Przyjmowane są tylko Twoje własne oryginalne zdjęcia i wideo.	Beiträge werden automatisch geprüft. Bilder, die KI-generiert oder aus dem Internet übernommen wirken, können abgelehnt werden. Akzeptiert werden nur deine eigenen Originalfotos und -videos.	Las participaciones se verifican automáticamente. Una imagen que parezca generada por IA o tomada de Internet puede rechazarse. Solo se aceptan tus propias fotos y vídeos originales.
+faq.q8	Puis-je modifier ma participation ?	Czy mogę edytować zgłoszenie?	Kann ich meinen Beitrag bearbeiten?	¿Puedo editar mi participación?
+faq.a8	Une fois envoyée, votre participation ne peut plus être modifiée. Vérifiez bien votre création avant de l’envoyer.	Po wysłaniu nie można zmienić zgłoszenia. Sprawdź pracę przed wysłaniem.	Nach dem Einreichen kannst du deinen Beitrag nicht mehr ändern. Prüfe alles vor dem Absenden.	Una vez enviada, no puedes modificar tu participación. Revísala bien antes de enviarla.
+faq.c3	Classement	Ranking	Rangliste	Clasificación
+faq.q9	Comment fonctionne le classement ?	Jak działa ranking?	Wie funktioniert die Rangliste?	¿Cómo funciona la clasificación?
+faq.a9	Le classement montre les 10 meilleurs participants de chaque défi terminé. Le score est calculé ainsi : J’aime × 2 + Commentaires. Vous pouvez aussi voir votre propre rang.	Ranking pokazuje 10 najlepszych uczestników każdego zakończonego wyzwania. Wynik to polubienia × 2 + komentarze. Możesz też sprawdzić własne miejsce.	Die Rangliste zeigt die Top 10 jeder beendeten Challenge. Die Punktzahl ist Likes × 2 + Kommentare. Du kannst auch deinen eigenen Rang sehen.	La clasificación muestra los 10 mejores de cada reto finalizado. La puntuación es Me gusta × 2 + Comentarios. También puedes ver tu posición.
+faq.q10	Quand le classement devient-il définitif ?	Kiedy ranking jest ostateczny?	Wann steht die Rangliste fest?	¿Cuándo es definitiva la clasificación?
+faq.a10	Le classement final est établi à la clôture du défi. Les créateurs éligibles reçoivent ensuite les points, badges, distinctions ou récompenses partenaires explicitement annoncés.	Ostateczny ranking ustala się po zakończeniu wyzwania. Uprawnieni twórcy otrzymują podane punkty, odznaki, wyróżnienia lub wyraźnie zapowiedziane nagrody partnerów.	Die endgültige Rangliste steht nach Ende der Challenge fest. Berechtigte Kreative erhalten anschließend die aufgeführten Punkte, Abzeichen, Anerkennungen oder ausdrücklich angekündigten Partnerbelohnungen.	La clasificación final se determina al cerrar el reto. Los creadores elegibles reciben después los puntos, insignias, reconocimientos o premios de socios anunciados expresamente.
+faq.c4	Points et badges	Punkty i odznaki	Punkte und Abzeichen	Puntos e insignias
+faq.q11	Puis-je convertir mes points en argent ?	Czy mogę wypłacić punkty jako pieniądze?	Kann ich Punkte als Geld auszahlen lassen?	¿Puedo retirar los puntos como dinero?
+faq.a11	Non. Les points et badges représentent une reconnaissance au sein de la communauté et ne peuvent pas être échangés ou retirés sous forme d’argent.	Nie. Punkty i odznaki to wyróżnienia w społeczności i nie można ich obecnie wymieniać ani wypłacać jako pieniędzy.	Nein. Punkte und Abzeichen sind Anerkennungen innerhalb der Community und können derzeit nicht in Geld getauscht oder ausgezahlt werden.	No. Los puntos e insignias son un reconocimiento en la comunidad y actualmente no se pueden cambiar ni retirar como dinero.
+faq.q12	Comment fonctionnent les récompenses partenaires ?	Jak działają nagrody partnerów?	Wie funktionieren Partnerbelohnungen?	¿Cómo funcionan los premios de socios?
+faq.a12	Lorsqu’un défi offre une récompense partenaire, ses conditions d’éligibilité et de remise sont indiquées sur sa page. Aucune récompense partenaire n’est promise si elle n’est pas explicitement annoncée.	Jeśli wyzwanie oferuje nagrodę partnera, warunki kwalifikacji i dostawy są podane na jego stronie. Nagroda nie jest obiecana, jeśli nie została wyraźnie wymieniona.	Bietet eine Challenge eine Partnerbelohnung, stehen Teilnahme- und Lieferbedingungen auf ihrer Seite. Ohne ausdrückliche Auflistung ist keine Partnerbelohnung zugesagt.	Si un reto incluye un premio de un socio, sus condiciones y entrega se indicarán en la página. No se promete ningún premio que no esté anunciado expresamente.
+faq.c5	Communauté	Społeczność	Community	Comunidad
+faq.q13	Comment suivre d’autres créateurs ?	Jak obserwować innych twórców?	Wie folge ich anderen Kreativen?	¿Cómo sigo a otros creadores?
+faq.a13	Ouvrez le profil d’un créateur et appuyez sur « Suivre ». Ses participations apparaîtront dans votre fil « Abonnements ».	Otwórz profil twórcy i kliknij „Obserwuj”. Jego zgłoszenia pojawią się w zakładce „Obserwowani”.	Öffne ein Profil und drücke auf „Folgen“. Die Beiträge erscheinen dann unter „Gefolgt“.	Abre el perfil de un creador y pulsa «Seguir». Sus participaciones aparecerán en tu sección «Siguiendo».
+faq.q14	Comment gagner des récompenses de parrainage ?	Jak zdobywać nagrody za polecenia?	Wie erhalte ich Empfehlungsbelohnungen?	¿Cómo gano recompensas por invitaciones?
+faq.a14	Partagez votre lien personnel depuis la rubrique Parrainage. Vous gagnez des récompenses lorsqu’une personne s’inscrit avec votre lien.	Udostępnij swój link z sekcji Polecenia. Gdy ktoś zarejestruje się za jego pomocą, otrzymasz nagrody.	Teile deinen persönlichen Link aus dem Empfehlungsbereich. Wenn sich jemand darüber anmeldet, erhältst du Belohnungen.	Comparte tu enlace personal de la sección Invitaciones. Cuando alguien se registre con él, ganarás recompensas.
+faq.c6	Règles et sécurité	Zasady i bezpieczeństwo	Regeln und Sicherheit	Reglas y seguridad
+faq.q15	Quelles sont les règles principales ?	Jakie są główne zasady?	Was sind die wichtigsten Regeln?	¿Cuáles son las reglas principales?
+faq.a15	1. Uniquement vos créations originales, sans IA ni contenu repris d’Internet. 2. Respectez le thème. 3. Aucun contenu offensant ou inapproprié. 4. Un seul compte par personne.	1. Tylko własne treści, bez AI i materiałów z internetu. 2. Przestrzegaj tematu. 3. Bez obraźliwych i niestosownych treści. 4. Jedno konto na osobę.	1. Nur eigene Originalinhalte, keine KI oder Internetkopien. 2. Beachte das Thema. 3. Keine beleidigenden oder unangemessenen Inhalte. 4. Ein Konto pro Person.	1. Solo contenido original propio, sin IA ni material de Internet. 2. Respeta el tema. 3. Sin contenido ofensivo o inapropiado. 4. Una cuenta por persona.
+faq.q16	Comment la fraude est-elle détectée ?	Jak wykrywane są oszustwa?	Wie wird Betrug erkannt?	¿Cómo se detecta el fraude?
+faq.a16	Notre IA vérifie automatiquement les participations pour repérer les images générées par IA ou reprises d’Internet. Les comptes qui trichent peuvent être bannis.	Nasza AI automatycznie sprawdza zgłoszenia w celu wykrycia obrazów generowanych przez AI lub pobranych z internetu. Konta oszukujących mogą zostać zablokowane.	Unsere KI prüft Beiträge automatisch auf KI-Bilder und Internetkopien. Betrügerische Konten können gesperrt werden.	Nuestra IA comprueba automáticamente si las imágenes son generadas por IA o tomadas de Internet. Las cuentas que hagan trampas pueden ser bloqueadas.
+legal.privacy.title	Politique de confidentialité	Polityka prywatności	Datenschutzerklärung	Política de privacidad
+legal.privacy.intro	Cette politique explique les données recueillies par A Challenge, leur utilisation et les choix dont vous disposez.	Ta polityka wyjaśnia, jakie dane zbiera A Challenge, w jakim celu i jakie masz możliwości wyboru.	Diese Erklärung erläutert, welche Daten A Challenge erhebt, wofür sie genutzt werden und welche Wahlmöglichkeiten du hast.	Esta política explica qué datos recoge A Challenge, para qué se usan y qué opciones tienes.
+legal.privacy.s0.title	Responsable du traitement et contact	Administrator danych i kontakt	Verantwortlicher und Kontakt	Responsable del tratamiento y contacto
+legal.privacy.s0.p0	A Challenge est exploité par Albi Lubila Mayamwene, responsable du traitement des données personnelles via le service. Ses coordonnées figurent ci-dessus et dans le pied de page.	Operatorem A Challenge i administratorem danych osobowych przetwarzanych w usłudze jest Albi Lubila Mayamwene. Dane kontaktowe znajdują się powyżej i w stopce strony.	A Challenge wird von Albi Lubila Mayamwene betrieben, der für die Verarbeitung personenbezogener Daten im Dienst verantwortlich ist. Kontaktdaten stehen oben und in der Fußzeile.	A Challenge está gestionado por Albi Lubila Mayamwene, responsable de los datos personales tratados en el servicio. Sus datos de contacto figuran arriba y al pie de la página.
+legal.privacy.s1.title	Données recueillies	Zbierane dane	Erhobene Daten	Datos que recogemos
+legal.privacy.s1.p0	Nous traitons les informations de compte et de profil, les participations aux défis, les dossiers de modération, l’activité de participation et les échanges avec l’assistance que vous choisissez de fournir.	Przetwarzamy przekazane przez Ciebie dane konta i profilu, zgłoszenia do wyzwań, dokumentację moderacji, aktywność uczestnictwa i korespondencję z pomocą techniczną.	Wir verarbeiten Kontodaten, Profilinformationen, Challenge-Beiträge, Moderationsunterlagen, Teilnahmeaktivitäten und Support-Nachrichten, die du bereitstellst.	Tratamos los datos de cuenta y perfil, las participaciones en retos, los registros de moderación, la actividad de participación y las comunicaciones con soporte que decidas facilitar.
+legal.privacy.s1.p1	Les prestataires de paiement peuvent traiter des informations de facturation. A Challenge ne devrait conserver que les identifiants des prestataires et les relevés nécessaires aux achats, récompenses et remboursements.	Dostawcy płatności mogą przetwarzać dane rozliczeniowe. A Challenge powinno przechowywać tylko identyfikatory dostawców i zapisy transakcji niezbędne do zakupów, nagród i zwrotów.	Zahlungsanbieter können Rechnungsdaten verarbeiten. A Challenge sollte nur Anbieterkennungen und Transaktionsdaten speichern, die für Käufe, Belohnungen und Erstattungen erforderlich sind.	Los proveedores de pago pueden tratar información de facturación. A Challenge debería conservar solo los identificadores y registros necesarios para gestionar compras, recompensas y reembolsos.
+legal.privacy.s2.title	Finalités et bases légales	Cele i podstawy prawne	Zwecke und Rechtsgrundlagen	Fines y bases legales
+legal.privacy.s2.p0	Les données servent à gérer les comptes, publier les créations que vous partagez, classer les participations éligibles, prévenir les abus, modérer les contenus, gérer les récompenses, améliorer les performances et respecter les obligations légales.	Dane służą do obsługi kont, publikowania udostępnionych prac, klasyfikowania uprawnionych zgłoszeń, zapobiegania nadużyciom, moderacji, zarządzania nagrodami, poprawy wydajności i realizacji obowiązków prawnych.	Daten dienen der Kontoverwaltung, Veröffentlichung deiner freigegebenen Beiträge, Bewertung berechtigter Teilnahmen, Missbrauchsprävention, Moderation, Belohnungsverwaltung, Leistungsverbesserung und Erfüllung gesetzlicher Pflichten.	Los datos se usan para gestionar cuentas, publicar las obras que compartas, clasificar participaciones elegibles, prevenir abusos, moderar contenido, administrar recompensas, mejorar el rendimiento y cumplir obligaciones legales.
+legal.privacy.s2.p1	Selon l’activité, le traitement repose sur l’exécution du contrat de service, une obligation légale, l’intérêt légitime à sécuriser et améliorer le service, ou votre consentement lorsqu’il est demandé. Vous pouvez retirer ce consentement à tout moment sans affecter la licéité des traitements antérieurs.	Zależnie od czynności podstawą jest wykonanie umowy, obowiązek prawny, uzasadniony interes w zabezpieczaniu i ulepszaniu usługi albo zgoda, gdy jest wymagana. Zgodę można wycofać w dowolnym momencie bez wpływu na zgodność wcześniejszego przetwarzania z prawem.	Je nach Tätigkeit beruht die Verarbeitung auf dem Dienstvertrag, gesetzlichen Pflichten, berechtigten Interessen an Sicherheit und Verbesserung oder ausdrücklich eingeholter Einwilligung. Du kannst eine Einwilligung jederzeit widerrufen, ohne die Rechtmäßigkeit früherer Verarbeitung zu berühren.	Según la actividad, el tratamiento se basa en el contrato de servicio, obligaciones legales, intereses legítimos de seguridad y mejora, o el consentimiento cuando se solicite. Puedes retirarlo en cualquier momento sin afectar al tratamiento lícito anterior.
+legal.privacy.s3.title	Analyse et suivi des erreurs	Analityka i monitorowanie błędów	Analyse und Fehlerüberwachung	Analítica y seguimiento de errores
+legal.privacy.s3.p0	A Challenge utilise Vercel Analytics, Speed Insights et des rapports d’erreurs techniques respectueux de la vie privée. Ces rapports sont limités, excluent les adresses e-mail détectées et servent à diagnostiquer les incidents et améliorer la fiabilité.	A Challenge korzysta z przyjaznych prywatności Vercel Analytics, Speed Insights i technicznych raportów błędów. Raporty są ograniczone, pomijają wykryte adresy e-mail i służą diagnozowaniu awarii oraz poprawie niezawodności.	A Challenge nutzt datenschutzfreundliche Vercel Analytics, Speed Insights und technische Fehlerberichte. Die Berichte sind begrenzt, schließen erkannte E-Mail-Adressen aus und helfen bei Fehlerdiagnose und Zuverlässigkeit.	A Challenge usa Vercel Analytics, Speed Insights e informes técnicos respetuosos con la privacidad. Los informes son limitados, excluyen los correos detectados y sirven para diagnosticar fallos y mejorar la fiabilidad.
+legal.privacy.s4.title	Partage, transferts et conservation	Udostępnianie, transfery i przechowywanie	Weitergabe, Übermittlung und Speicherung	Comunicación, transferencias y conservación
+legal.privacy.s4.p0	Les champs publics du profil et les participations approuvées peuvent être visibles par les visiteurs. Les prestataires tels que Supabase, Vercel, les services de paiement et d’envoi d’e-mails traitent les données uniquement pour fournir le service.	Publiczne pola profilu i zatwierdzone zgłoszenia mogą być widoczne dla innych. Dostawcy tacy jak Supabase, Vercel, operatorzy płatności i poczty przetwarzają dane wyłącznie w celu świadczenia usługi.	Öffentliche Profildaten und genehmigte Beiträge können für andere sichtbar sein. Dienstleister wie Supabase, Vercel, Zahlungs- und E-Mail-Anbieter verarbeiten Daten nur zur Erbringung des Dienstes.	Los campos públicos del perfil y las participaciones aprobadas pueden ser visibles para otros visitantes. Proveedores como Supabase, Vercel y los servicios de pago y correo tratan datos solo para prestar el servicio.
+legal.privacy.s4.p1	Lorsqu’un prestataire traite des données hors de l’Espace économique européen, A Challenge s’appuie sur une décision d’adéquation applicable ou des garanties approuvées, telles que les clauses contractuelles types.	Gdy dostawca przetwarza dane poza Europejskim Obszarem Gospodarczym, A Challenge opiera się na właściwej decyzji stwierdzającej odpowiedni stopień ochrony lub zatwierdzonych zabezpieczeniach, np. standardowych klauzulach umownych.	Verarbeitet ein Anbieter Daten außerhalb des Europäischen Wirtschaftsraums, stützt sich A Challenge auf einen geltenden Angemessenheitsbeschluss oder genehmigte Garantien wie Standardvertragsklauseln.	Cuando un proveedor trata datos fuera del Espacio Económico Europeo, A Challenge se basa en una decisión de adecuación aplicable o garantías aprobadas, como cláusulas contractuales tipo.
+legal.privacy.s4.p2	Les données du compte sont normalement conservées tant qu’il est actif, puis supprimées ou anonymisées lorsqu’elles ne sont plus nécessaires. Certains enregistrements peuvent être conservés plus longtemps pour la sécurité, la comptabilité, les litiges, les sauvegardes ou les obligations légales.	Dane konta są zwykle przechowywane, dopóki jest aktywne, a następnie usuwane lub anonimizowane, gdy nie są potrzebne. Niektóre zapisy mogą być przechowywane dłużej ze względów bezpieczeństwa, księgowych, sporów, kopii zapasowych lub prawa.	Kontodaten werden in der Regel während der aktiven Nutzung gespeichert und danach gelöscht oder anonymisiert, sobald sie nicht mehr benötigt werden. Für Sicherheit, Buchhaltung, Streitfälle, Sicherungen oder gesetzliche Pflichten können Daten länger aufbewahrt werden.	Los datos de cuenta se conservan normalmente mientras esté activa y después se eliminan o anonimizan cuando ya no sean necesarios. Algunos registros pueden conservarse más por seguridad, contabilidad, litigios, copias de seguridad u obligaciones legales.
+legal.privacy.s5.title	Vos droits sur les données	Twoje prawa dotyczące danych	Deine Datenschutzrechte	Tus derechos sobre los datos
+legal.privacy.s5.p0	Selon le droit applicable, vous pouvez demander l’accès, la rectification, l’effacement, la limitation ou la portabilité de vos données, ou vous opposer au traitement. Vous pouvez modifier votre profil, retirer des contenus facultatifs lorsque le produit le permet ou demander la suppression du compte.	Zgodnie z obowiązującym prawem możesz żądać dostępu, sprostowania, usunięcia, ograniczenia, przeniesienia danych lub wnieść sprzeciw. Możesz edytować profil, usuwać opcjonalne treści, jeśli produkt to umożliwia, lub zażądać usunięcia konta.	Nach geltendem Recht kannst du Auskunft, Berichtigung, Löschung, Einschränkung oder Übertragbarkeit verlangen oder der Verarbeitung widersprechen. Du kannst Profilangaben bearbeiten, optionale Inhalte soweit möglich entfernen oder die Kontolöschung beantragen.	Conforme a la ley aplicable, puedes solicitar acceso, rectificación, eliminación, limitación o portabilidad, u oponerte al tratamiento. Puedes editar tu perfil, retirar contenido opcional cuando el producto lo permita o solicitar la eliminación de tu cuenta.
+legal.privacy.s5.p1	Vous pouvez envoyer vos demandes à l’adresse e-mail ci-dessus. Vous pouvez aussi déposer une réclamation auprès de l’autorité polonaise de contrôle, le président de l’UODO. Le stockage essentiel d’authentification est nécessaire pour maintenir votre connexion sécurisée.	Wnioski można wysyłać na podany wyżej adres e-mail. Masz też prawo złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (UODO). Niezbędne dane uwierzytelniania są potrzebne do utrzymania bezpiecznej sesji.	Anfragen kannst du an die oben genannte E-Mail-Adresse senden. Du kannst dich auch bei der polnischen Aufsichtsbehörde, dem Präsidenten des UODO, beschweren. Essenzielle Authentifizierungsspeicherung ist für eine sichere Anmeldung nötig.	Puedes enviar solicitudes al correo indicado arriba. También puedes reclamar ante la autoridad polaca, el presidente de la UODO. El almacenamiento esencial de autenticación es necesario para mantener una sesión segura.
+legal.privacy.s6.title	Mineurs et utilisation internationale	Dzieci i korzystanie międzynarodowe	Kinder und internationale Nutzung	Menores y uso internacional
+legal.privacy.s6.p0	Les utilisateurs n’ayant pas l’âge du consentement numérique dans leur pays doivent utiliser le service avec l’autorisation d’un parent ou représentant légal. Les droits locaux en matière de confidentialité peuvent varier.	Użytkownicy poniżej wieku zgody cyfrowej w swoim kraju mogą korzystać z usługi tylko za zgodą rodzica lub opiekuna prawnego. Lokalne prawa do prywatności mogą się różnić.	Wer das Alter der digitalen Einwilligung im eigenen Land noch nicht erreicht hat, darf den Dienst nur mit Erlaubnis eines Elternteils oder gesetzlichen Vertreters nutzen. Lokale Datenschutzrechte können abweichen.	Los usuarios que no alcancen la edad de consentimiento digital en su país deben usar el servicio con permiso de un progenitor o tutor legal. Los derechos de privacidad pueden variar según el país.
+legal.cookies.title	Politique relative aux cookies et au stockage	Polityka plików cookie i pamięci przeglądarki	Cookie- und Speicherrichtlinie	Política de cookies y almacenamiento
+legal.cookies.intro	A Challenge limite volontairement le suivi et utilise le stockage du navigateur uniquement lorsqu’il sert au fonctionnement du service.	A Challenge celowo ogranicza śledzenie i korzysta z pamięci przeglądarki tylko w celu wspierania działania usługi.	A Challenge beschränkt Tracking bewusst und nutzt Browserspeicher nur zur Unterstützung des Dienstes.	A Challenge limita deliberadamente el seguimiento y usa el almacenamiento del navegador solo cuando sirve al servicio.
+legal.cookies.s0.title	Stockage essentiel	Niezbędne przechowywanie	Essenzielle Speicherung	Almacenamiento esencial
+legal.cookies.s0.p0	L’authentification Supabase utilise le stockage du navigateur pour maintenir une session sécurisée. Les préférences d’interface peuvent aussi être enregistrées localement. Désactiver ce stockage peut empêcher la connexion et les fonctionnalités personnalisées.	Uwierzytelnianie Supabase używa pamięci przeglądarki do utrzymania bezpiecznej sesji. Preferencje interfejsu też mogą być przechowywane lokalnie. Wyłączenie niezbędnej pamięci może uniemożliwić logowanie i funkcje spersonalizowane.	Supabase-Authentifizierung nutzt Browserspeicher für eine sichere Sitzung. Auch Oberflächeneinstellungen können lokal gespeichert werden. Deaktivierter essenzieller Speicher kann Anmeldung und personalisierte Funktionen verhindern.	La autenticación de Supabase usa el almacenamiento del navegador para mantener una sesión segura. También pueden guardarse preferencias de interfaz. Desactivar este almacenamiento puede impedir el inicio de sesión y las funciones personalizadas.
+legal.cookies.s1.title	Analyse	Analityka	Analyse	Analítica
+legal.cookies.s1.p0	Vercel Web Analytics et Speed Insights mesurent l’utilisation des pages et les Core Web Vitals sans créer de profils publicitaires. A Challenge n’utilise pas de cookies publicitaires tiers.	Vercel Web Analytics i Speed Insights mierzą użycie stron i Core Web Vitals bez tworzenia profili reklamowych. A Challenge nie używa reklamowych plików cookie innych firm.	Vercel Web Analytics und Speed Insights messen Seitennutzung und Core Web Vitals ohne Werbeprofile. A Challenge verwendet keine Werbe-Cookies von Drittanbietern.	Vercel Web Analytics y Speed Insights miden el uso de páginas y Core Web Vitals sin crear perfiles publicitarios. A Challenge no usa cookies publicitarias de terceros.
+legal.cookies.s2.title	Vos réglages	Twoje ustawienia	Deine Einstellungen	Tus controles
+legal.cookies.s2.p0	Vous pouvez effacer les données du site dans votre navigateur. Cela vous déconnecte et réinitialise les préférences locales. Les réglages de confidentialité du navigateur peuvent aussi limiter les mesures non essentielles.	Możesz wyczyścić dane witryny w przeglądarce. Spowoduje to wylogowanie i reset lokalnych preferencji. Ustawienia prywatności przeglądarki mogą ograniczać nieistotne pomiary.	Du kannst Websitedaten im Browser löschen. Dabei wirst du abgemeldet und lokale Einstellungen werden zurückgesetzt. Datenschutzeinstellungen des Browsers können nicht essenzielle Messungen begrenzen.	Puedes borrar los datos del sitio en tu navegador. Esto cierra tu sesión y restablece las preferencias locales. Los controles de privacidad también pueden limitar las mediciones no esenciales.
+legal.terms.title	Conditions d’utilisation	Warunki korzystania	Nutzungsbedingungen	Condiciones de uso
+legal.terms.intro	En créant un compte ou en envoyant du contenu, vous acceptez ces conditions et les règles du défi concerné.	Tworząc konto lub przesyłając treści, akceptujesz te warunki i zasady odpowiedniego wyzwania.	Mit der Kontoerstellung oder Einreichung von Inhalten akzeptierst du diese Bedingungen und die jeweiligen Challenge-Regeln.	Al crear una cuenta o enviar contenido, aceptas estas condiciones y las reglas del reto correspondiente.
+legal.terms.s0.title	Responsabilités liées au compte	Obowiązki dotyczące konta	Verantwortung für dein Konto	Responsabilidades de la cuenta
+legal.terms.s0.p0	Fournissez des informations exactes, protégez vos identifiants et prévenez A Challenge si vous pensez que votre compte a été compromis. Vous êtes responsable des activités réalisées avec votre compte.	Podawaj prawdziwe informacje, chroń dane logowania i powiadom A Challenge, jeśli podejrzewasz przejęcie konta. Odpowiadasz za działania wykonywane za jego pośrednictwem.	Gib korrekte Informationen an, schütze deine Zugangsdaten und informiere A Challenge bei Verdacht auf einen Kontozugriff durch Dritte. Du bist für Aktivitäten über dein Konto verantwortlich.	Facilita información correcta, protege tus credenciales e informa a A Challenge si crees que tu cuenta está comprometida. Eres responsable de la actividad realizada con ella.
+legal.terms.s1.title	Contenu original et licite	Oryginalne i zgodne z prawem treści	Eigene und rechtmäßige Inhalte	Contenido original y lícito
+legal.terms.s1.p0	N’envoyez que des œuvres créées par vous ou que vous avez le droit d’utiliser. Aucun contenu illégal, trompeur, haineux, sexuellement exploiteur, dangereux, attentatoire à la vie privée ou aux droits d’autrui n’est autorisé.	Przesyłaj tylko prace własne lub takie, do których masz uprawnienia. Nie przesyłaj treści nielegalnych, oszukańczych, nienawistnych, wykorzystujących seksualnie, niebezpiecznych ani naruszających prywatność lub prawa innych osób.	Reiche nur selbst erstellte Werke oder solche ein, für die du eine Nutzungserlaubnis hast. Unzulässig sind rechtswidrige, irreführende, hasserfüllte, sexuell ausbeuterische, gefährliche oder persönlichkeits- und rechtsverletzende Inhalte.	Envía solo obras propias o que tengas permiso para usar. No envíes contenido ilegal, engañoso, de odio, de explotación sexual, peligroso o que vulnere la privacidad o los derechos de otras personas.
+legal.terms.s2.title	Licence d’affichage des participations	Licencja na wyświetlanie zgłoszeń	Lizenz zur Anzeige von Beiträgen	Licencia para mostrar participaciones
+legal.terms.s2.p0	Vous restez propriétaire de vos œuvres. En envoyant une participation, vous accordez à A Challenge une licence non exclusive, mondiale et gratuite pour l’héberger, l’afficher, la redimensionner, la modérer et la promouvoir dans le cadre du service et du défi concerné.	Zachowujesz własność swojej pracy. Przesyłając ją, udzielasz A Challenge niewyłącznej, ogólnoświatowej i nieodpłatnej licencji na hosting, wyświetlanie, zmianę rozmiaru, moderację i promocję w związku z usługą i danym wyzwaniem.	Du bleibst Eigentümer deines Werks. Mit der Einreichung erteilst du A Challenge eine nicht ausschließliche, weltweite, gebührenfreie Lizenz zum Hosten, Anzeigen, Skalieren, Moderieren und Bewerben im Zusammenhang mit dem Dienst und der Challenge.	Conservas la propiedad de tu obra. Al enviarla, concedes a A Challenge una licencia no exclusiva, mundial y gratuita para alojarla, mostrarla, redimensionarla, moderarla y promocionarla en relación con el servicio y el reto.
+legal.terms.s3.title	Modération et application des règles	Moderacja i egzekwowanie zasad	Moderation und Durchsetzung	Moderación y aplicación de reglas
+legal.terms.s3.p0	A Challenge peut refuser, masquer ou retirer des participations et restreindre les comptes qui enfreignent ces conditions, les règles des défis, les exigences de sécurité ou la loi. Les décisions importantes peuvent être réexaminées lorsqu’une voie de recours est disponible.	A Challenge może odrzucać, ukrywać lub usuwać zgłoszenia i ograniczać konta naruszające warunki, zasady wyzwań, wymogi bezpieczeństwa lub prawo. Istotne decyzje mogą podlegać ponownej ocenie, gdy dostępna jest droga odwoławcza.	A Challenge kann Beiträge ablehnen, ausblenden oder entfernen und Konten bei Verstößen gegen Bedingungen, Challenge-Regeln, Sicherheitsanforderungen oder geltendes Recht einschränken. Wesentliche Entscheidungen können überprüft werden, sofern ein Beschwerdeweg besteht.	A Challenge puede rechazar, ocultar o retirar participaciones y restringir cuentas que infrinjan estas condiciones, las reglas, los requisitos de seguridad o la ley. Las decisiones importantes pueden revisarse cuando haya una vía de recurso.
+legal.terms.s4.title	Récompenses et disponibilité	Nagrody i dostępność	Belohnungen und Verfügbarkeit	Recompensas y disponibilidad
+legal.terms.s4.p0	Les points, badges, titres, effets de profil et distinctions de classement n’ont aucune valeur monétaire et ne peuvent actuellement être retirés ou échangés contre de l’argent. Une récompense partenaire annoncée séparément peut avoir ses propres conditions. Les fonctionnalités, calendriers, récompenses et disponibilités peuvent changer ; les engagements publiés seront traités de façon équitable et transparente.	Punkty, odznaki, tytuły, efekty profilu i wyróżnienia rankingowe nie mają wartości pieniężnej i nie można ich obecnie wypłacać ani wymieniać na pieniądze. Osobno ogłoszona nagroda partnera może mieć własne warunki. Funkcje, harmonogramy, nagrody i dostępność mogą się zmieniać, ale opublikowane zobowiązania będą realizowane uczciwie i przejrzyście.	Punkte, Abzeichen, Titel, Profileffekte und Ranglistenanerkennung haben keinen Geldwert und können derzeit weder ausgezahlt noch gegen Geld getauscht werden. Gesondert angekündigte Partnerbelohnungen können eigene Bedingungen haben. Funktionen, Termine, Belohnungen und Verfügbarkeit können sich ändern; veröffentlichte Zusagen werden fair und transparent behandelt.	Los puntos, insignias, títulos, efectos de perfil y reconocimientos no tienen valor monetario ni pueden retirarse o cambiarse por dinero. Los premios de socios anunciados por separado pueden tener condiciones propias. Las funciones, fechas, recompensas y disponibilidad pueden cambiar, pero los compromisos publicados se tratarán de forma justa y transparente.
+legal.terms.s5.title	Limites de responsabilité	Zastrzeżenia	Haftungshinweise	Exenciones de responsabilidad
+legal.terms.s5.p0	Le service est fourni selon sa disponibilité. Aucune disposition n’exclut les droits ou responsabilités qui ne peuvent légalement être exclus dans votre pays.	Usługa jest udostępniana w miarę dostępności. Żaden zapis nie wyłącza praw ani odpowiedzialności, których nie można prawnie wyłączyć w Twojej jurysdykcji.	Der Dienst wird nach Verfügbarkeit angeboten. Diese Bedingungen schließen keine Rechte oder Haftungen aus, die in deiner Rechtsordnung nicht ausgeschlossen werden dürfen.	El servicio se ofrece según disponibilidad. Nada en estas condiciones excluye derechos o responsabilidades que no puedan excluirse legalmente en tu jurisdicción.
+legal.terms.s6.title	Droit applicable	Prawo właściwe	Anwendbares Recht	Ley aplicable
+legal.terms.s6.p0	Ces conditions sont régies par le droit polonais. Les consommateurs conservent les protections impératives de leur pays de résidence. Les litiges peuvent être portés devant une juridiction compétente selon le droit applicable.	Warunki podlegają prawu polskiemu. Konsumenci zachowują obowiązkowe zabezpieczenia wynikające z prawa kraju zamieszkania. Spory można kierować do sądu właściwego zgodnie z obowiązującym prawem.	Diese Bedingungen unterliegen polnischem Recht. Zwingende Verbraucherschutzrechte deines Wohnsitzlandes bleiben erhalten. Streitigkeiten können vor einem nach geltendem Recht zuständigen Gericht geführt werden.	Estas condiciones se rigen por la ley polaca. Los consumidores conservan las protecciones obligatorias de su país de residencia. Las disputas pueden plantearse ante un tribunal competente según la ley aplicable.
+legal.contest-rules.title	Règles générales des défis et concours	Ogólne zasady wyzwań i konkursów	Allgemeine Challenge- und Wettbewerbsregeln	Reglas generales de retos y concursos
+legal.contest-rules.intro	Ces règles s’appliquent sauf si la page du défi publie des conditions supplémentaires. En cas de conflit, les règles propres au défi prévalent.	Te zasady obowiązują, chyba że strona wyzwania podaje dodatkowe warunki. W razie sprzeczności pierwszeństwo mają zasady danego wyzwania.	Diese Regeln gelten, sofern die Challenge-Seite keine zusätzlichen Bedingungen nennt. Bei Widersprüchen haben die besonderen Challenge-Regeln Vorrang.	Estas reglas se aplican salvo que el reto publique condiciones adicionales. En caso de conflicto, prevalecen las reglas específicas del reto.
+legal.contest-rules.s0.title	Éligibilité et participation	Uprawnienia i udział	Teilnahmeberechtigung und Einreichung	Elegibilidad y participación
+legal.contest-rules.s0.p0	Aucun achat n’est nécessaire. Participez avant la date limite avec un compte éligible. Des restrictions d’âge, de pays, de format ou de récompense partenaire peuvent être précisées sur chaque défi. Les mineurs doivent obtenir une autorisation parentale lorsque cela est requis.	Zakup nie jest wymagany. Weź udział przed terminem z uprawnionego konta. Każde wyzwanie może określać ograniczenia wieku, kraju, formatu i nagród partnerów. Osoby niepełnoletnie potrzebują zgody rodzica lub opiekuna, gdy jest wymagana.	Ein Kauf ist nicht erforderlich. Reiche fristgerecht über ein berechtigtes Konto ein. Alters-, Länder-, Format- und Partnerbelohnungsbeschränkungen können auf der jeweiligen Seite stehen. Minderjährige benötigen gegebenenfalls die Erlaubnis eines Elternteils oder gesetzlichen Vertreters.	No es necesario comprar. Participa antes del plazo con una cuenta elegible. Cada reto puede fijar restricciones de edad, país, formato y premios de socios. Los menores necesitan permiso de un progenitor o tutor cuando sea obligatorio.
+legal.contest-rules.s1.title	Originalité et autorisations	Oryginalność i zgody	Originalität und Genehmigungen	Originalidad y permisos
+legal.contest-rules.s1.p0	Les créations doivent être les vôtres. Obtenez les autorisations des personnes identifiables, propriétaires des lieux et titulaires de droits lorsque nécessaire. Le contenu généré ou fortement assisté par IA n’est autorisé que si le défi le permet explicitement et doit être déclaré sur demande.	Zgłoszenia muszą być Twoją autorską pracą. Uzyskaj wymagane zgody rozpoznawalnych osób, właścicieli miejsc i posiadaczy praw. Treści generowane lub istotnie wspomagane przez AI są dozwolone tylko za wyraźnym zezwoleniem wyzwania i muszą być ujawnione na żądanie.	Beiträge müssen deine eigenen Werke sein. Hole bei Bedarf Genehmigungen erkennbarer Personen, Eigentümer von Orten und Rechteinhaber ein. KI-generierte oder wesentlich KI-unterstützte Inhalte sind nur bei ausdrücklicher Erlaubnis der Challenge zulässig und müssen auf Anfrage offengelegt werden.	Las obras deben ser propias. Obtén los permisos necesarios de personas identificables, propietarios de lugares y titulares de derechos. El contenido generado o asistido de forma sustancial por IA solo está permitido si el reto lo autoriza expresamente y debe declararse cuando se solicite.
+legal.contest-rules.s2.title	Sécurité et équité	Bezpieczeństwo i uczciwa gra	Sicherheit und Fairplay	Seguridad y juego limpio
+legal.contest-rules.s2.p0	Ne mettez pas en danger les personnes, les animaux, les biens ou le public. Ne manipulez pas les votes, ne créez pas de comptes multiples, ne plagiez pas et ne mentez pas sur la date ou les méthodes de création.	Nie narażaj ludzi, zwierząt, mienia ani ogółu na niebezpieczeństwo. Nie manipuluj głosami, nie twórz dodatkowych kont, nie plagiatuj i nie fałszuj informacji o czasie lub sposobie powstania pracy.	Gefährde keine Menschen, Tiere, Sachen oder die Öffentlichkeit. Manipuliere keine Stimmen, erstelle keine Mehrfachkonten, plagiiere nicht und täusche nicht über Entstehungszeit oder -weise.	No pongas en peligro a personas, animales, bienes o al público. No manipules votos, crees cuentas duplicadas, plagies ni falsees cuándo o cómo se creó la obra.
+legal.contest-rules.s3.title	Évaluation	Ocena	Bewertung	Evaluación
+legal.contest-rules.s3.p0	Les gagnants peuvent être choisis selon les critères publiés : originalité, réalisation, pertinence, réactions de la communauté et respect des règles. Les interactions peuvent être contrôlées pour détecter la fraude et ne sont pas automatiquement décisives.	Zwycięzcy mogą być wybierani na podstawie opublikowanych kryteriów: oryginalności, wykonania, zgodności z tematem, reakcji społeczności i zasad. Sygnały zaangażowania mogą być sprawdzane pod kątem oszustw i nie są automatycznie decydujące.	Gewinner können anhand veröffentlichter Kriterien wie Originalität, Ausführung, Relevanz, Community-Reaktionen und Regelkonformität gewählt werden. Interaktionen können auf Betrug geprüft werden und sind nicht automatisch ausschlaggebend.	Los ganadores pueden elegirse según criterios publicados: originalidad, ejecución, relevancia, respuesta de la comunidad y cumplimiento. Las interacciones pueden revisarse por fraude y no son automáticamente decisivas.
+legal.contest-rules.s4.title	Récompenses	Nagrody	Belohnungen	Recompensas
+legal.contest-rules.s4.p0	Les récompenses actuelles sont des points, badges, titres, distinctions de profil ou fonctionnalités de classement sans valeur monétaire. Elles ne peuvent être retirées ni échangées contre de l’argent. Pour une récompense partenaire distincte, sa description, les critères d’éligibilité, les délais et les obligations fiscales éventuelles figureront sur le défi ou l’avis au gagnant.	Obecne nagrody to niepieniężne punkty, odznaki, tytuły, wyróżnienia profilu lub funkcje rankingu. Nie można ich wypłacić ani wymienić na pieniądze. Opis osobnej nagrody partnera, warunki kwalifikacji, terminy dostawy i ewentualne obowiązki podatkowe znajdą się na stronie wyzwania lub w powiadomieniu zwycięzcy.	Aktuelle Plattformbelohnungen sind nicht monetäre Punkte, Abzeichen, Titel, Profilanerkennung oder Ranglistenfunktionen. Sie können weder ausgezahlt noch gegen Geld getauscht werden. Bei einer gesonderten Partnerbelohnung stehen Beschreibung, Berechtigung, Lieferfrist und gegebenenfalls Steuerpflichten auf der Challenge-Seite oder in der Gewinnerbenachrichtigung.	Las recompensas actuales son puntos, insignias, títulos, reconocimientos de perfil o funciones de clasificación sin valor monetario. No pueden retirarse ni cambiarse por dinero. Si hay un premio de un socio, su descripción, requisitos, plazos y posibles obligaciones fiscales se indicarán en el reto o en el aviso al ganador.
+legal.contest-rules.s5.title	Disqualification et annulation	Dyskwalifikacja i anulowanie	Disqualifikation und Absage	Descalificación y cancelación
+legal.contest-rules.s5.p0	Les participations contraires aux règles peuvent être refusées. Un défi peut être modifié, suspendu ou annulé si une fraude, une panne, un risque de sécurité, une restriction légale ou un événement hors de contrôle raisonnable empêche son déroulement équitable.	Zgłoszenia naruszające zasady mogą zostać odrzucone. Wyzwanie może zostać zmienione, wstrzymane lub anulowane, gdy oszustwo, awaria, bezpieczeństwo, ograniczenia prawne lub zdarzenia poza rozsądną kontrolą uniemożliwiają uczciwy przebieg.	Regelwidrige Beiträge können abgelehnt werden. Eine Challenge kann geändert, pausiert oder abgesagt werden, wenn Betrug, technische Ausfälle, Sicherheitsfragen, rechtliche Beschränkungen oder unkontrollierbare Ereignisse einen fairen Ablauf verhindern.	Las participaciones que incumplan las reglas pueden rechazarse. Un reto puede modificarse, pausarse o cancelarse si el fraude, los fallos técnicos, la seguridad, las restricciones legales o hechos fuera del control razonable impiden su desarrollo justo.
+legal.policies	Politiques A Challenge	Zasady A Challenge	A Challenge Richtlinien	Políticas de A Challenge
+legal.updated	Dernière mise à jour :	Ostatnia aktualizacja:	Zuletzt aktualisiert:	Última actualización:
+legal.operator	Exploitant du service et responsable du traitement	Operator usługi i administrator danych	Dienstbetreiber und Datenverantwortlicher	Operador del servicio y responsable de datos
+legal.contact	Questions, demandes relatives à la confidentialité et notifications légales :	Pytania, wnioski dotyczące prywatności i zawiadomienia prawne:	Fragen, Datenschutzanfragen und rechtliche Mitteilungen:	Preguntas, solicitudes de privacidad y avisos legales:
+legal.guidance	Consultez l’aide pour les informations générales.	Informacje ogólne znajdziesz w pomocy.	Allgemeine Informationen findest du in der Hilfe.	Consulta la ayuda para información general.
+A Challenge — Weekly Creative Photo & Video Challenges	A Challenge — Défis créatifs photo et vidéo chaque semaine	A Challenge — Cotygodniowe kreatywne wyzwania foto i wideo	A Challenge — Wöchentliche kreative Foto- und Video-Challenges	A Challenge — Retos creativos semanales de foto y vídeo
+Join original weekly photo and video challenges, share creative work, earn points, and discover standout creators on A Challenge.	Participez à des défis photo et vidéo originaux chaque semaine, partagez vos créations, gagnez des points et découvrez des talents sur A Challenge.	Dołącz do oryginalnych cotygodniowych wyzwań foto i wideo, dziel się pracami, zdobywaj punkty i odkrywaj twórców w A Challenge.	Nimm an originellen wöchentlichen Foto- und Video-Challenges teil, teile Werke, sammle Punkte und entdecke Talente bei A Challenge.	Participa en retos originales semanales de foto y vídeo, comparte obras, gana puntos y descubre creadores en A Challenge.
+Community Feed — Creative Challenge Entries | A Challenge	Communauté — Créations des défis | A Challenge	Społeczność — Prace z wyzwań | A Challenge	Community — Kreative Challenge-Beiträge | A Challenge	Comunidad — Obras de los retos | A Challenge
+Discover original photo and video challenge entries from the A Challenge creator community.	Découvrez les créations photo et vidéo originales de la communauté A Challenge.	Odkryj autorskie zdjęcia i filmy społeczności A Challenge.	Entdecke originelle Foto- und Videobeiträge der A Challenge Community.	Descubre las obras originales de foto y vídeo de la comunidad A Challenge.
+Creative Challenge Leaderboard | A Challenge	Classement des défis créatifs | A Challenge	Ranking kreatywnych wyzwań | A Challenge	Rangliste kreativer Challenges | A Challenge	Clasificación de retos creativos | A Challenge
+See the top A Challenge creators ranked by community votes and engagement across completed challenges.	Découvrez les meilleurs créateurs A Challenge selon les votes et les interactions des défis terminés.	Zobacz najlepszych twórców A Challenge według głosów i aktywności w zakończonych wyzwaniach.	Sieh die besten Kreativen nach Community-Stimmen und Interaktionen in beendeten Challenges.	Consulta los mejores creadores según votos e interacciones en retos finalizados.
+How A Challenge Works | A Challenge	Comment fonctionne A Challenge | A Challenge	Jak działa A Challenge | A Challenge	So funktioniert A Challenge | A Challenge	Cómo funciona A Challenge | A Challenge
+Learn how to join A Challenge, submit original work, earn points, and participate safely.	Découvrez comment rejoindre A Challenge, envoyer vos créations, gagner des points et participer en sécurité.	Dowiedz się, jak dołączyć, przesyłać autorskie prace, zdobywać punkty i bezpiecznie uczestniczyć.	Erfahre, wie du teilnimmst, eigene Werke einreichst, Punkte sammelst und sicher mitmachst.	Descubre cómo unirte, enviar obras originales, ganar puntos y participar con seguridad.
+Privacy Policy | A Challenge	Politique de confidentialité | A Challenge	Polityka prywatności | A Challenge	Datenschutzerklärung | A Challenge	Política de privacidad | A Challenge
+Learn how A Challenge handles account, submission, analytics, and payment-related data.	Découvrez comment A Challenge traite les données de compte, de participation, d’analyse et de paiement.	Dowiedz się, jak A Challenge przetwarza dane kont, zgłoszeń, analityki i płatności.	Erfahre, wie A Challenge Konto-, Beitrags-, Analyse- und Zahlungsdaten verarbeitet.	Descubre cómo A Challenge trata los datos de cuentas, participaciones, analítica y pagos.
+Terms of Use | A Challenge	Conditions d’utilisation | A Challenge	Warunki korzystania | A Challenge	Nutzungsbedingungen | A Challenge	Condiciones de uso | A Challenge
+Read the terms that apply when using A Challenge and submitting creative work.	Consultez les conditions applicables à l’utilisation d’A Challenge et à l’envoi de créations.	Przeczytaj warunki korzystania z A Challenge i przesyłania prac.	Lies die Bedingungen zur Nutzung von A Challenge und zur Einreichung kreativer Werke.	Lee las condiciones de uso de A Challenge y de envío de obras creativas.
+Cookie Policy | A Challenge	Politique relative aux cookies | A Challenge	Polityka plików cookie | A Challenge	Cookie-Richtlinie | A Challenge	Política de cookies | A Challenge
+Learn about essential browser storage and privacy-friendly analytics on A Challenge.	Découvrez le stockage essentiel du navigateur et l’analyse respectueuse de la vie privée sur A Challenge.	Poznaj niezbędne dane przeglądarki i analitykę przyjazną prywatności w A Challenge.	Erfahre mehr über essenziellen Browserspeicher und datenschutzfreundliche Analysen bei A Challenge.	Conoce el almacenamiento esencial y la analítica respetuosa con la privacidad en A Challenge.
+Challenge and Contest Rules | A Challenge	Règles des défis et concours | A Challenge	Zasady wyzwań i konkursów | A Challenge	Challenge- und Wettbewerbsregeln | A Challenge	Reglas de retos y concursos | A Challenge
+Read the general participation, judging, originality, prize, and safety rules for A Challenge.	Consultez les règles de participation, d’évaluation, d’originalité, de récompenses et de sécurité.	Przeczytaj ogólne zasady udziału, oceny, oryginalności, nagród i bezpieczeństwa.	Lies die allgemeinen Regeln zu Teilnahme, Bewertung, Originalität, Belohnungen und Sicherheit.	Lee las reglas generales de participación, evaluación, originalidad, premios y seguridad.
+Creative Challenge Brief | A Challenge	Consignes du défi créatif | A Challenge	Opis kreatywnego wyzwania | A Challenge	Kreatives Challenge-Briefing | A Challenge	Instrucciones del reto creativo | A Challenge
+View the rules, deadline, points, and submission details for this A Challenge creative mission.	Consultez les règles, l’échéance, les points et les détails de participation de ce défi A Challenge.	Sprawdź zasady, termin, punkty i szczegóły zgłoszenia do tego wyzwania A Challenge.	Sieh Regeln, Frist, Punkte und Einreichungsdetails dieser A Challenge Mission.	Consulta las reglas, el plazo, los puntos y los detalles de participación de este reto A Challenge.
+Creator Profile | A Challenge	Profil du créateur | A Challenge	Profil twórcy | A Challenge	Kreativprofil | A Challenge	Perfil del creador | A Challenge
+Explore an A Challenge creator profile and their original creative entries.	Découvrez le profil d’un créateur A Challenge et ses créations originales.	Poznaj profil twórcy A Challenge i jego autorskie prace.	Entdecke ein A Challenge Profil und seine eigenen kreativen Beiträge.	Explora el perfil de un creador de A Challenge y sus obras originales.
+Apply	Appliquer	Zastosuj	Anwenden	Aplicar
+Original	Original	Oryginał	Original	Original
+Filters	Filtres	Filtry	Filter	Filtros
+Adjust	Réglages	Dostosuj	Anpassen	Ajustar
+Grade	Étalonnage	Kolorystyka	Farbkorrektur	Colorimetría
+Text	Texte	Tekst	Text	Texto
+Stickers	Autocollants	Naklejki	Sticker	Pegatinas
+Built-in Presets	Préréglages intégrés	Wbudowane ustawienia	Integrierte Vorgaben	Ajustes predefinidos
+Custom Presets	Préréglages personnels	Własne ustawienia	Eigene Vorgaben	Ajustes personalizados
+Save Current as Preset	Enregistrer les réglages actuels	Zapisz bieżące ustawienia	Aktuelle Einstellungen speichern	Guardar ajustes actuales
+Preset name...	Nom du préréglage…	Nazwa ustawień…	Name der Vorgabe…	Nombre del ajuste…
+Vignette:	Vignettage :	Winieta:	Vignette:	Viñeta:
+Sharpen:	Netteté :	Wyostrzenie:	Schärfe:	Nitidez:
+Blur Edges:	Flou des bords :	Rozmycie krawędzi:	Randunschärfe:	Desenfoque de bordes:
+Exposure:	Exposition :	Ekspozycja:	Belichtung:	Exposición:
+Highlights:	Hautes lumières :	Jasne tony:	Lichter:	Luces:
+Shadows:	Ombres :	Cienie:	Schatten:	Sombras:
+Temperature:	Température :	Temperatura:	Temperatur:	Temperatura:
+Aspect Ratio	Format de l’image	Proporcje obrazu	Seitenverhältnis	Relación de aspecto
+Rotate:	Rotation :	Obrót:	Drehung:	Rotación:
+Brightness:	Luminosité :	Jasność:	Helligkeit:	Brillo:
+Contrast:	Contraste :	Kontrast:	Kontrast:	Contraste:
+Saturation:	Saturation :	Nasycenie:	Sättigung:	Saturación:
+Enter text...	Saisissez du texte…	Wpisz tekst…	Text eingeben…	Escribe un texto…
+Size:	Taille :	Rozmiar:	Größe:	Tamaño:
+Color	Couleur	Kolor	Farbe	Color
+Add Text	Ajouter du texte	Dodaj tekst	Text hinzufügen	Añadir texto
+Added Text (drag to reposition):	Textes ajoutés (faites glisser pour déplacer) :	Dodane teksty (przeciągnij, aby przesunąć):	Hinzugefügter Text (zum Verschieben ziehen):	Textos añadidos (arrastra para mover):
+Drag text directly on the image to reposition	Faites glisser le texte sur l’image pour le déplacer	Przeciągnij tekst na obrazie, aby go przesunąć	Ziehe den Text direkt auf dem Bild, um ihn zu verschieben	Arrastra el texto sobre la imagen para moverlo
+Added Stickers:	Autocollants ajoutés :	Dodane naklejki:	Hinzugefügte Sticker:	Pegatinas añadidas:
+No layers yet. Add text or stickers to see them here.	Aucun calque. Ajoutez du texte ou des autocollants pour les voir ici.	Brak warstw. Dodaj tekst lub naklejki, aby je tu zobaczyć.	Noch keine Ebenen. Füge Text oder Sticker hinzu, um sie hier zu sehen.	Aún no hay capas. Añade texto o pegatinas para verlas aquí.
+Sticker:	Autocollant :	Naklejka:	Sticker:	Pegatina:
+Reset	Réinitialiser	Resetuj	Zurücksetzen	Restablecer
+Blur:	Flou :	Rozmycie:	Unschärfe:	Desenfoque:
+Grayscale:	Niveaux de gris :	Skala szarości:	Graustufen:	Escala de grises:
+Sepia:	Sépia :	Sepia:	Sepia:	Sepia:
+Hue Rotate:	Teinte :	Przesunięcie barwy:	Farbton:	Tono:
+Boost Your Submission	Booster votre participation	Promuj swoje zgłoszenie	Booste deinen Beitrag	Impulsa tu participación
+Increase your submission's visibility and get more votes!	Augmentez la visibilité de votre participation pour obtenir davantage de votes !	Zwiększ widoczność zgłoszenia i zdobądź więcej głosów!	Erhöhe die Sichtbarkeit deines Beitrags und erhalte mehr Stimmen!	¡Aumenta la visibilidad de tu participación y consigue más votos!
+Boosted submissions appear more frequently in the feed	Les participations boostées apparaissent plus souvent dans le fil	Promowane zgłoszenia pojawiają się częściej w aktualnościach	Geboostete Beiträge erscheinen häufiger im Feed	Las participaciones impulsadas aparecen con más frecuencia en el feed
+Re-Edit Submission	Retoucher la participation	Edytuj zgłoszenie ponownie	Beitrag erneut bearbeiten	Volver a editar participación
+Current Image	Image actuelle	Bieżący obraz	Aktuelles Bild	Imagen actual
+Caption	Légende	Opis	Bildunterschrift	Descripción
+Suggested for you	Suggestions pour vous	Polecani dla Ciebie	Vorschläge für dich	Sugerencias para ti
+Recent Achievements	Succès récents	Ostatnie osiągnięcia	Letzte Erfolge	Logros recientes
+Connections	Relations	Kontakty	Verbindungen	Conexiones
+View followers and following	Voir les abonnés et abonnements	Zobacz obserwujących i obserwowanych	Follower und gefolgte Profile ansehen	Ver seguidores y seguidos
+Followers (	Abonnés (	Obserwujący (	Follower (	Seguidores (
+Following (	Abonnements (	Obserwowani (	Gefolgt (	Siguiendo (
+No followers yet	Aucun abonné pour le moment	Brak obserwujących	Noch keine Follower	Aún no hay seguidores
+Not following anyone yet	Aucun abonnement pour le moment	Jeszcze nikogo nie obserwujesz	Du folgst noch niemandem	Aún no sigues a nadie
+Small Boost	Petit boost	Małe promowanie	Kleiner Boost	Impulso pequeño
+Medium Boost	Boost moyen	Średnie promowanie	Mittlerer Boost	Impulso medio
+Large Boost	Grand boost	Duże promowanie	Großer Boost	Impulso grande
+Double your submission visibility	Doublez la visibilité de votre participation	Podwój widoczność swojego zgłoszenia	Verdopple die Sichtbarkeit deines Beitrags	Duplica la visibilidad de tu participación
+5x your submission visibility	Multipliez la visibilité par 5	Zwiększ widoczność pięciokrotnie	Fünffache Sichtbarkeit für deinen Beitrag	Multiplica tu visibilidad por 5
+10x your submission visibility	Multipliez la visibilité par 10	Zwiększ widoczność dziesięciokrotnie	Zehnfache Sichtbarkeit für deinen Beitrag	Multiplica tu visibilidad por 10
+Free	Libre	Dowolne	Frei	Libre
+1:1 (Square)	1:1 (Carré)	1:1 (Kwadrat)	1:1 (Quadrat)	1:1 (Cuadrado)
+9:16 (Story)	9:16 (Story)	9:16 (Relacja)	9:16 (Story)	9:16 (Historia)
+Undo	Annuler l’action	Cofnij	Rückgängig	Deshacer
+Redo	Rétablir	Ponów	Wiederholen	Rehacer
+Please enter a preset name	Indiquez un nom pour le préréglage	Podaj nazwę ustawień	Gib einen Namen für die Vorgabe ein	Introduce un nombre para el ajuste
+Layer deleted	Calque supprimé	Warstwa usunięta	Ebene gelöscht	Capa eliminada
+editor.preset.none	Aucun	Brak	Keine	Ninguno
+editor.preset.vintage	Rétro	Retro	Retro	Retro
+editor.preset.cool	Froid	Chłodny	Kühl	Frío
+editor.preset.warm	Chaud	Ciepły	Warm	Cálido
+editor.preset.dramatic	Dramatique	Dramatyczny	Dramatisch	Dramático
+editor.preset.bw	Noir et blanc	Czarno-biały	Schwarzweiß	Blanco y negro
+editor.applied	Préréglage appliqué : {name}	Zastosowano ustawienia: {name}	Vorgabe angewendet: {name}	Ajuste aplicado: {name}
+editor.saved	Préréglage enregistré : {name}	Zapisano ustawienia: {name}	Vorgabe gespeichert: {name}	Ajuste guardado: {name}
+editor.deleted	Préréglage supprimé : {name}	Usunięto ustawienia: {name}	Vorgabe gelöscht: {name}	Ajuste eliminado: {name}
+search.clear	Effacer la recherche	Wyczyść wyszukiwanie	Suche löschen	Borrar búsqueda
+Search...	Rechercher…	Szukaj…	Suchen…	Buscar…
+submission.videoFor	Vidéo pour {title}	Film do wyzwania {title}	Videobeitrag für {title}	Vídeo para {title}
+submission.for	Participation à {title}	Zgłoszenie do wyzwania {title}	Beitrag für {title}	Participación en {title}
+First Challenge	Premier défi	Pierwsze wyzwanie	Erste Challenge	Primer reto
+Complete your first challenge	Terminez votre premier défi	Ukończ pierwsze wyzwanie	Schließe deine erste Challenge ab	Completa tu primer reto
+Rising Star	Étoile montante	Wschodząca gwiazda	Aufsteigender Stern	Estrella emergente
+Earn 1000 points	Gagnez 1 000 points	Zdobądź 1000 punktów	Sammle 1.000 Punkte	Gana 1000 puntos
+Challenge Master	Maître des défis	Mistrz wyzwań	Challenge-Meister	Maestro de retos
+Complete 10 challenges	Terminez 10 défis	Ukończ 10 wyzwań	Schließe 10 Challenges ab	Completa 10 retos
+Viral Creator	Créateur viral	Popularny twórca	Viraler Kreativer	Creador viral
+Get 100 votes on a submission	Obtenez 100 votes sur une participation	Zdobądź 100 głosów na zgłoszenie	Erhalte 100 Stimmen für einen Beitrag	Consigue 100 votos en una participación
+Consistency King	Roi de la régularité	Mistrz regularności	König der Beständigkeit	Rey de la constancia
+Complete challenges 7 days in a row	Terminez des défis 7 jours de suite	Ukończ wyzwania przez 7 dni z rzędu	Schließe an 7 Tagen in Folge Challenges ab	Completa retos durante 7 días seguidos
+Creator Pass activated	Creator Pass activé	Creator Pass aktywowany	Creator Pass aktiviert	Creator Pass activado
+Your subscription is active.	Votre abonnement est actif.	Twoja subskrypcja jest aktywna.	Dein Abo ist aktiv.	Tu suscripción está activa.
+Boost applied	Boost appliqué	Promowanie zastosowane	Boost angewendet	Impulso aplicado
+Your submission visibility boost is active.	Le boost de visibilité de votre participation est actif.	Promowanie widoczności Twojego zgłoszenia jest aktywne.	Der Sichtbarkeitsboost für deinen Beitrag ist aktiv.	El impulso de visibilidad de tu participación está activo.
+Boost Applied Successfully! ⚡	Boost appliqué ! ⚡	Promowanie zastosowane! ⚡	Boost angewendet! ⚡	¡Impulso aplicado! ⚡
+Creator Pass Activated! 🎉	Creator Pass activé ! 🎉	Creator Pass aktywowany! 🎉	Creator Pass aktiviert! 🎉	¡Creator Pass activado! 🎉
+Referral link copied to clipboard!	Lien de parrainage copié !	Link polecający skopiowany!	Empfehlungslink kopiert!	¡Enlace de invitación copiado!

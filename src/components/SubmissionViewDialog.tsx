@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -10,6 +11,7 @@ interface SubmissionViewDialogProps {
 }
 
 export const SubmissionViewDialog = ({ contentUrl, isVideo, children }: SubmissionViewDialogProps) => {
+  const { t, language } = useLanguage();
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -27,7 +29,7 @@ export const SubmissionViewDialog = ({ contentUrl, isVideo, children }: Submissi
           ) : (
             <img
               src={contentUrl}
-              alt="Submission"
+              alt={t("Submission")}
               className="max-w-full max-h-full object-contain"
             />
           )}

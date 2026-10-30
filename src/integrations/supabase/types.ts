@@ -148,6 +148,8 @@ export type Database = {
           publish_status: string | null
           scheduled_publish_at: string | null
           start_date: string
+          source_language: string
+          translations: Json
           title: string
           updated_at: string | null
         }
@@ -167,6 +169,8 @@ export type Database = {
           publish_status?: string | null
           scheduled_publish_at?: string | null
           start_date?: string
+          source_language?: string
+          translations?: Json
           title: string
           updated_at?: string | null
         }
@@ -186,6 +190,8 @@ export type Database = {
           publish_status?: string | null
           scheduled_publish_at?: string | null
           start_date?: string
+          source_language?: string
+          translations?: Json
           title?: string
           updated_at?: string | null
         }

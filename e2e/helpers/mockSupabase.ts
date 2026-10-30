@@ -27,7 +27,7 @@ const testSession = {
   user: testUser,
 };
 
-const challenge = {
+const baseChallenge = {
   id: TEST_CHALLENGE_ID,
   title: "Pocket Movie Magic",
   description: "Create a playful ten-second visual trick with an everyday object.",
@@ -49,6 +49,7 @@ const challenge = {
 type MockOptions = {
   authenticated?: boolean;
   role?: "admin" | "moderator" | "user";
+  challenge?: Partial<typeof baseChallenge> & { translations?: unknown; source_language?: string };
 };
 
 const json = (route: Route, body: unknown, status = 200) => route.fulfill({
@@ -62,6 +63,7 @@ const json = (route: Route, body: unknown, status = 200) => route.fulfill({
 });
 
 export async function installSupabaseMock(page: Page, options: MockOptions = {}) {
+  const challenge = { ...baseChallenge, ...options.challenge };
   const requests: Array<{ url: string; method: string; body: unknown }> = [];
 
   if (options.authenticated) {

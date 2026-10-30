@@ -33,6 +33,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Pencil, Trash2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Database } from "@/integrations/supabase/types";
+import type { Json } from "@/integrations/supabase/types";
+import { ChallengeTranslationEditor } from "@/components/ChallengeTranslationEditor";
+import { ChallengeTranslations, prepareTranslations } from "@/lib/localizedContent";
+import { Language, resolveLanguage } from "@/lib/i18n";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type UserRole = "admin" | "moderator" | "user";
 type ChallengeRow = Database["public"]["Tables"]["challenges"]["Row"];
@@ -48,6 +53,9 @@ const emptyEditForm = {
 };
 
 export const ChallengeModeration = () => {
+  const { t } = useLanguage();
+  const [translations, setTranslations] = useState<ChallengeTranslations>({});
+  const [sourceLanguage, setSourceLanguage] = useState<Language>("en");
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -131,6 +139,8 @@ export const ChallengeModeration = () => {
         .from("challenges")
         .update({
           title: editForm.title.trim(),
+          source_language: sourceLanguage,
+          translations: prepareTranslations(translations, sourceLanguage) as Json,
           description: editForm.description.trim(),
           prize: editForm.prize.trim(),
           points,
@@ -146,11 +156,13 @@ export const ChallengeModeration = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["allChallenges"] });
       queryClient.invalidateQueries({ queryKey: ["challenges"] });
+      queryClient.invalidateQueries({ queryKey: ["challenge"] });
+      queryClient.invalidateQueries({ queryKey: ["trending-challenges"] });
       setEditingChallenge(null);
       toast.success("Challenge updated successfully");
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Failed to update challenge");
+      toast.error(t(error.message) || "Failed to update challenge");
     },
   });
 
@@ -165,6 +177,8 @@ export const ChallengeModeration = () => {
         : "published";
 
     setEditingChallenge(challenge);
+    setTranslations(challenge.translations as ChallengeTranslations ?? {});
+    setSourceLanguage(resolveLanguage(challenge.source_language) ?? "en");
     setEditForm({
       title: challenge.title,
       description: challenge.description,
@@ -311,6 +325,7 @@ export const ChallengeModeration = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
+            <ChallengeTranslationEditor value={translations} sourceLanguage={sourceLanguage} onSourceLanguageChange={setSourceLanguage} onChange={setTranslations} />
             <div className="space-y-2">
               <Label htmlFor="edit-challenge-title">Title</Label>
               <Input id="edit-challenge-title" value={editForm.title} maxLength={100} onChange={(event) => setEditForm((current) => ({ ...current, title: event.target.value }))} />

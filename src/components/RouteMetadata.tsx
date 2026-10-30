@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const SITE_URL = "https://achallenge.vercel.app";
 const DEFAULT_TITLE = "A Challenge — Weekly Creative Photo & Video Challenges";
@@ -52,6 +53,7 @@ const upsertMeta = (selector: string, attribute: "name" | "property", key: strin
 
 export const RouteMetadata = () => {
   const { pathname } = useLocation();
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     const isChallenge = pathname.startsWith("/challenge/");
@@ -76,16 +78,19 @@ export const RouteMetadata = () => {
     const canonicalPath = pathname === "/" ? "/" : pathname.replace(/\/$/, "");
     const canonicalUrl = `${SITE_URL}${canonicalPath}`;
 
-    document.title = metadata.title;
-    upsertMeta('meta[name="description"]', "name", "description", metadata.description);
+    const title = t(metadata.title);
+    const description = t(metadata.description);
+    document.title = title;
+    upsertMeta('meta[name="description"]', "name", "description", description);
+    upsertMeta('meta[property="og:locale"]', "property", "og:locale", { en: "en_US", fr: "fr_FR", pl: "pl_PL", de: "de_DE", es: "es_ES" }[language]);
     upsertMeta('meta[name="robots"]', "name", "robots", noIndex
       ? "noindex, nofollow"
       : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
-    upsertMeta('meta[property="og:title"]', "property", "og:title", metadata.title);
-    upsertMeta('meta[property="og:description"]', "property", "og:description", metadata.description);
+    upsertMeta('meta[property="og:title"]', "property", "og:title", title);
+    upsertMeta('meta[property="og:description"]', "property", "og:description", description);
     upsertMeta('meta[property="og:url"]', "property", "og:url", canonicalUrl);
-    upsertMeta('meta[name="twitter:title"]', "name", "twitter:title", metadata.title);
-    upsertMeta('meta[name="twitter:description"]', "name", "twitter:description", metadata.description);
+    upsertMeta('meta[name="twitter:title"]', "name", "twitter:title", title);
+    upsertMeta('meta[name="twitter:description"]', "name", "twitter:description", description);
 
     let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) {
@@ -94,7 +99,7 @@ export const RouteMetadata = () => {
       document.head.appendChild(canonical);
     }
     canonical.href = canonicalUrl;
-  }, [pathname]);
+  }, [pathname, t, language]);
 
   return null;
 };

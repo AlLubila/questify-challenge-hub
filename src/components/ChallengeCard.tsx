@@ -18,6 +18,7 @@ interface ChallengeCardProps {
   points: number;
   difficulty: "easy" | "medium" | "hard";
   isEnded?: boolean;
+  translationMissing?: boolean;
 }
 
 export const ChallengeCard = ({
@@ -31,9 +32,10 @@ export const ChallengeCard = ({
   points,
   difficulty,
   isEnded = false,
+  translationMissing = false,
 }: ChallengeCardProps) => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   const difficultyColors = {
     easy: "bg-success text-success-foreground",
@@ -48,7 +50,7 @@ export const ChallengeCard = ({
       <div className="relative h-52 overflow-hidden border-b-2 border-border">
         <ChallengeArtwork src={image} alt={title} />
         <div className="absolute left-3 top-3 border-2 border-background bg-[#f7f2e8] px-2 py-1 font-mono text-[11px] font-bold text-[#101113]">
-          MISSION
+          {t("challenge.mission")}
         </div>
         <div className="absolute top-3 right-3 flex gap-2">
           <Badge className={difficultyColors[difficulty]} variant="secondary">
@@ -66,16 +68,17 @@ export const ChallengeCard = ({
             {title}
           </h3>
           <p className="text-muted-foreground text-sm line-clamp-2">{description}</p>
+          {translationMissing && <p className="mt-2 text-xs text-muted-foreground">{t("content.original")}</p>}
         </div>
 
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Trophy className="w-4 h-4 text-accent" />
-            <span>{publicRewardLabel(prize, points)}</span>
+            <span>{publicRewardLabel(prize, points, language)}</span>
           </div>
           <div className="flex items-center gap-1">
             <Users className="w-4 h-4 text-primary" />
-            <span>{participants.toLocaleString()}</span>
+            <span>{participants.toLocaleString(language)}</span>
           </div>
         </div>
 
@@ -88,7 +91,7 @@ export const ChallengeCard = ({
             onClick={() => navigate(`/challenge/${id}`)}
             disabled={isEnded}
           >
-            {isEnded ? "Challenge ended" : t("challenges.joinChallenge")}
+            {isEnded ? t("challenge.ended") : t("challenges.joinChallenge")}
           </Button>
         </div>
       </div>

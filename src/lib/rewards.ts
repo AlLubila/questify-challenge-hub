@@ -1,8 +1,10 @@
 const MONEY_REWARD_PATTERN = /(?:[$€£]\s?\d|\d[\d.,]*\s?(?:usd|eur|gbp|dollars?|euros?|pounds?)\b|\bcash\b)/i;
 
-export const publicRewardLabel = (reward: string, points: number) => {
+import { Language, translate } from "@/lib/i18n";
+
+export const publicRewardLabel = (reward: string, points: number, language: Language = "en") => {
   if (!reward || MONEY_REWARD_PATTERN.test(reward)) {
-    return `${points} points + Weekly Spotlight badge`;
+    return translate(language, "reward.default", { points });
   }
 
   return reward;

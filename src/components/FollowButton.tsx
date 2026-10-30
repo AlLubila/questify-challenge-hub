@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { useFollow } from "@/hooks/useFollow";
 import { UserPlus, UserMinus } from "lucide-react";
@@ -10,6 +11,7 @@ interface FollowButtonProps {
 }
 
 export const FollowButton = ({ userId, variant = "default", size = "default" }: FollowButtonProps) => {
+  const { t, language } = useLanguage();
   const { user } = useAuth();
   const { isFollowing, follow, unfollow, isPending, isLoading } = useFollow(userId);
 
@@ -18,7 +20,7 @@ export const FollowButton = ({ userId, variant = "default", size = "default" }: 
   if (isLoading) {
     return (
       <Button variant={variant} size={size} disabled>
-        Loading...
+        {t("Loading...")}
       </Button>
     );
   }
@@ -33,12 +35,12 @@ export const FollowButton = ({ userId, variant = "default", size = "default" }: 
       {isFollowing ? (
         <>
           <UserMinus className="h-4 w-4 mr-2" />
-          Unfollow
+          {t("Unfollow")}
         </>
       ) : (
         <>
           <UserPlus className="h-4 w-4 mr-2" />
-          Follow
+          {t("Follow")}
         </>
       )}
     </Button>

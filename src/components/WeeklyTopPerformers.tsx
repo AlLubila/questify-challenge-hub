@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 export const WeeklyTopPerformers = () => {
   const navigate = useNavigate();
+  const { t, language } = useLanguage();
   const { data: topPerformers, isLoading } = useWeeklyTopPerformers(5);
 
   if (isLoading) {
@@ -15,7 +17,7 @@ export const WeeklyTopPerformers = () => {
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-4">
           <Trophy className="h-5 w-5 text-yellow-500" />
-          <h3 className="font-semibold">Top of the Week</h3>
+          <h3 className="font-semibold">{t("weekly.title")}</h3>
         </div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
@@ -54,9 +56,9 @@ export const WeeklyTopPerformers = () => {
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-4">
         <Trophy className="h-5 w-5 text-yellow-500" />
-        <h3 className="font-semibold">Top of the Week</h3>
+        <h3 className="font-semibold">{t("weekly.title")}</h3>
         <Badge variant="secondary" className="text-xs ml-auto">
-          This Week
+          {t("leaderboard.thisWeek")}
         </Badge>
       </div>
       <div className="space-y-3">
@@ -88,7 +90,7 @@ export const WeeklyTopPerformers = () => {
                 {performer.display_name || performer.username}
               </p>
               <p className="text-xs text-muted-foreground">
-                Level {performer.level}
+                {t("profile.level")} {performer.level}
               </p>
             </div>
             <div className="flex items-center gap-1 text-primary">

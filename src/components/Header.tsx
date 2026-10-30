@@ -1,3 +1,4 @@
+import { LanguageSelector } from "@/components/LanguageSelector";
 import { Button } from "@/components/ui/button";
 import { Flag, Menu, X, User, LogOut, Wallet, Shield, Gift } from "lucide-react";
 import { useState } from "react";
@@ -24,17 +25,17 @@ export const Header = () => {
   const { data: profile } = useProfile();
   const { isAdminOrModerator } = useUserRole();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <header className="sticky top-0 z-50 border-b-2 border-border bg-background">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" to="/" aria-label="A Challenge home">
+          <Link className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" to="/" aria-label={t("header.home")}>
             <AChallengeLogo />
           </Link>
           
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-6">
             <NavLink to="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               {t("nav.home")}
             </NavLink>
@@ -50,12 +51,13 @@ export const Header = () => {
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
+          <LanguageSelector />
           {user && profile ? (
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-3">
               <div className="flex items-center gap-2 rounded-md border border-border bg-muted/40 px-3 py-2">
                 <Flag className="w-4 h-4 text-primary" />
-                <span className="text-sm font-semibold">{profile.points.toLocaleString()} pts</span>
+                <span className="text-sm font-semibold">{profile.points.toLocaleString(language)} {t("challenge.pts")}</span>
               </div>
 
               <NotificationsDropdown />
@@ -65,7 +67,7 @@ export const Header = () => {
                   <Button 
                     variant="ghost" 
                     className="relative h-10 w-10 rounded-full p-0"
-                    aria-label="Open account menu"
+                    aria-label={t("header.account")}
                   >
                     <Avatar className="h-10 w-10 cursor-pointer">
                       <AvatarImage src={profile.avatar_url || undefined} alt={profile.username} />
@@ -110,7 +112,7 @@ export const Header = () => {
               </DropdownMenu>
             </div>
           ) : (
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-3">
               <Button variant="outline" onClick={() => navigate('/auth')}>{t("nav.signIn")}</Button>
               <Button onClick={() => navigate('/auth')}>
                 {t("nav.getStarted")}
@@ -119,9 +121,9 @@ export const Header = () => {
           )}
 
           <button
-            className="md:hidden p-2"
+            className="lg:hidden p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={t("header.menu")}
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -129,23 +131,23 @@ export const Header = () => {
       </div>
 
       {isMenuOpen && (
-        <div className="md:hidden border-t border-border">
+        <div className="lg:hidden border-t border-border">
           <nav className="container py-4 flex flex-col gap-4">
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
-              Home
+              {t("nav.home") }
             </Link>
             <a href="/#challenges" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Challenges
+              {t("nav.challenges") }
             </a>
             <Link to="/feed" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
-              Feed
+              {t("nav.feed") }
             </Link>
             <Link to="/leaderboard" onClick={() => setIsMenuOpen(false)} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
-              Leaderboard
+              {t("nav.leaderboard") }
             </Link>
             {user && (
               <button onClick={() => navigate('/referrals')} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left">
-                Referrals
+                {t("nav.referrals") }
               </button>
             )}
             <div className="flex flex-col gap-3 pt-4 border-t border-border">
@@ -160,7 +162,7 @@ export const Header = () => {
                     </Avatar>
                     <div className="flex-1">
                       <p className="font-medium">{profile.display_name || profile.username}</p>
-                      <p className="text-sm text-muted-foreground">{profile.points} points</p>
+                      <p className="text-sm text-muted-foreground">{profile.points.toLocaleString(language)} {t("challenges.points").toLowerCase()}</p>
                     </div>
                   </div>
                   <Button variant="ghost" className="w-full justify-start" onClick={() => { navigate('/profile'); setIsMenuOpen(false); }}>
@@ -179,16 +181,16 @@ export const Header = () => {
                   )}
                   <Button variant="outline" className="w-full" onClick={signOut}>
                     <LogOut className="w-4 h-4 mr-2" />
-                    Sign Out
+                    {t("nav.signOut") }
                   </Button>
                 </>
               ) : (
                 <>
                   <Button variant="outline" className="w-full" onClick={() => navigate('/auth')}>
-                    Sign In
+                    {t("nav.signIn") }
                   </Button>
                   <Button className="w-full" onClick={() => navigate('/auth')}>
-                    Get Started
+                    {t("nav.getStarted") }
                   </Button>
                 </>
               )}

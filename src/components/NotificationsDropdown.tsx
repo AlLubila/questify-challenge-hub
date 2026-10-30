@@ -1,3 +1,5 @@
+import { dateLocales } from "@/lib/dateLocales";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
 import {
   DropdownMenu,
@@ -33,6 +35,7 @@ const getNotificationIcon = (type: string) => {
 };
 
 export const NotificationsDropdown = () => {
+  const { t, language } = useLanguage();
   const [filterType, setFilterType] = useState<string>("all");
   const { 
     notifications, 
@@ -61,7 +64,7 @@ export const NotificationsDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-96">
         <DropdownMenuLabel className="flex items-center justify-between">
-          <span>Notifications</span>
+          <span>{t("Notifications")}</span>
           <div className="flex gap-1">
             <Button
               variant="ghost"
@@ -84,7 +87,7 @@ export const NotificationsDropdown = () => {
                 className="h-auto p-1 text-xs"
               >
                 <CheckCheck className="h-3 w-3 mr-1" />
-                Mark all read
+                {t("Mark all read")}
               </Button>
             )}
           </div>
@@ -93,10 +96,10 @@ export const NotificationsDropdown = () => {
         <div className="px-2 py-2">
           <Tabs value={filterType} onValueChange={setFilterType} className="w-full">
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="all" className="text-xs">All</TabsTrigger>
-              <TabsTrigger value="boost_applied" className="text-xs">Boosts</TabsTrigger>
-              <TabsTrigger value="subscription_activated" className="text-xs">Subs</TabsTrigger>
-              <TabsTrigger value="reward_earned" className="text-xs">Rewards</TabsTrigger>
+              <TabsTrigger value="all" className="text-xs">{t("All")}</TabsTrigger>
+              <TabsTrigger value="boost_applied" className="text-xs">{t("Boosts")}</TabsTrigger>
+              <TabsTrigger value="subscription_activated" className="text-xs">{t("Subs")}</TabsTrigger>
+              <TabsTrigger value="reward_earned" className="text-xs">{t("Rewards")}</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -105,7 +108,7 @@ export const NotificationsDropdown = () => {
           {notifications.length === 0 ? (
             <div className="py-8 text-center text-sm text-muted-foreground">
               <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p>No notifications yet</p>
+              <p>{t("No notifications yet")}</p>
             </div>
           ) : (
             notifications.map((notification) => (
@@ -118,11 +121,11 @@ export const NotificationsDropdown = () => {
               >
                 <div className="mt-0.5">{getNotificationIcon(notification.type)}</div>
                 <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none">{notification.title}</p>
-                  <p className="text-xs text-muted-foreground">{notification.message}</p>
+                  <p className="text-sm font-medium leading-none">{t(notification.title)}</p>
+                  <p className="text-xs text-muted-foreground">{t(notification.message)}</p>
                   <p className="text-xs text-muted-foreground">
                     {formatDistanceToNow(new Date(notification.created_at), {
-                      addSuffix: true,
+                      addSuffix: true, locale: dateLocales[language],
                     })}
                   </p>
                 </div>

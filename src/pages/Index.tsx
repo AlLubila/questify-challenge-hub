@@ -12,7 +12,7 @@ import { WeeklyTopPerformers } from "@/components/WeeklyTopPerformers";
 
 const Index = () => {
   const { data: challenges, isLoading, isError, refetch } = useChallenges();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
 
   const now = Date.now();
@@ -73,7 +73,7 @@ const Index = () => {
 
             <div className="relative overflow-hidden rounded-2xl border-2 border-[#101113] bg-[#f7f2e8] p-6 text-[#101113] shadow-card md:p-8">
               <div className="flex items-center justify-between border-b-2 border-dashed border-[#101113]/30 pb-4">
-                <p className="font-mono text-xs font-bold uppercase tracking-[0.16em]">Mission route / 01</p>
+                <p className="font-mono text-xs font-bold uppercase tracking-[0.16em]">{t("home.route")}</p>
                 <span className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[#101113] bg-primary"><Flag className="h-5 w-5" /></span>
               </div>
               <svg viewBox="0 0 420 70" className="mt-4 h-14 w-full" aria-hidden="true">
@@ -81,9 +81,9 @@ const Index = () => {
               </svg>
               <ol className="grid gap-3 sm:grid-cols-3">
                 {[
-                  ["01", "Choose an open brief", "Check the rules, deadline, reward, and judging criteria."],
-                  ["02", "Submit original work", "Upload your own photo or video before the challenge closes."],
-                  ["03", "Get reviewed", "Approved entries earn points and appear in the community feed."],
+                  ["01", t("home.step1Title"), t("home.step1Description")],
+                  ["02", t("home.step2Title"), t("home.step2Description")],
+                  ["03", t("home.step3Title"), t("home.step3Description")],
                 ].map(([step, title, description]) => (
                   <li key={step} className="rounded-xl border-2 border-[#101113] bg-white/50 p-4">
                     <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border-2 border-[#101113] bg-primary font-mono text-xs font-bold">{step}</span>
@@ -104,12 +104,12 @@ const Index = () => {
         <div className="container">
           <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <p className="mb-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-primary">Mission board</p>
+              <p className="mb-2 font-mono text-xs font-bold uppercase tracking-[0.18em] text-primary">{t("home.board")}</p>
               <h2 className="mb-2 text-3xl font-black tracking-tight text-foreground md:text-4xl">
-                {showingArchive ? "Recent Challenges" : t("challenges.featured")}
+                {showingArchive ? t("home.recent") : t("challenges.featured")}
               </h2>
               <p className="max-w-2xl text-muted-foreground">
-                {showingArchive ? "New challenges are on the way. Explore recently completed quests in the meantime." : t("challenges.trending")}
+                {showingArchive ? t("home.archive") : t("challenges.trending")}
               </p>
             </div>
           </div>
@@ -124,9 +124,9 @@ const Index = () => {
                 </div>
               ) : isError ? (
                 <Card className="p-8 text-center">
-                  <h3 className="text-xl font-semibold">Challenges could not be loaded</h3>
-                  <p className="mt-2 text-muted-foreground">Check your connection and try again.</p>
-                  <Button className="mt-5" onClick={() => refetch()}>Try again</Button>
+                  <h3 className="text-xl font-semibold">{t("home.loadError")}</h3>
+                  <p className="mt-2 text-muted-foreground">{t("home.connection")}</p>
+                  <Button className="mt-5" onClick={() => refetch()}>{t("home.retry")}</Button>
                 </Card>
               ) : displayChallenges.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-6">
@@ -139,9 +139,10 @@ const Index = () => {
                         image={challenge.image_url || ""}
                         prize={challenge.prize}
                         participants={challenge.participants_count}
-                        timeLeft={calculateTimeLeft(challenge.end_date)}
+                        timeLeft={calculateTimeLeft(challenge.end_date, language)}
                         points={challenge.points}
                         difficulty={challenge.difficulty}
+                        translationMissing={challenge.translationMissing}
                         isEnded={new Date(challenge.end_date).getTime() <= now}
                       />
                     </div>
@@ -149,8 +150,8 @@ const Index = () => {
                 </div>
               ) : (
                 <Card className="p-10 text-center">
-                  <h3 className="text-xl font-semibold">No open challenges right now</h3>
-                  <p className="mx-auto mt-2 max-w-md text-muted-foreground">Check back soon for a fresh creative challenge.</p>
+                  <h3 className="text-xl font-semibold">{t("home.empty")}</h3>
+                  <p className="mx-auto mt-2 max-w-md text-muted-foreground">{t("home.checkBack")}</p>
                 </Card>
               )}
             </div>
@@ -167,7 +168,7 @@ const Index = () => {
         <div className="container">
           <Card className="flex flex-col items-start justify-between gap-6 border-2 border-[#101113] bg-secondary p-8 text-secondary-foreground shadow-card md:flex-row md:items-center md:p-10">
             <div>
-              <p className="font-mono text-xs font-bold uppercase tracking-[0.16em]">Your next mission</p>
+              <p className="font-mono text-xs font-bold uppercase tracking-[0.16em]">{t("home.next")}</p>
               <h2 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">{t("cta.title")}</h2>
               <p className="mt-2 max-w-2xl text-secondary-foreground">{t("cta.description")}</p>
             </div>

@@ -1,3 +1,5 @@
+import { dateLocales } from "@/lib/dateLocales";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 
 export const AchievementsShowcase = () => {
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
   const { data: achievements, isLoading } = useRecentAchievements(5);
 
@@ -16,7 +19,7 @@ export const AchievementsShowcase = () => {
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-4">
           <Award className="h-5 w-5 text-purple-500" />
-          <h3 className="font-semibold">Recent Achievements</h3>
+          <h3 className="font-semibold">{t("Recent Achievements")}</h3>
         </div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
@@ -41,7 +44,7 @@ export const AchievementsShowcase = () => {
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-4">
         <Award className="h-5 w-5 text-purple-500" />
-        <h3 className="font-semibold">Recent Achievements</h3>
+        <h3 className="font-semibold">{t("Recent Achievements")}</h3>
         <Flag className="ml-auto h-4 w-4 text-primary" />
       </div>
       <div className="space-y-4">
@@ -65,7 +68,7 @@ export const AchievementsShowcase = () => {
                   {achievement.profiles.display_name || achievement.profiles.username}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {formatDistanceToNow(new Date(achievement.earned_at), { addSuffix: true })}
+                  {formatDistanceToNow(new Date(achievement.earned_at), { addSuffix: true, locale: dateLocales[language] })}
                 </p>
               </div>
             </div>
@@ -77,10 +80,10 @@ export const AchievementsShowcase = () => {
                 {achievement.badges.icon && (
                   <span className="mr-1.5">{achievement.badges.icon}</span>
                 )}
-                {achievement.badges.name}
+                {t(achievement.badges.name)}
               </Badge>
               <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                {achievement.badges.description}
+                {t(achievement.badges.description)}
               </p>
             </div>
           </div>

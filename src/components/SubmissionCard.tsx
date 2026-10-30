@@ -1,3 +1,5 @@
+import { localizeChallenge } from "@/lib/localizedContent";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,6 +25,9 @@ interface SubmissionProfile {
 }
 
 interface SubmissionChallenge {
+  description?: string;
+  translations?: unknown;
+  source_language?: string;
   id: string;
   title: string;
   difficulty: "easy" | "medium" | "hard";
@@ -64,6 +69,7 @@ export const SubmissionCard = ({ submission }: SubmissionCardProps) => {
 const SubmissionCardContent = ({ submission }: {
   submission: Submission & { profiles: SubmissionProfile; challenges: SubmissionChallenge };
 }) => {
+  const { t, language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -159,10 +165,10 @@ const SubmissionCardContent = ({ submission }: {
       }
       
       if (error.message.includes("logged in")) {
-        toast.error("Sign in to vote on submissions");
+        toast.error(t("Sign in to vote on submissions"));
         navigate("/auth");
       } else {
-        toast.error("Failed to vote");
+        toast.error(t("Failed to vote"));
       }
     },
   });
@@ -185,14 +191,14 @@ const SubmissionCardContent = ({ submission }: {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments"] });
       setCommentText("");
-      toast.success("Comment added!");
+      toast.success(t("Comment added!"));
     },
     onError: (error: Error) => {
       if (error.message.includes("logged in")) {
-        toast.error("Sign in to comment");
+        toast.error(t("Sign in to comment"));
         navigate("/auth");
       } else {
-        toast.error("Failed to add comment");
+        toast.error(t("Failed to add comment"));
       }
     },
   });
@@ -203,11 +209,11 @@ const SubmissionCardContent = ({ submission }: {
 
   const handleComment = () => {
     if (!commentText.trim()) {
-      toast.error("Comment cannot be empty");
+      toast.error(t("Comment cannot be empty"));
       return;
     }
     if (commentText.length > 500) {
-      toast.error("Comment is too long (max 500 characters)");
+      toast.error(t("Comment is too long (max 500 characters)"));
       return;
     }
     commentMutation.mutate();
@@ -258,7 +264,7 @@ const SubmissionCardContent = ({ submission }: {
           <Badge
             className={difficultyColors[submission.challenges.difficulty as keyof typeof difficultyColors]}
           >
-            {submission.challenges.title}
+            {localizeChallenge(submission.challenges, language).title}
           </Badge>
         </div>
       </div>
@@ -277,13 +283,13 @@ const SubmissionCardContent = ({ submission }: {
           ) : (
             <img
               src={submission.content_url}
-              alt="Submission"
+              alt={t("Submission")}
               className="w-full h-full object-cover"
             />
           )}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/20">
             <span className="text-white text-sm font-medium bg-black/50 px-3 py-1 rounded-full">
-              Click to view full
+              {t("Click to view full")}
             </span>
           </div>
         </div>
@@ -325,7 +331,7 @@ const SubmissionCardContent = ({ submission }: {
               className="gap-2 ml-auto"
             >
               <Zap className="w-5 h-5" />
-              <span className="font-bold">Boost</span>
+              <span className="font-bold">{t("Boost")}</span>
             </Button>
           </BoostSubmissionDialog>
         )}
@@ -355,14 +361,14 @@ const SubmissionCardContent = ({ submission }: {
                       <span className="text-muted-foreground">{comment.content}</span>
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {new Date(comment.created_at).toLocaleDateString()}
+                      {new Date(comment.created_at).toLocaleDateString(language)}
                     </p>
                   </div>
                 </div>
               ))
             ) : (
               <p className="text-sm text-muted-foreground text-center py-4">
-                No comments yet. Be the first to comment!
+                {t("No comments yet. Be the first to comment!")}
               </p>
             )}
           </div>
@@ -371,7 +377,7 @@ const SubmissionCardContent = ({ submission }: {
           {user ? (
             <div className="p-4 border-t border-border flex gap-2">
               <Input
-                placeholder="Add a comment..."
+                placeholder={t("Add a comment...")}
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleComment()}
@@ -388,7 +394,7 @@ const SubmissionCardContent = ({ submission }: {
           ) : (
             <div className="p-4 border-t border-border text-center">
               <Button variant="outline" onClick={() => navigate("/auth")}>
-                Sign in to comment
+                {t("Sign in to comment")}
               </Button>
             </div>
           )}
@@ -397,7 +403,7 @@ const SubmissionCardContent = ({ submission }: {
 
       {/* Metadata */}
       <div className="px-4 py-3 border-t border-border text-sm text-muted-foreground">
-        {new Date(submission.submitted_at).toLocaleString()}
+        {new Date(submission.submitted_at).toLocaleString(language)}
       </div>
     </Card>
   );

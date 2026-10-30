@@ -1,3 +1,6 @@
+import { localizeChallenge } from "@/lib/localizedContent";
+import { dateLocales } from "@/lib/dateLocales";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -25,6 +28,7 @@ import { SubmissionCardSkeleton } from "@/components/skeletons/SubmissionCardSke
 import PullToRefresh from "react-simple-pull-to-refresh";
 
 const Profile = () => {
+  const { t, language } = useLanguage();
   const { user, isLoading: authLoading } = useAuth();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -82,7 +86,7 @@ const Profile = () => {
           
           if (error) throw error;
           
-          toast.success("Creator Pass Activated! 🎉", {
+          toast.success(t("Creator Pass Activated! 🎉"), {
             description: "Your subscription is now active. Enjoy exclusive perks!",
           });
         } catch (error) {
@@ -179,13 +183,13 @@ const Profile = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      toast.success("Profile updated successfully!");
+      toast.success(t("Profile updated successfully!"));
       setIsEditing(false);
       setAvatarFile(null);
       setAvatarPreview("");
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to update profile");
+      toast.error(t(error.message || "Failed to update profile"));
     },
   });
 
@@ -193,7 +197,7 @@ const Profile = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("Avatar must be less than 5MB");
+        toast.error(t("Avatar must be less than 5MB"));
         return;
       }
       setAvatarFile(file);
@@ -245,7 +249,7 @@ const Profile = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <div className="container py-20 text-center">
-          <p className="text-muted-foreground">Profile not found</p>
+          <p className="text-muted-foreground">{t("Profile not found")}</p>
         </div>
       </div>
     );
@@ -283,7 +287,7 @@ const Profile = () => {
                     <Button variant="outline" size="sm" asChild>
                       <span className="cursor-pointer">
                         <Upload className="w-4 h-4 mr-2" />
-                        Upload Avatar
+                        {t("Upload Avatar")}
                       </span>
                     </Button>
                   </Label>
@@ -295,7 +299,7 @@ const Profile = () => {
               {isEditing ? (
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="display-name">Display Name</Label>
+                    <Label htmlFor="display-name">{t("Display Name")}</Label>
                     <Input
                       id="display-name"
                       value={displayName}
@@ -304,12 +308,12 @@ const Profile = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="bio">Bio</Label>
+                    <Label htmlFor="bio">{t("Bio")}</Label>
                     <Textarea
                       id="bio"
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
-                      placeholder="Tell us about yourself..."
+                      placeholder={t("Tell us about yourself...")}
                       rows={3}
                     />
                   </div>
@@ -319,10 +323,10 @@ const Profile = () => {
                       disabled={updateProfileMutation.isPending}
                     >
                       <Save className="w-4 h-4 mr-2" />
-                      Save Changes
+                      {t("Save Changes")}
                     </Button>
                     <Button variant="outline" onClick={handleEditToggle}>
-                      Cancel
+                      {t("Cancel")}
                     </Button>
                   </div>
                 </div>
@@ -339,7 +343,7 @@ const Profile = () => {
                   )}
                   <div className="flex gap-2">
                     {isOwnProfile ? (
-                      <Button onClick={handleEditToggle}>Edit Profile</Button>
+                      <Button onClick={handleEditToggle}>{t("Edit Profile")}</Button>
                     ) : (
                       <FollowButton userId={viewedUserId!} />
                     )}
@@ -359,7 +363,7 @@ const Profile = () => {
                     <Users className="w-4 h-4 text-primary" />
                     <p className="text-2xl font-bold">{profile.followers_count || 0}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">Followers</p>
+                  <p className="text-sm text-muted-foreground">{t("Followers")}</p>
                 </Card>
                 <Card 
                   className="p-4 text-center cursor-pointer hover:bg-accent/50 transition-colors"
@@ -372,14 +376,14 @@ const Profile = () => {
                     <Users className="w-4 h-4 text-accent" />
                     <p className="text-2xl font-bold">{profile.following_count || 0}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">Following</p>
+                  <p className="text-sm text-muted-foreground">{t("Following")}</p>
                 </Card>
                 <Card className="p-4 text-center">
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Flag className="w-4 h-4 text-accent" />
                     <p className="text-2xl font-bold">{profile.points}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">Points</p>
+                  <p className="text-sm text-muted-foreground">{t("Points")}</p>
                 </Card>
                 <Card className="p-4 text-center">
                   <div className="flex items-center justify-center gap-2 mb-2">
@@ -393,7 +397,7 @@ const Profile = () => {
                     <Trophy className="w-4 h-4 text-secondary" />
                     <p className="text-2xl font-bold">{profile.level}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">Level</p>
+                  <p className="text-sm text-muted-foreground">{t("Level")}</p>
                 </Card>
               </div>
             </div>
@@ -403,9 +407,9 @@ const Profile = () => {
         {/* Tabs for Badges, Submissions, and Subscription */}
         <Tabs defaultValue="badges" className="w-full">
             <TabsList className={`grid w-full ${isOwnProfile ? "grid-cols-3" : "grid-cols-2"}`}>
-              <TabsTrigger value="badges">Badges ({userBadges?.length || 0})</TabsTrigger>
-              <TabsTrigger value="submissions">Submissions ({submissions?.length || 0})</TabsTrigger>
-              {isOwnProfile && <TabsTrigger value="subscription">Subscription</TabsTrigger>}
+              <TabsTrigger value="badges">{t("Badges (")}{userBadges?.length || 0})</TabsTrigger>
+              <TabsTrigger value="submissions">{t("Submissions (")}{submissions?.length || 0})</TabsTrigger>
+              {isOwnProfile && <TabsTrigger value="subscription">{t("Subscription")}</TabsTrigger>}
           </TabsList>
 
           <TabsContent value="badges" className="space-y-4">
@@ -416,12 +420,12 @@ const Profile = () => {
                     <div className="flex items-start gap-4">
                       <div className="text-4xl">{userBadge.badges.icon}</div>
                       <div className="flex-1">
-                        <h3 className="font-bold text-lg">{userBadge.badges.name}</h3>
+                        <h3 className="font-bold text-lg">{t(userBadge.badges.name)}</h3>
                         <p className="text-sm text-muted-foreground mb-2">
-                          {userBadge.badges.description}
+                          {t(userBadge.badges.description)}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          Earned {new Date(userBadge.earned_at).toLocaleDateString()}
+                          {t("Earned")} {new Date(userBadge.earned_at).toLocaleDateString(language)}
                         </p>
                       </div>
                     </div>
@@ -431,9 +435,9 @@ const Profile = () => {
             ) : (
               <Card className="p-12 text-center">
                 <Award className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-xl font-bold mb-2">No badges yet</h3>
+                <h3 className="text-xl font-bold mb-2">{t("No badges yet")}</h3>
                 <p className="text-muted-foreground">
-                  Complete challenges to earn badges!
+                  {t("Complete challenges to earn badges!")}
                 </p>
               </Card>
             )}
@@ -451,12 +455,12 @@ const Profile = () => {
                            controls
                            preload="metadata"
                            className="h-full w-full object-cover"
-                           aria-label={`Video submission for ${submission.challenges.title}`}
+                           aria-label={t("submission.videoFor", { title: localizeChallenge(submission.challenges, language).title })}
                          />
                        ) : (
                          <img
                            src={submission.content_url}
-                           alt={`Submission for ${submission.challenges.title}`}
+                           alt={t("submission.for", { title: localizeChallenge(submission.challenges, language).title })}
                            loading="lazy"
                            className="w-full h-full object-cover"
                          />
@@ -472,13 +476,13 @@ const Profile = () => {
                              className="absolute bottom-2 right-2 gap-1"
                            >
                              <Pencil className="w-3 h-3" />
-                             Edit
+                             {t("Edit")}
                            </Button>
                          </ReEditSubmissionDialog>
                        )}
                      </div>
                      <div className="p-4">
-                       <h3 className="font-bold mb-1">{submission.challenges.title}</h3>
+                       <h3 className="font-bold mb-1">{localizeChallenge(submission.challenges, language).title}</h3>
                        {submission.caption && (
                          <p className="text-sm text-muted-foreground mb-2">
                            {submission.caption}
@@ -487,10 +491,10 @@ const Profile = () => {
                        <div className="flex items-center gap-4 text-sm">
                          <span className="flex items-center gap-1">
                            <Trophy className="w-4 h-4 text-accent" />
-                           {submission.votes} votes
+                           {submission.votes} {t("votes")}
                          </span>
                          <span className="text-muted-foreground">
-                           {new Date(submission.submitted_at).toLocaleDateString()}
+                           {new Date(submission.submitted_at).toLocaleDateString(language)}
                          </span>
                        </div>
                      </div>
@@ -500,9 +504,9 @@ const Profile = () => {
             ) : (
               <Card className="p-12 text-center">
                 <Flag className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-xl font-bold mb-2">No submissions yet</h3>
+                <h3 className="text-xl font-bold mb-2">{t("No submissions yet")}</h3>
                 <p className="text-muted-foreground">
-                  Join a challenge and submit your first entry!
+                  {t("Join a challenge and submit your first entry!")}
                 </p>
               </Card>
             )}
@@ -515,9 +519,9 @@ const Profile = () => {
                   <Crown className="h-6 w-6 text-primary-foreground" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Creator Pass</h2>
+                  <h2 className="text-2xl font-bold mb-2">{t("Creator Pass")}</h2>
                   <p className="text-muted-foreground">
-                    Get exclusive perks, extra rewards, and premium features for $5/month
+                    {t("Get exclusive perks, extra rewards, and premium features for $5/month")}
                   </p>
                 </div>
               </div>
@@ -525,27 +529,27 @@ const Profile = () => {
               {subscriptionData?.subscribed ? (
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <Badge variant="default" className="text-lg px-4 py-1">Active</Badge>
+                    <Badge variant="default" className="text-lg px-4 py-1">{t("Active")}</Badge>
                     {subscriptionData.subscription_end && (
                       <span className="text-sm text-muted-foreground">
-                        Renews on {format(new Date(subscriptionData.subscription_end), "PPP")}
+                        {t("Renews on")} {format(new Date(subscriptionData.subscription_end), "PPP", { locale: dateLocales[language] })}
                       </span>
                     )}
                   </div>
                   
                   <div className="bg-muted rounded-lg p-6 space-y-3">
-                    <h3 className="font-semibold mb-3">Your Benefits:</h3>
+                    <h3 className="font-semibold mb-3">{t("Your Benefits:")}</h3>
                     <div className="flex items-center gap-2">
                       <Zap className="h-4 w-4 text-primary" />
-                      <span className="text-sm">2x Challenge Rewards</span>
+                      <span className="text-sm">{t("2x Challenge Rewards")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Trophy className="h-4 w-4 text-primary" />
-                      <span className="text-sm">Exclusive Creator Badge</span>
+                      <span className="text-sm">{t("Exclusive Creator Badge")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Flag className="h-4 w-4 text-primary" />
-                      <span className="text-sm">Access to Premium Stats</span>
+                      <span className="text-sm">{t("Access to Premium Stats")}</span>
                     </div>
                   </div>
 
@@ -554,24 +558,24 @@ const Profile = () => {
                     onClick={() => openCustomerPortal()}
                     disabled={isOpeningPortal}
                   >
-                    Manage Subscription
+                    {t("Manage Subscription")}
                   </Button>
                 </div>
               ) : (
                 <div className="space-y-6">
                   <div className="bg-muted rounded-lg p-6 space-y-3">
-                    <h3 className="font-semibold mb-3">What You'll Get:</h3>
+                    <h3 className="font-semibold mb-3">{t("What You'll Get:")}</h3>
                     <div className="flex items-center gap-2">
                       <Zap className="h-4 w-4 text-primary" />
-                      <span className="text-sm">2x Challenge Rewards</span>
+                      <span className="text-sm">{t("2x Challenge Rewards")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Trophy className="h-4 w-4 text-primary" />
-                      <span className="text-sm">Exclusive Creator Badge</span>
+                      <span className="text-sm">{t("Exclusive Creator Badge")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Flag className="h-4 w-4 text-primary" />
-                      <span className="text-sm">Access to Premium Stats</span>
+                      <span className="text-sm">{t("Access to Premium Stats")}</span>
                     </div>
                   </div>
 
@@ -580,7 +584,7 @@ const Profile = () => {
                     onClick={() => createCheckout()}
                     disabled={isCreatingCheckout}
                   >
-                    Subscribe for $5/month
+                    {t("Subscribe for $5/month")}
                   </Button>
                 </div>
               )}

@@ -1,3 +1,4 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useChallengeRecommendations } from "@/hooks/useChallengeRecommendations";
@@ -7,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const PersonalizedChallenges = () => {
+  const { t, language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { data: recommendations, isLoading } = useChallengeRecommendations(4);
@@ -67,7 +69,7 @@ export const PersonalizedChallenges = () => {
               </Badge>
               <div className="flex items-center gap-1 text-muted-foreground ml-auto">
                 <Trophy className="h-3 w-3" />
-                <span>{challenge.points} pts</span>
+                <span>{challenge.points} {t("pts")}</span>
               </div>
             </div>
           </div>

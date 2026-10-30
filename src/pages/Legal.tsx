@@ -1,10 +1,11 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Header } from "@/components/Header";
 import { Link, useLocation } from "react-router-dom";
 
 type Section = { title: string; paragraphs: string[] };
 type LegalDocument = { title: string; introduction: string; sections: Section[] };
 
-const updated = "September 22, 2026";
+const updated = "2026-09-22T12:00:00Z";
 const operator = {
   name: "Albi Lubila Mayamwene",
   address: "Aleja Zygmunta Krasińskiego 28, Kraków, Poland",
@@ -63,6 +64,8 @@ const documents: Record<string, LegalDocument> = {
 
 const Legal = () => {
   const { pathname } = useLocation();
+  const { t, language } = useLanguage();
+  const route = pathname.slice(1);
   const document = documents[pathname] ?? documents["/terms"];
 
   return (
@@ -70,12 +73,12 @@ const Legal = () => {
       <Header />
       <main className="px-4 py-12 md:py-16">
         <article className="container max-w-3xl">
-          <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-primary">A Challenge policies</p>
-          <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">{document.title}</h1>
-          <p className="mt-4 text-sm text-muted-foreground">Last updated: {updated}</p>
-          <p className="mt-7 text-lg leading-8 text-muted-foreground">{document.introduction}</p>
+          <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-primary">{t("legal.policies")}</p>
+          <h1 className="mt-3 text-4xl font-black tracking-tight md:text-5xl">{t(`legal.${route}.title`)}</h1>
+          <p className="mt-4 text-sm text-muted-foreground">{t("legal.updated")} {new Intl.DateTimeFormat(language, { dateStyle: "long" }).format(new Date(updated))}</p>
+          <p className="mt-7 text-lg leading-8 text-muted-foreground">{t(`legal.${route}.intro`)}</p>
           <aside className="mt-7 rounded-xl border-2 border-border bg-card p-5 text-sm leading-6">
-            <p className="font-bold text-foreground">Service operator and data controller</p>
+            <p className="font-bold text-foreground">{t("legal.operator")}</p>
             <address className="mt-2 not-italic text-muted-foreground">
               {operator.name}<br />
               {operator.address}<br />
@@ -83,17 +86,17 @@ const Legal = () => {
             </address>
           </aside>
           <div className="mt-10 space-y-10">
-            {document.sections.map((section) => (
+            {document.sections.map((section, sectionIndex) => (
               <section key={section.title} aria-labelledby={section.title.replace(/\s+/g, "-").toLowerCase()}>
-                <h2 id={section.title.replace(/\s+/g, "-").toLowerCase()} className="text-2xl font-black">{section.title}</h2>
+                <h2 id={section.title.replace(/\s+/g, "-").toLowerCase()} className="text-2xl font-black">{t(`legal.${route}.s${sectionIndex}.title`)}</h2>
                 <div className="mt-3 space-y-3 text-base leading-7 text-muted-foreground">
-                  {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                  {section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraph}>{t(`legal.${route}.s${sectionIndex}.p${paragraphIndex}`)}</p>)}
                 </div>
               </section>
             ))}
           </div>
           <aside className="mt-12 rounded-xl border-2 border-border bg-muted/40 p-5 text-sm leading-6 text-muted-foreground">
-            Questions, privacy requests, and legal notices can be sent to <a className="font-semibold text-primary underline-offset-4 hover:underline" href={`mailto:${operator.email}`}>{operator.email}</a>. See the <Link className="font-semibold text-primary underline-offset-4 hover:underline" to="/faq">Help page</Link> for general guidance.
+            {t("legal.contact")} <a className="font-semibold text-primary underline-offset-4 hover:underline" href={`mailto:${operator.email}`}>{operator.email}</a>. <Link className="font-semibold text-primary underline-offset-4 hover:underline" to="/faq">{t("legal.guidance")}</Link>
           </aside>
         </article>
       </main>

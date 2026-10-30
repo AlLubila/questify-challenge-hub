@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { challengeTranslationSchema, getEditorialTranslations, localizationInstructions } from "../_shared/challengeLocalization.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -91,6 +92,8 @@ serve(async (req) => {
 
     const systemPrompt = `You are A Challenge's senior challenge editor. Generate ${type} creator missions for a young audience. Every mission must be original, safe, cheap to attempt, visually obvious in the first second, and easy to explain in one TikTok caption.
 
+${localizationInstructions}
+
 Editorial rules:
 - Build around a surprising constraint, transformation, social remix, or playful real-world observation—not a generic photo prompt.
 - Give the creator a strong visual hook, a clear action, and room for personal interpretation.
@@ -139,6 +142,7 @@ Each challenge should feel like a real editorial commission with genuine viral p
                     items: {
                       type: "object",
                       properties: {
+                        translations: challengeTranslationSchema,
                         title: { 
                           type: "string",
                           description: "Catchy, short title (max 60 chars)"
@@ -161,7 +165,7 @@ Each challenge should feel like a real editorial commission with genuine viral p
                           description: "Points awarded (200-300 for easy, 400-600 for medium, 700-1000 for hard)"
                         }
                       },
-                      required: ["title", "description", "prize", "difficulty", "points"],
+                      required: ["title", "description", "prize", "difficulty", "points", "translations"],
                       additionalProperties: false
                     }
                   }
@@ -219,6 +223,8 @@ Each challenge should feel like a real editorial commission with genuine viral p
     // Insert challenges into database
     const challengesToInsert = generatedChallenges.map((challenge: any) => ({
       title: challenge.title,
+      source_language: "en",
+      translations: getEditorialTranslations(challenge),
       description: challenge.description,
       prize: safeReward(challenge.prize, challenge.points),
       difficulty: challenge.difficulty,
