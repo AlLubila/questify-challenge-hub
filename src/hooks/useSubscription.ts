@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { isNativeApp } from '@/lib/mobile';
 
 export const useSubscription = (enabled = true) => {
   const { toast } = useToast();
@@ -17,12 +18,13 @@ export const useSubscription = (enabled = true) => {
         subscription_end: string | null;
       };
     },
-    enabled,
+    enabled: enabled && !isNativeApp(),
     refetchInterval: 60000, // Check every minute
   });
 
   const createCheckout = useMutation({
     mutationFn: async () => {
+      if (isNativeApp()) throw new Error('Purchases are not available in the free mobile edition.');
       const { data, error } = await supabase.functions.invoke("create-subscription-checkout");
       if (error) throw error;
       return data as { url: string };
@@ -43,6 +45,7 @@ export const useSubscription = (enabled = true) => {
 
   const openCustomerPortal = useMutation({
     mutationFn: async () => {
+      if (isNativeApp()) throw new Error('Purchases are not available in the free mobile edition.');
       const { data, error } = await supabase.functions.invoke("customer-portal");
       if (error) throw error;
       return data as { url: string };

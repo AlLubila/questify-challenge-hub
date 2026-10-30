@@ -655,5 +655,6 @@
   "Your submission visibility boost is active.": "Your submission visibility boost is active.",
   "Boost Applied Successfully! ⚡": "Boost Applied Successfully! ⚡",
   "Creator Pass Activated! 🎉": "Creator Pass Activated! 🎉",
-  "Referral link copied to clipboard!": "Referral link copied to clipboard!"
+  "Referral link copied to clipboard!": "Referral link copied to clipboard!",
+  "mobile.authFailed": "Sign-in could not be completed. Please try again."
 }

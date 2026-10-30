@@ -656,6 +656,7 @@
   "Boost Applied Successfully! ⚡": "¡Impulso aplicado! ⚡",
   "Creator Pass Activated! 🎉": "¡Creator Pass activado! 🎉",
   "Referral link copied to clipboard!": "¡Enlace de invitación copiado!",
+  "mobile.authFailed": "No se pudo completar el inicio de sesión. Inténtalo de nuevo.",
   "Home": "Inicio",
   "Challenges": "Retos",
   "Feed": "Comunidad",
@@ -1046,5 +1047,6 @@
   "Deleted preset: {name}": "Ajuste eliminado: {name}",
   "Clear search": "Borrar búsqueda",
   "Video submission for {title}": "Vídeo para {title}",
-  "Submission for {title}": "Participación en {title}"
+  "Submission for {title}": "Participación en {title}",
+  "Sign-in could not be completed. Please try again.": "No se pudo completar el inicio de sesión. Inténtalo de nuevo."
 }

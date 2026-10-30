@@ -656,6 +656,7 @@
   "Boost Applied Successfully! ⚡": "Promowanie zastosowane! ⚡",
   "Creator Pass Activated! 🎉": "Creator Pass aktywowany! 🎉",
   "Referral link copied to clipboard!": "Link polecający skopiowany!",
+  "mobile.authFailed": "Nie udało się ukończyć logowania. Spróbuj ponownie.",
   "Home": "Strona główna",
   "Challenges": "Wyzwania",
   "Feed": "Społeczność",
@@ -1046,5 +1047,6 @@
   "Deleted preset: {name}": "Usunięto ustawienia: {name}",
   "Clear search": "Wyczyść wyszukiwanie",
   "Video submission for {title}": "Film do wyzwania {title}",
-  "Submission for {title}": "Zgłoszenie do wyzwania {title}"
+  "Submission for {title}": "Zgłoszenie do wyzwania {title}",
+  "Sign-in could not be completed. Please try again.": "Nie udało się ukończyć logowania. Spróbuj ponownie."
 }

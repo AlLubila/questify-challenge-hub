@@ -1,4 +1,5 @@
 import { dateLocales } from "@/lib/dateLocales";
+import { publicShareUrl } from '@/lib/mobile';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useReferrals } from "@/hooks/useReferrals";
@@ -16,7 +17,7 @@ export default function Referrals() {
 
   const copyReferralLink = () => {
     if (data?.referralCode) {
-      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
+      const link = publicShareUrl(`/auth?ref=${encodeURIComponent(data.referralCode)}`);
       navigator.clipboard.writeText(link);
       toast.success(t("Referral link copied to clipboard!"));
     }
@@ -24,7 +25,7 @@ export default function Referrals() {
 
   const shareReferral = async () => {
     if (data?.referralCode) {
-      const link = `${window.location.origin}/auth?ref=${data.referralCode}`;
+      const link = publicShareUrl(`/auth?ref=${encodeURIComponent(data.referralCode)}`);
       const text = `Join A Challenge with my referral code and get 25 bonus points! ${link}`;
 
       if (navigator.share) {

@@ -14,7 +14,7 @@ export const usePushNotifications = () => {
     const isNative = Capacitor.isNativePlatform();
     setIsSupported(isNative);
 
-    if (!isNative || !user) {
+    if (!isNative || !user || import.meta.env.VITE_NATIVE_PUSH_ENABLED !== 'true') {
       console.log('Push notifications only available on native platforms with authenticated user');
       return;
     }

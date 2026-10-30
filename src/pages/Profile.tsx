@@ -1,4 +1,5 @@
 import { localizeChallenge } from "@/lib/localizedContent";
+import { isNativeApp } from '@/lib/mobile';
 import { dateLocales } from "@/lib/dateLocales";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -406,10 +407,10 @@ const Profile = () => {
 
         {/* Tabs for Badges, Submissions, and Subscription */}
         <Tabs defaultValue="badges" className="w-full">
-            <TabsList className={`grid w-full ${isOwnProfile ? "grid-cols-3" : "grid-cols-2"}`}>
+            <TabsList className={`grid w-full ${isOwnProfile && !isNativeApp() ? "grid-cols-3" : "grid-cols-2"}`}>
               <TabsTrigger value="badges">{t("Badges (")}{userBadges?.length || 0})</TabsTrigger>
               <TabsTrigger value="submissions">{t("Submissions (")}{submissions?.length || 0})</TabsTrigger>
-              {isOwnProfile && <TabsTrigger value="subscription">{t("Subscription")}</TabsTrigger>}
+              {isOwnProfile && !isNativeApp() && <TabsTrigger value="subscription">{t("Subscription")}</TabsTrigger>}
           </TabsList>
 
           <TabsContent value="badges" className="space-y-4">
@@ -512,7 +513,7 @@ const Profile = () => {
             )}
           </TabsContent>
 
-          {isOwnProfile && <TabsContent value="subscription" className="space-y-4">
+          {isOwnProfile && !isNativeApp() && <TabsContent value="subscription" className="space-y-4">
             <Card className="p-8">
               <div className="flex items-start gap-4 mb-6">
                 <div className="p-3 rounded-full bg-primary">

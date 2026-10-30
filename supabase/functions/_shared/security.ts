@@ -6,6 +6,7 @@ const localOrigins = new Set([
   "http://127.0.0.1:5173",
   "capacitor://localhost",
   "http://localhost",
+  "https://localhost",
 ]);
 
 export function corsHeaders(req: Request): Record<string, string> {

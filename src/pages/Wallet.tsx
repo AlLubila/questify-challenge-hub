@@ -1,4 +1,5 @@
 import { dateLocales } from "@/lib/dateLocales";
+import { isNativeApp } from '@/lib/mobile';
 import { Header } from "@/components/Header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useWallet } from "@/hooks/useWallet";
@@ -93,7 +94,7 @@ const Wallet = () => {
           </Card>
 
           {/* Subscription Card */}
-          <Card>
+          {!isNativeApp() && <Card>
             <CardHeader>
               <CardTitle>{t("wallet.creatorPass")}</CardTitle>
               <CardDescription>{t("wallet.premiumSubscription")}</CardDescription>
@@ -126,7 +127,7 @@ const Wallet = () => {
                 </>
               )}
             </CardContent>
-          </Card>
+          </Card>}
         </div>
 
         {/* Transactions */}
