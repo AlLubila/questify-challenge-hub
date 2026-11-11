@@ -52,7 +52,7 @@ export const UserRecommendations = () => {
               className="h-10 w-10 cursor-pointer" 
               onClick={() => navigate(`/profile/${user.id}`)}
             >
-              <AvatarImage src={user.avatar_url || undefined} />
+              <AvatarImage src={user.avatar_url || undefined} alt={user.display_name || user.username} />
               <AvatarFallback>
                 {user.display_name?.[0] || user.username[0]}
               </AvatarFallback>

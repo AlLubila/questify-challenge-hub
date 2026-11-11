@@ -165,7 +165,7 @@ export default function Referrals() {
               >
                 <div className="flex items-center gap-4">
                   <Avatar>
-                    <AvatarImage src={referral.referred?.avatar_url} />
+                    <AvatarImage src={referral.referred?.avatar_url} alt={referral.referred?.display_name || referral.referred?.username || t("Creator")} />
                     <AvatarFallback>
                       {referral.referred?.username?.charAt(0).toUpperCase()}
                     </AvatarFallback>

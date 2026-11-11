@@ -58,7 +58,7 @@ export const AchievementsShowcase = () => {
               onClick={() => navigate(`/profile/${achievement.profiles.id}`)}
             >
               <Avatar className="h-8 w-8">
-                <AvatarImage src={achievement.profiles.avatar_url || undefined} />
+                <AvatarImage src={achievement.profiles.avatar_url || undefined} alt={achievement.profiles.display_name || achievement.profiles.username} />
                 <AvatarFallback className="text-xs">
                   {achievement.profiles.display_name?.[0] || achievement.profiles.username[0]}
                 </AvatarFallback>

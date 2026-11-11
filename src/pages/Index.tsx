@@ -38,7 +38,7 @@ const Index = () => {
                 {t("hero.badge")}
               </p>
               
-              <h1 className="max-w-3xl text-4xl font-black leading-[1.04] tracking-tight md:text-6xl">
+              <h1 className="max-w-3xl text-4xl font-black leading-[1.04] tracking-tight md:text-5xl 2xl:text-6xl">
                 {t("hero.title1")}
                 <br />
                 {t("hero.title2")}
