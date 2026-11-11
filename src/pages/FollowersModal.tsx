@@ -38,7 +38,7 @@ export const FollowersModal = ({
         onClick={onClose}
       >
         <Avatar className="h-10 w-10">
-          <AvatarImage src={profile.avatar_url} />
+          <AvatarImage src={profile.avatar_url} alt={profile.display_name || profile.username || t("Creator")} />
           <AvatarFallback>
             {profile.display_name?.[0] || profile.username?.[0] || "U"}
           </AvatarFallback>

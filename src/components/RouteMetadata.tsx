@@ -7,6 +7,22 @@ const DEFAULT_TITLE = "A Challenge — Weekly Creative Photo & Video Challenges"
 const DEFAULT_DESCRIPTION = "Join original weekly photo and video challenges, share creative work, earn points, and discover standout creators on A Challenge.";
 
 const publicPages: Record<string, { title: string; description: string }> = {
+  "/auth": {
+    title: "Sign in or create an account | A Challenge",
+    description: "Sign in to A Challenge to join creative challenges and share your work.",
+  },
+  "/profile": {
+    title: "Your profile | A Challenge",
+    description: "Manage your creator profile, badges, and challenge entries.",
+  },
+  "/wallet": {
+    title: "Your wallet | A Challenge",
+    description: "View your A Challenge balance and transaction history.",
+  },
+  "/referrals": {
+    title: "Invite friends | A Challenge",
+    description: "Share your referral link and invite friends to A Challenge.",
+  },
   "/": {
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
@@ -56,26 +72,28 @@ export const RouteMetadata = () => {
   const { t, language } = useLanguage();
 
   useEffect(() => {
-    const isChallenge = pathname.startsWith("/challenge/");
-    const isPublicProfile = pathname.startsWith("/profile/");
-    const metadata = publicPages[pathname]
+    const normalizedPath = pathname.replace(/\/+$/, "") || "/";
+    const isChallenge = /^\/challenge\/[^/]+$/.test(normalizedPath);
+    const isPublicProfile = /^\/profile\/[^/]+$/.test(normalizedPath);
+    const isAdmin = normalizedPath === "/admin" || normalizedPath.startsWith("/admin/");
+    const isNotFound = !publicPages[normalizedPath] && !isChallenge && !isPublicProfile && !isAdmin;
+    const metadata = publicPages[normalizedPath]
       ?? (isChallenge ? {
         title: "Creative Challenge Brief | A Challenge",
         description: "View the rules, deadline, points, and submission details for this A Challenge creative mission.",
       } : isPublicProfile ? {
         title: "Creator Profile | A Challenge",
         description: "Explore an A Challenge creator profile and their original creative entries.",
+      } : isAdmin ? {
+        title: "Administration | A Challenge",
+        description: "Manage A Challenge content and community.",
       } : {
-        title: DEFAULT_TITLE,
-        description: DEFAULT_DESCRIPTION,
+        title: "Page not found | A Challenge",
+        description: "This page could not be found. Explore creative challenges on A Challenge.",
       });
 
-    const noIndex = pathname === "/auth"
-      || pathname === "/profile"
-      || pathname.startsWith("/admin")
-      || pathname === "/wallet"
-      || pathname === "/referrals";
-    const canonicalPath = pathname === "/" ? "/" : pathname.replace(/\/$/, "");
+    const noIndex = isNotFound || isAdmin || ["/auth", "/profile", "/wallet", "/referrals"].includes(normalizedPath);
+    const canonicalPath = normalizedPath;
     const canonicalUrl = `${SITE_URL}${canonicalPath}`;
 
     const title = t(metadata.title);

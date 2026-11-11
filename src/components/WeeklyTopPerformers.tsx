@@ -70,7 +70,7 @@ export const WeeklyTopPerformers = () => {
           >
             <div className="relative">
               <Avatar className="h-10 w-10">
-                <AvatarImage src={performer.avatar_url || undefined} />
+                <AvatarImage src={performer.avatar_url || undefined} alt={performer.display_name || performer.username} />
                 <AvatarFallback>
                   {performer.display_name?.[0] || performer.username[0]}
                 </AvatarFallback>
